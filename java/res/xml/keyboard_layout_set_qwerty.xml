@@ -26,6 +26,12 @@
         latin:enableProximityCharsCorrection="true"
         latin:supportsSplitLayout="true" />
     <Element
+        latin:elementName="alphabetFn"
+        latin:elementKeyboard="@xml/kbd_qwerty_fn" />
+    <Element
+        latin:elementName="alphabetFnCtrl"
+        latin:elementKeyboard="@xml/kbd_qwerty_fn_ctrl" />
+    <Element
         latin:elementName="symbols"
         latin:elementKeyboard="@xml/kbd_symbols" />
     <Element

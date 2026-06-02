@@ -17,6 +17,9 @@
 package com.android.inputmethod.keyboard;
 
 import static com.android.inputmethod.keyboard.internal.KeyboardIconsSet.ICON_UNDEFINED;
+import static com.android.inputmethod.latin.common.Constants.CODE_ALT;
+import static com.android.inputmethod.latin.common.Constants.CODE_CTRL;
+import static com.android.inputmethod.latin.common.Constants.CODE_FN;
 import static com.android.inputmethod.latin.common.Constants.CODE_OUTPUT_TEXT;
 import static com.android.inputmethod.latin.common.Constants.CODE_SHIFT;
 import static com.android.inputmethod.latin.common.Constants.CODE_SWITCH_ALPHA_SYMBOL;
@@ -607,7 +610,8 @@ public class Key implements Comparable<Key> {
     }
 
     public final boolean isModifier() {
-        return mCode == CODE_SHIFT || mCode == CODE_SWITCH_ALPHA_SYMBOL;
+        return mCode == CODE_SHIFT || mCode == CODE_SWITCH_ALPHA_SYMBOL
+                || mCode == CODE_FN || mCode == CODE_CTRL || mCode == CODE_ALT;
     }
 
     public final boolean isRepeatable() {

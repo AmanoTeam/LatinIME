@@ -279,6 +279,24 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         setKeyboard(KeyboardId.ELEMENT_SYMBOLS_SHIFTED, KeyboardSwitchState.SYMBOLS_SHIFTED);
     }
 
+    // Implements {@link KeyboardState.SwitchActions}.
+    @Override
+    public void setAlphabetFnKeyboard() {
+        if (DEBUG_ACTION) {
+            Log.d(TAG, "setAlphabetFnKeyboard");
+        }
+        setKeyboard(KeyboardId.ELEMENT_ALPHABET_FN, KeyboardSwitchState.OTHER);
+    }
+
+    // Implements {@link KeyboardState.SwitchActions}.
+    @Override
+    public void setAlphabetFnCtrlKeyboard() {
+        if (DEBUG_ACTION) {
+            Log.d(TAG, "setAlphabetFnCtrlKeyboard");
+        }
+        setKeyboard(KeyboardId.ELEMENT_ALPHABET_FN_CTRL, KeyboardSwitchState.OTHER);
+    }
+
     public boolean isImeSuppressedByHardwareKeyboard(
             @Nonnull final SettingsValues settingsValues,
             @Nonnull final KeyboardSwitchState toggleState) {

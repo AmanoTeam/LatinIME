@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <include
+        latin:keyboardLayout="@xml/key_styles_common" />
+    <include
+        latin:keyboardLayout="@xml/key_styles_fn" />
+    <!-- Row 1: ^Q ^W ^E ^R ^T ^Y ^U ^I ^O ^P -->
+    <Row
+        latin:keyWidth="10%p"
+    >
+        <include
+            latin:keyboardLayout="@xml/rowkeys_fn_ctrl_row1" />
+    </Row>
+    <!-- Row 2: ^A ^S ^D ^F ^G ^H ^J ^K ^L -->
+    <Row
+        latin:keyWidth="10%p"
+    >
+        <include
+            latin:keyboardLayout="@xml/rowkeys_fn_ctrl_row2"
+            latin:keyXPos="5%p" />
+    </Row>
+    <!-- Row 3: Del  ^Z ^X ^C ^V ^B ^N ^M  Up  Backspace -->
+    <Row
+        latin:keyWidth="10%p"
+    >
+        <Key
+            latin:keyStyle="deleteKeyStyle"
+            latin:keyWidth="15%p"
+            latin:visualInsetsRight="1%p" />
+        <include
+            latin:keyboardLayout="@xml/rowkeys_fn_ctrl_row3" />
+        <Key
+            latin:keyStyle="deleteKeyStyle"
+            latin:keyWidth="fillRight"
+            latin:visualInsetsLeft="1%p" />
+    </Row>
+    <!-- Row 4: Esc  ABC  Fn  Enter  ◀◀  ▶▶  Left  Down  Right -->
+    <include
+        latin:keyboardLayout="@xml/row_fn_row4" />
+</merge>

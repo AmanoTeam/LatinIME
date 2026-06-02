@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <Key
+        latin:keySpec="Esc|!code/key_escape"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="Undo|!code/key_undo"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="Redo|!code/key_redo"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="F1|!code/key_f1"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="F2|!code/key_f2"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="F3|!code/key_f3"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="F4|!code/key_f4"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keyStyle="deleteKeyStyle"
+        latin:keyWidth="fillRight" />
+    <Key
+        latin:keySpec="Del|!code/key_delete_forward"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="PgUp|!code/key_page_up"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+</merge>
