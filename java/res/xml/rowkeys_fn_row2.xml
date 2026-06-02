@@ -27,9 +27,7 @@
         latin:keySpec="F8|!code/key_f8"
         latin:keyStyle="fnKeyStyle" />
     <Key
-        latin:keySpec="←|!code/key_move_left"
-        latin:keyStyle="fnKeyStyle"
-        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+        latin:keyStyle="enterKeyStyle" />
     <Key
         latin:keySpec="Ins|!code/key_insert"
         latin:keyStyle="fnKeyStyle" />
