@@ -308,6 +308,8 @@ public final class Constants {
     public static final int CODE_CTRL_X = -72;
     public static final int CODE_CTRL_Y = -73;
     public static final int CODE_CTRL_Z = -74;
+    public static final int CODE_MOVE_WORD_LEFT = -75;
+    public static final int CODE_MOVE_WORD_RIGHT = -76;
 
     public static boolean isLetterCode(final int code) {
         return code >= CODE_SPACE;
@@ -389,6 +391,8 @@ public final class Constants {
         case CODE_CTRL_X: return "ctrlX";
         case CODE_CTRL_Y: return "ctrlY";
         case CODE_CTRL_Z: return "ctrlZ";
+        case CODE_MOVE_WORD_LEFT: return "moveWordLeft";
+        case CODE_MOVE_WORD_RIGHT: return "moveWordRight";
         case CODE_TAB: return "tab";
         case CODE_ENTER: return "enter";
         case CODE_SPACE: return "space";

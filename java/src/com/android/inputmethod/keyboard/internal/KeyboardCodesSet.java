@@ -112,6 +112,8 @@ public final class KeyboardCodesSet {
         "key_ctrl_x",
         "key_ctrl_y",
         "key_ctrl_z",
+        "key_move_word_left",
+        "key_move_word_right",
     };
 
     private static final int[] DEFAULT = {
@@ -191,6 +193,8 @@ public final class KeyboardCodesSet {
         Constants.CODE_CTRL_X,
         Constants.CODE_CTRL_Y,
         Constants.CODE_CTRL_Z,
+        Constants.CODE_MOVE_WORD_LEFT,
+        Constants.CODE_MOVE_WORD_RIGHT,
     };
 
     static {

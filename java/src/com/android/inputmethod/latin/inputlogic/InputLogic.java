@@ -773,6 +773,12 @@ public final class InputLogic {
             case Constants.CODE_MOVE_RIGHT:
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
                 break;
+            case Constants.CODE_MOVE_WORD_LEFT:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.META_CTRL_ON);
+                break;
+            case Constants.CODE_MOVE_WORD_RIGHT:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.META_CTRL_ON);
+                break;
             case Constants.CODE_MOVE_UP:
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
                 break;

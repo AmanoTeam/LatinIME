@@ -18,11 +18,11 @@
             latin:keyStyle="spaceKeyStyle"
             latin:keyWidth="20%p" />
         <Key
-            latin:keySpec="◀◀|!code/key_home"
+            latin:keySpec="◀◀|!code/key_move_word_left"
             latin:keyStyle="fnKeyStyle"
             latin:keyActionFlags="isRepeatable|noKeyPreview" />
         <Key
-            latin:keySpec="▶▶|!code/key_end"
+            latin:keySpec="▶▶|!code/key_move_word_right"
             latin:keyStyle="fnKeyStyle"
             latin:keyActionFlags="isRepeatable|noKeyPreview" />
         <Key
