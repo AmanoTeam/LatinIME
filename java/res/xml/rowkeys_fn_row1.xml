@@ -27,7 +27,8 @@
         latin:keyStyle="deleteKeyStyle" />
     <Key
         latin:keySpec="Del|!code/key_delete_forward"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="PgUp|!code/key_page_up"
         latin:keyStyle="fnKeyStyle"
