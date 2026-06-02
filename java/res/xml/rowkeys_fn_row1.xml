@@ -24,8 +24,7 @@
         latin:keySpec="F4|!code/key_f4"
         latin:keyStyle="fnKeyStyle" />
     <Key
-        latin:keyStyle="deleteKeyStyle"
-        latin:keyWidth="fillRight" />
+        latin:keyStyle="deleteKeyStyle" />
     <Key
         latin:keySpec="Del|!code/key_delete_forward"
         latin:keyStyle="fnKeyStyle" />
