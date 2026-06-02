@@ -282,6 +282,7 @@
         <attr name="iconImeKey" format="reference" />
         <attr name="iconEmojiActionKey" format="reference" />
         <attr name="iconEmojiNormalKey" format="reference" />
+        <attr name="iconCutKey" format="reference" />
         <attr name="iconCopyKey" format="reference" />
         <attr name="iconPasteKey" format="reference" />
     </declare-styleable>

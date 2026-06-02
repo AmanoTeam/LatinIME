@@ -6,7 +6,7 @@
         latin:keySpec="Ctrl|!code/key_ctrl"
         latin:keyStyle="fnModifierKeyStyle" />
     <Key
-        latin:keySpec="Cut|!code/key_cut"
+        latin:keySpec="!icon/cut_key|!code/key_cut"
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^X" />
     <Key
