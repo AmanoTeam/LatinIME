@@ -105,6 +105,8 @@ public final class InputLogic {
     private boolean mIsAutoCorrectionIndicatorOn;
     private long mDoubleSpacePeriodCountdownStart;
 
+    private boolean mSelectionMode;
+
     // The word being corrected while the cursor is in the middle of the word.
     // Note: This does not have a composing span, so it must be handled separately.
     private String mWordBeingCorrectedByCursor = null;
@@ -719,6 +721,7 @@ public final class InputLogic {
                 // Handled by KeyboardState state machine
                 break;
             case Constants.CODE_ESCAPE:
+                mSelectionMode = false;
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_ESCAPE);
                 break;
             case Constants.CODE_UNDO:
@@ -746,19 +749,23 @@ public final class InputLogic {
                 inputTransaction.setDidAffectContents();
                 break;
             case Constants.CODE_SELECT:
-                // Not directly mappable; skip
+                mSelectionMode = !mSelectionMode;
                 break;
             case Constants.CODE_HOME:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_END:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_PAGE_UP:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_PAGE_DOWN:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_INSERT:
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_INSERT);
@@ -768,22 +775,32 @@ public final class InputLogic {
                 inputTransaction.setDidAffectContents();
                 break;
             case Constants.CODE_MOVE_LEFT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_MOVE_RIGHT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_MOVE_WORD_LEFT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.META_CTRL_ON);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT,
+                        mSelectionMode
+                                ? (KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON)
+                                : KeyEvent.META_CTRL_ON);
                 break;
             case Constants.CODE_MOVE_WORD_RIGHT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.META_CTRL_ON);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT,
+                        mSelectionMode
+                                ? (KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON)
+                                : KeyEvent.META_CTRL_ON);
                 break;
             case Constants.CODE_MOVE_UP:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_MOVE_DOWN:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN);
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN,
+                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
                 break;
             case Constants.CODE_F1:
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_F1);
