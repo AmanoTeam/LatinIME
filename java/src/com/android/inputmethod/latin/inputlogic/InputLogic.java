@@ -752,20 +752,32 @@ public final class InputLogic {
                 mSelectionMode = !mSelectionMode;
                 break;
             case Constants.CODE_HOME:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME);
+                }
                 break;
             case Constants.CODE_END:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END);
+                }
                 break;
             case Constants.CODE_PAGE_UP:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP);
+                }
                 break;
             case Constants.CODE_PAGE_DOWN:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN);
+                }
                 break;
             case Constants.CODE_INSERT:
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_INSERT);
@@ -775,32 +787,48 @@ public final class InputLogic {
                 inputTransaction.setDidAffectContents();
                 break;
             case Constants.CODE_MOVE_LEFT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT);
+                }
                 break;
             case Constants.CODE_MOVE_RIGHT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
+                }
                 break;
             case Constants.CODE_MOVE_WORD_LEFT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT,
-                        mSelectionMode
-                                ? (KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON)
-                                : KeyEvent.META_CTRL_ON);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT,
+                            KeyEvent.META_CTRL_ON);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.META_CTRL_ON);
+                }
                 break;
             case Constants.CODE_MOVE_WORD_RIGHT:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT,
-                        mSelectionMode
-                                ? (KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON)
-                                : KeyEvent.META_CTRL_ON);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT,
+                            KeyEvent.META_CTRL_ON);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.META_CTRL_ON);
+                }
                 break;
             case Constants.CODE_MOVE_UP:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
+                }
                 break;
             case Constants.CODE_MOVE_DOWN:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN,
-                        mSelectionMode ? KeyEvent.META_SHIFT_ON : 0);
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN);
+                }
                 break;
             case Constants.CODE_F1:
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_F1);
@@ -2223,6 +2251,32 @@ public final class InputLogic {
                 KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
         mConnection.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
                 KeyEvent.ACTION_UP, keyCode, 0, metaState, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+    }
+
+    private void sendShiftedDownUpKeyEvent(final int keyCode) {
+        sendShiftedDownUpKeyEvent(keyCode, 0);
+    }
+
+    private void sendShiftedDownUpKeyEvent(final int keyCode, final int extraMetaState) {
+        final long eventTime = SystemClock.uptimeMillis();
+        mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,
+                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+        mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,
+                KeyEvent.ACTION_DOWN, keyCode, 0,
+                KeyEvent.META_SHIFT_ON | extraMetaState,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+        mConnection.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
+                KeyEvent.ACTION_UP, keyCode, 0,
+                KeyEvent.META_SHIFT_ON | extraMetaState,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+        mConnection.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
+                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
     }
 
