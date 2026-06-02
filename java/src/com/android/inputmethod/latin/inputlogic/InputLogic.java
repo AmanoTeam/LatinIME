@@ -655,8 +655,30 @@ public final class InputLogic {
      * @param event The event to handle.
      * @param inputTransaction The transaction in progress.
      */
+    private static boolean isNavigationKey(final int keyCode) {
+        switch (keyCode) {
+            case Constants.CODE_MOVE_LEFT:
+            case Constants.CODE_MOVE_RIGHT:
+            case Constants.CODE_MOVE_UP:
+            case Constants.CODE_MOVE_DOWN:
+            case Constants.CODE_MOVE_WORD_LEFT:
+            case Constants.CODE_MOVE_WORD_RIGHT:
+            case Constants.CODE_HOME:
+            case Constants.CODE_END:
+            case Constants.CODE_PAGE_UP:
+            case Constants.CODE_PAGE_DOWN:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private void handleFunctionalEvent(final Event event, final InputTransaction inputTransaction,
             final int currentKeyboardScriptId, final LatinIME.UIHandler handler) {
+        if (mSelectionMode && !isNavigationKey(event.mKeyCode)
+                && event.mKeyCode != Constants.CODE_SELECT) {
+            mSelectionMode = false;
+        }
         switch (event.mKeyCode) {
             case Constants.CODE_DELETE:
                 handleBackspaceEvent(event, inputTransaction, currentKeyboardScriptId);
@@ -721,7 +743,6 @@ public final class InputLogic {
                 // Handled by KeyboardState state machine
                 break;
             case Constants.CODE_ESCAPE:
-                mSelectionMode = false;
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_ESCAPE);
                 break;
             case Constants.CODE_UNDO:
