@@ -5,7 +5,7 @@
     <Key
         latin:keySpec="Select|!code/key_select"
         latin:keyStyle="fnKeyStyle"
-        latin:keyHintLabel="^X" />
+        latin:keyHintLabel="Select" />
     <Key
         latin:keySpec="SelAll|!code/key_select_all"
         latin:keyStyle="fnKeyStyle"

@@ -7,7 +7,8 @@
         latin:keyStyle="fnModifierKeyStyle" />
     <Key
         latin:keySpec="Cut|!code/key_cut"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^X" />
     <Key
         latin:keySpec="Copy|!code/key_copy"
         latin:keyStyle="fnKeyStyle"

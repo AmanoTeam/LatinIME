@@ -7,10 +7,12 @@
         latin:keyStyle="fnKeyStyle" />
     <Key
         latin:keySpec="Undo|!code/key_undo"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^Z" />
     <Key
         latin:keySpec="Redo|!code/key_redo"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^Y" />
     <Key
         latin:keySpec="F1|!code/key_f1"
         latin:keyStyle="fnKeyStyle" />
