@@ -14,7 +14,7 @@
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^C" />
     <Key
-        latin:keySpec="Paste|!code/key_paste"
+        latin:keySpec="!icon/paste_key|!code/key_paste"
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^V" />
     <Key
