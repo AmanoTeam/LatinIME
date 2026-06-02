@@ -10,7 +10,7 @@
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^X" />
     <Key
-        latin:keySpec="Copy|!code/key_copy"
+        latin:keySpec="!icon/copy_key|!code/key_copy"
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^C" />
     <Key
