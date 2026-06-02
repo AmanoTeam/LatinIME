@@ -10,10 +10,12 @@
         latin:keyStyle="fnKeyStyle" />
     <Key
         latin:keySpec="Copy|!code/key_copy"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^C" />
     <Key
         latin:keySpec="Paste|!code/key_paste"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^V" />
     <Key
         latin:keySpec="F5|!code/key_f5"
         latin:keyStyle="fnKeyStyle" />

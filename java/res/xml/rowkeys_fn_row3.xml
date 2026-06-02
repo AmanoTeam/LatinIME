@@ -4,10 +4,12 @@
 >
     <Key
         latin:keySpec="Select|!code/key_select"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^X" />
     <Key
         latin:keySpec="SelAll|!code/key_select_all"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^A" />
     <Key
         latin:keySpec="F9|!code/key_f9"
         latin:keyStyle="fnKeyStyle" />
