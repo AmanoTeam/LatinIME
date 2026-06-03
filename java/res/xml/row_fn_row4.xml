@@ -26,15 +26,15 @@
             latin:keyStyle="fnKeyStyle"
             latin:keyActionFlags="isRepeatable|noKeyPreview" />
         <Key
-            latin:keySpec="←|!code/key_move_left"
+            latin:keySpec="!icon/arrow_left_key|!code/key_move_left"
             latin:keyStyle="fnKeyStyle"
             latin:keyActionFlags="isRepeatable|noKeyPreview" />
         <Key
-            latin:keySpec="↓|!code/key_move_down"
+            latin:keySpec="!icon/arrow_down_key|!code/key_move_down"
             latin:keyStyle="fnKeyStyle"
             latin:keyActionFlags="isRepeatable|noKeyPreview" />
         <Key
-            latin:keySpec="→|!code/key_move_right"
+            latin:keySpec="!icon/arrow_right_key|!code/key_move_right"
             latin:keyStyle="fnKeyStyle"
             latin:keyActionFlags="isRepeatable|noKeyPreview" />
     </Row>

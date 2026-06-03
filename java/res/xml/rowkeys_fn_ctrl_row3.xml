@@ -24,7 +24,7 @@
         latin:keySpec="^M|!code/key_ctrl_m"
         latin:keyStyle="fnKeyStyle" />
     <Key
-        latin:keySpec="↑|!code/key_move_up"
+        latin:keySpec="!icon/arrow_up_key|!code/key_move_up"
         latin:keyStyle="fnKeyStyle"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
 </merge>

@@ -27,6 +27,10 @@
         <item name="iconZwjKey">@drawable/sym_keyboard_zwj_lxx_dark</item>
         <item name="iconEmojiActionKey">@drawable/sym_keyboard_smiley_you</item>
         <item name="iconEmojiNormalKey">@drawable/sym_keyboard_smiley_you</item>
+        <item name="iconArrowLeftKey">@drawable/sym_keyboard_arrow_left</item>
+        <item name="iconArrowDownKey">@drawable/sym_keyboard_arrow_down</item>
+        <item name="iconArrowUpKey">@drawable/sym_keyboard_arrow_up</item>
+        <item name="iconArrowRightKey">@drawable/sym_keyboard_arrow_right</item>
         <item name="iconSelectAllKey">@drawable/sym_keyboard_select_all</item>
         <item name="iconSelectKey">@drawable/sym_keyboard_select</item>
         <item name="iconUndoKey">@drawable/sym_keyboard_undo</item>

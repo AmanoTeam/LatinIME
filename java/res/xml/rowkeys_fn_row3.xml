@@ -27,7 +27,7 @@
         latin:keyStyle="fnKeyStyle"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
-        latin:keySpec="↑|!code/key_move_up"
+        latin:keySpec="!icon/arrow_up_key|!code/key_move_up"
         latin:keyStyle="fnKeyStyle"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key

@@ -282,6 +282,10 @@
         <attr name="iconImeKey" format="reference" />
         <attr name="iconEmojiActionKey" format="reference" />
         <attr name="iconEmojiNormalKey" format="reference" />
+        <attr name="iconArrowLeftKey" format="reference" />
+        <attr name="iconArrowDownKey" format="reference" />
+        <attr name="iconArrowUpKey" format="reference" />
+        <attr name="iconArrowRightKey" format="reference" />
         <attr name="iconSelectAllKey" format="reference" />
         <attr name="iconSelectKey" format="reference" />
         <attr name="iconUndoKey" format="reference" />
