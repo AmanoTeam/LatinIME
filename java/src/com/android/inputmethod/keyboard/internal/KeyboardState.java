@@ -578,6 +578,9 @@ public final class KeyboardState {
     }
 
     private void onPressShift() {
+        // If we are in Fn mode, ignore Shift presses to prevent switching to shifted
+        // alphabet keyboard.
+        if (mFnMode != FN_MODE_OFF) return;
         // If we are recapitalizing, we don't do any of the normal processing, including
         // importantly the double tap timer.
         if (RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE != mRecapitalizeMode) {
@@ -634,6 +637,8 @@ public final class KeyboardState {
             // We are recapitalizing. We should match the keyboard state to the recapitalize
             // state in priority.
             updateShiftStateForRecapitalize(mRecapitalizeMode);
+        } else if (mFnMode != FN_MODE_OFF) {
+            mShiftKeyState.onRelease();
         } else if (mIsAlphabetMode) {
             final boolean isShiftLocked = mAlphabetShiftState.isShiftLocked();
             mIsInAlphabetUnshiftedFromShifted = false;
