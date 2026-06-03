@@ -37,7 +37,8 @@
         latin:keyStyle="enterKeyStyle" />
     <Key
         latin:keySpec="Ins|!code/key_insert"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="8%p" />
     <Key
         latin:keySpec="PgDn|!code/key_page_down"
         latin:keyStyle="fnKeyStyle"

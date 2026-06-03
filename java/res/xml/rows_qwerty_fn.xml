@@ -13,9 +13,9 @@
         <include
             latin:keyboardLayout="@xml/rowkeys_fn_row1" />
     </Row>
-    <!-- Row 2: Ctrl  Cut  Copy  Paste  F5  F6  F7  F8  Left  Ins  PgDn -->
+    <!-- Row 2: Ctrl  Cut  Copy  Paste  F5  F6  F7  F8  Enter  Ins  PgDn -->
     <Row
-        latin:keyWidth="9.09%p"
+        latin:keyWidth="10%p"
     >
         <include
             latin:keyboardLayout="@xml/rowkeys_fn_row2" />
