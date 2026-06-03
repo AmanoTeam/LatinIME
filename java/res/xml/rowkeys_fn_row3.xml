@@ -5,11 +5,12 @@
     <Key
         latin:keySpec="!icon/select_all_key|!code/key_select_all"
         latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="11%p"
         latin:keyHintLabel="^A" />
     <Key
         latin:keySpec="!icon/select_key|!code/key_select"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="13%p"
+        latin:keyWidth="15%p"
         latin:keyHintLabel="Select" />
     <Key
         latin:keySpec="F9|!code/key_f9"
