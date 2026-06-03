@@ -491,7 +491,17 @@ public final class InputLogic {
                         currentEvent = currentEvent.mNextEvent;
                         continue;
                     }
-                    // Non-letter character: consume Ctrl and proceed normally
+                    if (currentEvent.mCodePoint >= '0'
+                            && currentEvent.mCodePoint <= '9') {
+                        // Number: send Ctrl+number KeyEvent
+                        mIsCtrlActive = false;
+                        final int ctrlKeyCode = KeyEvent.KEYCODE_0
+                                + (currentEvent.mCodePoint - '0');
+                        sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        currentEvent = currentEvent.mNextEvent;
+                        continue;
+                    }
+                    // Non-letter/number character: consume Ctrl and proceed normally
                     mIsCtrlActive = false;
                 }
             }
