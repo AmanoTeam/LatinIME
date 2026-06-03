@@ -15,7 +15,7 @@
             latin:keySpec="Fn|!code/key_fn"
             latin:keyStyle="fnKeyStyle" />
         <Key
-            latin:keySpec="Tab|!code/key_tab"
+            latin:keySpec="!icon/tab_key|!code/key_tab"
             latin:keyStyle="fnKeyStyle" />
         <Key
             latin:keyStyle="spaceKeyStyle" />

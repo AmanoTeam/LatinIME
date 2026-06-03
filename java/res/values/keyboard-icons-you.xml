@@ -17,7 +17,7 @@
         <item name="iconNextKey">@drawable/sym_keyboard_next_you</item>
         <item name="iconDoneKey">@drawable/sym_keyboard_done_you</item>
         <item name="iconPreviousKey">@drawable/sym_keyboard_previous_you</item>
-        <item name="iconTabKey">@drawable/sym_keyboard_tab_you</item>
+        <item name="iconTabKey">@drawable/sym_keyboard_tab</item>
         <item name="iconShortcutKey">@drawable/sym_keyboard_voice_you</item>
         <item name="iconSpaceKeyForNumberLayout">@drawable/sym_keyboard_space_you</item>
         <item name="iconShiftKeyShifted">@drawable/sym_keyboard_shift_locked_you</item>
