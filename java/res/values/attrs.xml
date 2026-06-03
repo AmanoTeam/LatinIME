@@ -581,6 +581,9 @@
             <enum name="emojiCategory16" value="26" />
             <enum name="alphabetFn" value="27" />
             <enum name="alphabetFnCtrl" value="28" />
+            <enum name="alphabetFnCtrlActive" value="29" />
+            <enum name="alphabetFnSelectActive" value="30" />
+            <enum name="alphabetFnBothActive" value="31" />
         </attr>
         <attr name="elementKeyboard" format="reference"/>
         <!-- Enable proximity characters correction. Disabled by default. -->

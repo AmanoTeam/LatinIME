@@ -74,6 +74,9 @@ public final class KeyboardId {
     // Fn layer element IDs for Technical Keyboard
     public static final int ELEMENT_ALPHABET_FN = 27;
     public static final int ELEMENT_ALPHABET_FN_CTRL = 28;
+    public static final int ELEMENT_ALPHABET_FN_CTRL_ACTIVE = 29;
+    public static final int ELEMENT_ALPHABET_FN_SELECT_ACTIVE = 30;
+    public static final int ELEMENT_ALPHABET_FN_BOTH_ACTIVE = 31;
 
     public final RichInputMethodSubtype mSubtype;
     public final int mWidth;
@@ -157,7 +160,10 @@ public final class KeyboardId {
     private static boolean isAlphabetKeyboard(final int elementId) {
         return elementId < ELEMENT_SYMBOLS
                 || elementId == ELEMENT_ALPHABET_FN
-                || elementId == ELEMENT_ALPHABET_FN_CTRL;
+                || elementId == ELEMENT_ALPHABET_FN_CTRL
+                || elementId == ELEMENT_ALPHABET_FN_CTRL_ACTIVE
+                || elementId == ELEMENT_ALPHABET_FN_SELECT_ACTIVE
+                || elementId == ELEMENT_ALPHABET_FN_BOTH_ACTIVE;
     }
 
     public boolean isAlphabetKeyboard() {
@@ -262,6 +268,9 @@ public final class KeyboardId {
         case ELEMENT_EMOJI_CATEGORY15: return "emojiCategory15";
         case ELEMENT_ALPHABET_FN: return "alphabetFn";
         case ELEMENT_ALPHABET_FN_CTRL: return "alphabetFnCtrl";
+        case ELEMENT_ALPHABET_FN_CTRL_ACTIVE: return "alphabetFnCtrlActive";
+        case ELEMENT_ALPHABET_FN_SELECT_ACTIVE: return "alphabetFnSelectActive";
+        case ELEMENT_ALPHABET_FN_BOTH_ACTIVE: return "alphabetFnBothActive";
         case ELEMENT_EMOJI_CATEGORY16: return "emojiCategory16";
         default: return null;
         }

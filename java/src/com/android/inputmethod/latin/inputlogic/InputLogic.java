@@ -105,8 +105,11 @@ public final class InputLogic {
     private boolean mIsAutoCorrectionIndicatorOn;
     private long mDoubleSpacePeriodCountdownStart;
 
-    private boolean mSelectionMode;
-    private boolean mIsCtrlActive;
+    public boolean mSelectionMode;
+    public boolean mIsCtrlActive;
+
+    // Tracks that sendDownUpKeyEvent consumed Ctrl/Select, requiring element update.
+    public boolean mRequiresFnElementDeactivation;
 
     // The word being corrected while the cursor is in the middle of the word.
     // Note: This does not have a composing span, so it must be handled separately.
@@ -485,6 +488,7 @@ public final class InputLogic {
                             && currentEvent.mCodePoint <= 'z') {
                         // Letter: send Ctrl+letter KeyEvent
                         mIsCtrlActive = false;
+                        inputTransaction.requireFnElementUpdate();
                         final int ctrlKeyCode = KeyEvent.KEYCODE_A
                                 + (currentEvent.mCodePoint - 'a');
                         sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
@@ -495,6 +499,7 @@ public final class InputLogic {
                             && currentEvent.mCodePoint <= '9') {
                         // Number: send Ctrl+number KeyEvent
                         mIsCtrlActive = false;
+                        inputTransaction.requireFnElementUpdate();
                         final int ctrlKeyCode = KeyEvent.KEYCODE_0
                                 + (currentEvent.mCodePoint - '0');
                         sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
@@ -503,6 +508,7 @@ public final class InputLogic {
                     }
                     // Non-letter/number character: consume Ctrl and proceed normally
                     mIsCtrlActive = false;
+                    inputTransaction.requireFnElementUpdate();
                 }
             }
             if (currentEvent.isConsumed()) {
@@ -709,6 +715,7 @@ public final class InputLogic {
                 && event.mKeyCode != Constants.CODE_SELECT) {
             mSelectionMode = false;
             mIsCtrlActive = false;
+            inputTransaction.requireFnElementUpdate();
         }
         switch (event.mKeyCode) {
             case Constants.CODE_DELETE:
@@ -777,6 +784,7 @@ public final class InputLogic {
                     // Deactivate selection mode when Ctrl turns off
                     mSelectionMode = false;
                 }
+                inputTransaction.requireFnElementUpdate();
                 break;
             case Constants.CODE_ALT:
                 // Handled by KeyboardState state machine
@@ -810,6 +818,7 @@ public final class InputLogic {
                 break;
             case Constants.CODE_SELECT:
                 mSelectionMode = !mSelectionMode;
+                inputTransaction.requireFnElementUpdate();
                 break;
             case Constants.CODE_HOME:
                 if (mSelectionMode) {
@@ -2302,11 +2311,17 @@ public final class InputLogic {
      */
     private void sendDownUpKeyEvent(final int keyCode) {
         final int metaState = mIsCtrlActive ? KeyEvent.META_CTRL_ON : 0;
+        if (mIsCtrlActive) {
+            mRequiresFnElementDeactivation = true;
+        }
         mIsCtrlActive = false;
         sendDownUpKeyEvent(keyCode, metaState);
     }
 
     private void sendDownUpKeyEvent(final int keyCode, final int metaState) {
+        if (mIsCtrlActive) {
+            mRequiresFnElementDeactivation = true;
+        }
         mIsCtrlActive = false;
         final long eventTime = SystemClock.uptimeMillis();
         mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,

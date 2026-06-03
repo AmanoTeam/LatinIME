@@ -9,7 +9,7 @@
         latin:keyHintLabel="^A" />
     <Key
         latin:keySpec="!icon/select_key|!code/key_select"
-        latin:keyStyle="fnKeyStyle"
+        latin:keyStyle="fnSelectKeyStyle"
         latin:keyWidth="20%p"
         latin:keyHintLabel="Select" />
     <Key

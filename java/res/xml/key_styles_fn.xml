@@ -8,10 +8,40 @@
         latin:keyLabelFlags="preserveCase|autoXScale"
         latin:keyActionFlags="noKeyPreview"
         latin:backgroundType="functional" />
-    <!-- Fn modifier key style (Ctrl, Alt) -->
+    <!-- Base style for Fn modifier keys (Ctrl, Alt) and Select -->
     <key-style
-        latin:styleName="fnModifierKeyStyle"
+        latin:styleName="baseForFnModifierKeyStyle"
         latin:keyLabelFlags="preserveCase|autoXScale"
         latin:keyActionFlags="noKeyPreview"
         latin:backgroundType="functional" />
+    <!-- Ctrl key: toggles to stickyOn on Ctrl active -->
+    <key-style
+        latin:styleName="fnModifierKeyStyle"
+        latin:parentStyle="baseForFnModifierKeyStyle" />
+    <!-- Select key: toggles to stickyOn on Select active -->
+    <key-style
+        latin:styleName="fnSelectKeyStyle"
+        latin:parentStyle="baseForFnModifierKeyStyle" />
+    <!-- Alt key: always functional, no active state -->
+    <key-style
+        latin:styleName="fnAltKeyStyle"
+        latin:parentStyle="baseForFnModifierKeyStyle" />
+    <switch>
+        <case
+            latin:keyboardLayoutSetElement="alphabetFnCtrlActive|alphabetFnBothActive"
+        >
+            <key-style
+                latin:styleName="fnModifierKeyStyle"
+                latin:backgroundType="stickyOn"
+                latin:parentStyle="baseForFnModifierKeyStyle" />
+        </case>
+        <case
+            latin:keyboardLayoutSetElement="alphabetFnSelectActive|alphabetFnBothActive"
+        >
+            <key-style
+                latin:styleName="fnSelectKeyStyle"
+                latin:backgroundType="stickyOn"
+                latin:parentStyle="baseForFnModifierKeyStyle" />
+        </case>
+    </switch>
 </merge>

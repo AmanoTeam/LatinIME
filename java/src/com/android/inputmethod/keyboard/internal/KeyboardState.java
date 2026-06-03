@@ -54,6 +54,9 @@ public final class KeyboardState {
         public void setSymbolsShiftedKeyboard();
         public void setAlphabetFnKeyboard();
         public void setAlphabetFnCtrlKeyboard();
+        public void setAlphabetFnCtrlActiveKeyboard();
+        public void setAlphabetFnSelectActiveKeyboard();
+        public void setAlphabetFnBothActiveKeyboard();
 
         /**
          * Request to call back {@link KeyboardState#onUpdateShiftState(int, int)}.
@@ -77,6 +80,10 @@ public final class KeyboardState {
     private static final int FN_MODE_FN = 1;
     private static final int FN_MODE_FN_CTRL = 2;
     private int mFnMode = FN_MODE_OFF;
+
+    // Ctrl/Select active state for visual highlighting on the Fn layer
+    private boolean mFnCtrlActive;
+    private boolean mFnSelectActive;
 
     // TODO: Merge {@link #mSwitchState}, {@link #mIsAlphabetMode}, {@link #mAlphabetShiftState},
     // {@link #mIsSymbolShifted}, {@link #mPrevMainKeyboardWasShiftLocked}, and
@@ -401,6 +408,62 @@ public final class KeyboardState {
         mIsSymbolShifted = false;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    private void setAlphabetFnCtrlActiveKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnCtrlActiveKeyboard");
+        }
+        mSwitchActions.setAlphabetFnCtrlActiveKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    private void setAlphabetFnSelectActiveKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnSelectActiveKeyboard");
+        }
+        mSwitchActions.setAlphabetFnSelectActiveKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    private void setAlphabetFnBothActiveKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnBothActiveKeyboard");
+        }
+        mSwitchActions.setAlphabetFnBothActiveKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    public void onUpdateFnElementState(final boolean ctrlActive, final boolean selectActive) {
+        if (mFnMode != FN_MODE_FN) {
+            mFnCtrlActive = false;
+            mFnSelectActive = false;
+            return;
+        }
+        if (mFnCtrlActive == ctrlActive && mFnSelectActive == selectActive) return;
+        mFnCtrlActive = ctrlActive;
+        mFnSelectActive = selectActive;
+        if (ctrlActive && selectActive) {
+            setAlphabetFnBothActiveKeyboard();
+        } else if (ctrlActive) {
+            setAlphabetFnCtrlActiveKeyboard();
+        } else if (selectActive) {
+            setAlphabetFnSelectActiveKeyboard();
+        } else {
+            setAlphabetFnKeyboard();
+        }
     }
 
     public void onPressKey(final int code, final boolean isSinglePointer, final int autoCapsFlags,
