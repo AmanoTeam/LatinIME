@@ -58,6 +58,8 @@ public final class KeyboardIconsSet {
     public static final String NAME_ZWJ_KEY = "zwj_key";
     public static final String NAME_EMOJI_ACTION_KEY = "emoji_action_key";
     public static final String NAME_EMOJI_NORMAL_KEY = "emoji_normal_key";
+    public static final String NAME_MOVE_WORD_LEFT_KEY = "move_word_left_key";
+    public static final String NAME_MOVE_WORD_RIGHT_KEY = "move_word_right_key";
     public static final String NAME_ARROW_LEFT_KEY = "arrow_left_key";
     public static final String NAME_ARROW_DOWN_KEY = "arrow_down_key";
     public static final String NAME_ARROW_UP_KEY = "arrow_up_key";
@@ -98,6 +100,8 @@ public final class KeyboardIconsSet {
         NAME_ZWJ_KEY,                     R.styleable.Keyboard_iconZwjKey,
         NAME_EMOJI_ACTION_KEY,            R.styleable.Keyboard_iconEmojiActionKey,
         NAME_EMOJI_NORMAL_KEY,            R.styleable.Keyboard_iconEmojiNormalKey,
+        NAME_MOVE_WORD_LEFT_KEY,          R.styleable.Keyboard_iconMoveWordLeftKey,
+        NAME_MOVE_WORD_RIGHT_KEY,         R.styleable.Keyboard_iconMoveWordRightKey,
         NAME_ARROW_LEFT_KEY,              R.styleable.Keyboard_iconArrowLeftKey,
         NAME_ARROW_DOWN_KEY,              R.styleable.Keyboard_iconArrowDownKey,
         NAME_ARROW_UP_KEY,                R.styleable.Keyboard_iconArrowUpKey,
