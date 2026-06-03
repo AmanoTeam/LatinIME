@@ -44,6 +44,8 @@
         <item name="iconEmojiActionKey">@drawable/sym_keyboard_smiley_lxx_dark</item>
         <!-- Use dark green emoji icon (for lxx_light) because a normal key has white color background. -->
         <item name="iconEmojiNormalKey">@drawable/sym_keyboard_smiley_lxx_light</item>
+        <item name="iconSelectAllKey">@drawable/sym_keyboard_select_all</item>
+        <item name="iconSelectKey">@drawable/sym_keyboard_select</item>
         <item name="iconUndoKey">@drawable/sym_keyboard_undo</item>
         <item name="iconRedoKey">@drawable/sym_keyboard_redo</item>
         <item name="iconCutKey">@drawable/sym_keyboard_cut</item>

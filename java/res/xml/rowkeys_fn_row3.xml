@@ -3,11 +3,11 @@
     xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
 >
     <Key
-        latin:keySpec="SelAll|!code/key_select_all"
+        latin:keySpec="!icon/select_all_key|!code/key_select_all"
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^A" />
     <Key
-        latin:keySpec="Select|!code/key_select"
+        latin:keySpec="!icon/select_key|!code/key_select"
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="Select" />
     <Key
