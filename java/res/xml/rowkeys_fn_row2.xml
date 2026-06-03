@@ -20,19 +20,19 @@
     <Key
         latin:keySpec="F5|!code/key_f5"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F6|!code/key_f6"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F7|!code/key_f7"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F8|!code/key_f8"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keyStyle="enterKeyStyle" />
     <Key
@@ -41,6 +41,5 @@
     <Key
         latin:keySpec="PgDn|!code/key_page_down"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
 </merge>

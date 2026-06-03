@@ -21,19 +21,19 @@
     <Key
         latin:keySpec="F1|!code/key_f1"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F2|!code/key_f2"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F3|!code/key_f3"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F4|!code/key_f4"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keyStyle="deleteKeyStyle" />
     <Key
@@ -45,6 +45,6 @@
     <Key
         latin:keySpec="PgUp|!code/key_page_up"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p"
+        latin:keyWidth="10%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
 </merge>

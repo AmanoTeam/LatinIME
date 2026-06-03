@@ -15,19 +15,19 @@
     <Key
         latin:keySpec="F9|!code/key_f9"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F10|!code/key_f10"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F11|!code/key_f11"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="F12|!code/key_f12"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyWidth="7.5%p" />
     <Key
         latin:keySpec="Home|!code/key_home"
         latin:keyStyle="fnKeyStyle"
@@ -35,11 +35,9 @@
     <Key
         latin:keySpec="!icon/arrow_up_key|!code/key_move_up"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="9%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="End|!code/key_end"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="9%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
 </merge>
