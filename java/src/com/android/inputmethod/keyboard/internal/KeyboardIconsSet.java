@@ -58,6 +58,8 @@ public final class KeyboardIconsSet {
     public static final String NAME_ZWJ_KEY = "zwj_key";
     public static final String NAME_EMOJI_ACTION_KEY = "emoji_action_key";
     public static final String NAME_EMOJI_NORMAL_KEY = "emoji_normal_key";
+    public static final String NAME_UNDO_KEY = "undo_key";
+    public static final String NAME_REDO_KEY = "redo_key";
     public static final String NAME_CUT_KEY = "cut_key";
     public static final String NAME_COPY_KEY = "copy_key";
     public static final String NAME_PASTE_KEY = "paste_key";
@@ -90,6 +92,8 @@ public final class KeyboardIconsSet {
         NAME_ZWJ_KEY,                     R.styleable.Keyboard_iconZwjKey,
         NAME_EMOJI_ACTION_KEY,            R.styleable.Keyboard_iconEmojiActionKey,
         NAME_EMOJI_NORMAL_KEY,            R.styleable.Keyboard_iconEmojiNormalKey,
+        NAME_UNDO_KEY,                    R.styleable.Keyboard_iconUndoKey,
+        NAME_REDO_KEY,                    R.styleable.Keyboard_iconRedoKey,
         NAME_CUT_KEY,                     R.styleable.Keyboard_iconCutKey,
         NAME_COPY_KEY,                    R.styleable.Keyboard_iconCopyKey,
         NAME_PASTE_KEY,                   R.styleable.Keyboard_iconPasteKey,

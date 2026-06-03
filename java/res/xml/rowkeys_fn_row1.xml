@@ -6,12 +6,12 @@
         latin:keySpec="Esc|!code/key_escape"
         latin:keyStyle="fnKeyStyle" />
     <Key
-        latin:keySpec="Undo|!code/key_undo"
+        latin:keySpec="!icon/undo_key|!code/key_undo"
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^Z"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
-        latin:keySpec="Redo|!code/key_redo"
+        latin:keySpec="!icon/redo_key|!code/key_redo"
         latin:keyStyle="fnKeyStyle"
         latin:keyHintLabel="^Y"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
