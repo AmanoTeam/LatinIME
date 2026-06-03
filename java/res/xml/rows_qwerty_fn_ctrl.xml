@@ -31,9 +31,7 @@
         <include
             latin:keyboardLayout="@xml/rowkeys_fn_ctrl_row3" />
         <Key
-            latin:keyStyle="enterKeyStyle"
-            latin:keyWidth="fillRight"
-            latin:visualInsetsLeft="1%p" />
+            latin:keyStyle="enterKeyStyle" />
     </Row>
     <!-- Row 4: Esc  ABC  Fn  Enter  ◀◀  ▶▶  Left  Down  Right -->
     <include
