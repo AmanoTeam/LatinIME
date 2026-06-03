@@ -37,10 +37,10 @@
         latin:keyStyle="enterKeyStyle" />
     <Key
         latin:keySpec="Ins|!code/key_insert"
-        latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="8%p" />
+        latin:keyStyle="fnKeyStyle" />
     <Key
         latin:keySpec="PgDn|!code/key_page_down"
         latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="8%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
 </merge>

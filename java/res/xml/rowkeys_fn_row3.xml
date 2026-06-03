@@ -31,14 +31,16 @@
     <Key
         latin:keySpec="Home|!code/key_home"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="10%p"
+        latin:keyWidth="8%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="!icon/arrow_up_key|!code/key_move_up"
         latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="10%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="End|!code/key_end"
         latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="10%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
 </merge>

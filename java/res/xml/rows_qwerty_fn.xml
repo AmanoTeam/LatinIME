@@ -22,7 +22,7 @@
     </Row>
     <!-- Row 3: Shift  SelectAll  Select  F9  F10  F11  F12  Home  Up  End -->
     <Row
-        latin:keyWidth="9%p"
+        latin:keyWidth="10%p"
     >
         <Key
             latin:keyStyle="shiftKeyStyle"
