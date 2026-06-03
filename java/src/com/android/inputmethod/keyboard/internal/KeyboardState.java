@@ -502,7 +502,7 @@ public final class KeyboardState {
 
     private void onPressFn(final int autoCapsFlags,
             final int recapitalizeMode) {
-        // Cycle Fn mode: OFF -> FN -> FN_CTRL -> OFF
+        // Cycle Fn mode: OFF -> FN -> FN_CTRL -> FN <-> FN_CTRL
         if (mFnMode == FN_MODE_OFF) {
             mFnMode = FN_MODE_FN;
             setAlphabetFnKeyboard();
@@ -510,8 +510,8 @@ public final class KeyboardState {
             mFnMode = FN_MODE_FN_CTRL;
             setAlphabetFnCtrlKeyboard();
         } else {
-            mFnMode = FN_MODE_OFF;
-            setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
+            mFnMode = FN_MODE_FN;
+            setAlphabetFnKeyboard();
         }
         mFnKeyState.onPress();
     }
