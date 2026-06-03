@@ -4,7 +4,8 @@
 >
     <Key
         latin:keySpec="Esc|!code/key_escape"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="12%p" />
     <Key
         latin:keySpec="!icon/undo_key|!code/key_undo"
         latin:keyStyle="fnKeyStyle"
@@ -38,6 +39,7 @@
     <Key
         latin:keySpec="Del|!code/key_delete_forward"
         latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="8%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview"
         latin:keyHintLabel="Del" />
     <Key
