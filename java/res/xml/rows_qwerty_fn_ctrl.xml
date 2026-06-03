@@ -31,7 +31,7 @@
         <include
             latin:keyboardLayout="@xml/rowkeys_fn_ctrl_row3" />
         <Key
-            latin:keyStyle="deleteKeyStyle"
+            latin:keyStyle="enterKeyStyle"
             latin:keyWidth="fillRight"
             latin:visualInsetsLeft="1%p" />
     </Row>
