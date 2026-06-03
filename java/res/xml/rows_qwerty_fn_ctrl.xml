@@ -28,7 +28,7 @@
         <Key
             latin:keyStyle="deleteKeyStyle"
             latin:keyWidth="15%p"
-            latin:visualInsetsRight="1%p" />
+            latin:visualInsetsRight="0%p" />
         <include
             latin:keyboardLayout="@xml/rowkeys_fn_ctrl_row3" />
         <Key
