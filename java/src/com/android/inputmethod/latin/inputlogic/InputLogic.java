@@ -106,6 +106,7 @@ public final class InputLogic {
     private long mDoubleSpacePeriodCountdownStart;
 
     private boolean mSelectionMode;
+    private boolean mIsCtrlActive;
 
     // The word being corrected while the cursor is in the middle of the word.
     // Note: This does not have a composing span, so it must be handled separately.
@@ -475,6 +476,25 @@ public final class InputLogic {
 
         Event currentEvent = processedEvent;
         while (null != currentEvent) {
+            if (mIsCtrlActive && currentEvent.mKeyCode != Constants.CODE_CTRL
+                    && currentEvent.mKeyCode != Constants.CODE_FN
+                    && currentEvent.mKeyCode != Constants.CODE_ALT) {
+                if (!currentEvent.isFunctionalKeyEvent()) {
+                    // Non-functional event while Ctrl active
+                    if (currentEvent.mCodePoint >= 'a'
+                            && currentEvent.mCodePoint <= 'z') {
+                        // Letter: send Ctrl+letter KeyEvent
+                        mIsCtrlActive = false;
+                        final int ctrlKeyCode = KeyEvent.KEYCODE_A
+                                + (currentEvent.mCodePoint - 'a');
+                        sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        currentEvent = currentEvent.mNextEvent;
+                        continue;
+                    }
+                    // Non-letter character: consume Ctrl and proceed normally
+                    mIsCtrlActive = false;
+                }
+            }
             if (currentEvent.isConsumed()) {
                 handleConsumedEvent(currentEvent, inputTransaction);
             } else if (currentEvent.isFunctionalKeyEvent()) {
@@ -678,6 +698,7 @@ public final class InputLogic {
         if (mSelectionMode && !isNavigationKey(event.mKeyCode)
                 && event.mKeyCode != Constants.CODE_SELECT) {
             mSelectionMode = false;
+            mIsCtrlActive = false;
         }
         switch (event.mKeyCode) {
             case Constants.CODE_DELETE:
@@ -738,7 +759,15 @@ public final class InputLogic {
                 break;
             // Technical Keyboard Fn layer keys
             case Constants.CODE_FN:
+                // Handled by KeyboardState state machine
+                break;
             case Constants.CODE_CTRL:
+                mIsCtrlActive = !mIsCtrlActive;
+                if (!mIsCtrlActive) {
+                    // Deactivate selection mode when Ctrl turns off
+                    mSelectionMode = false;
+                }
+                break;
             case Constants.CODE_ALT:
                 // Handled by KeyboardState state machine
                 break;
@@ -2262,10 +2291,13 @@ public final class InputLogic {
      * @param keyCode the key code to send inside the key event.
      */
     private void sendDownUpKeyEvent(final int keyCode) {
-        sendDownUpKeyEvent(keyCode, 0);
+        final int metaState = mIsCtrlActive ? KeyEvent.META_CTRL_ON : 0;
+        mIsCtrlActive = false;
+        sendDownUpKeyEvent(keyCode, metaState);
     }
 
     private void sendDownUpKeyEvent(final int keyCode, final int metaState) {
+        mIsCtrlActive = false;
         final long eventTime = SystemClock.uptimeMillis();
         mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,
                 KeyEvent.ACTION_DOWN, keyCode, 0, metaState, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
