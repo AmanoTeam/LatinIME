@@ -27,7 +27,7 @@
         <Key
             latin:keySpec="!icon/shift_key|!code/key_shift"
             latin:keyStyle="fnKeyStyle"
-            latin:keyWidth="15%p" />
+            latin:keyWidth="10%p" />
         <include
             latin:keyboardLayout="@xml/rowkeys_fn_row3" />
     </Row>

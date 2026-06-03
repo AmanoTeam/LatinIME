@@ -10,7 +10,7 @@
     <Key
         latin:keySpec="!icon/select_key|!code/key_select"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="15%p"
+        latin:keyWidth="20%p"
         latin:keyHintLabel="Select" />
     <Key
         latin:keySpec="F9|!code/key_f9"
