@@ -8,15 +8,18 @@
     <Key
         latin:keySpec="!icon/cut_key|!code/key_cut"
         latin:keyStyle="fnKeyStyle"
-        latin:keyHintLabel="^X" />
+        latin:keyHintLabel="^X"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="!icon/copy_key|!code/key_copy"
         latin:keyStyle="fnKeyStyle"
-        latin:keyHintLabel="^C" />
+        latin:keyHintLabel="^C"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="!icon/paste_key|!code/key_paste"
         latin:keyStyle="fnKeyStyle"
-        latin:keyHintLabel="^V" />
+        latin:keyHintLabel="^V"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="F5|!code/key_f5"
         latin:keyStyle="fnKeyStyle"
