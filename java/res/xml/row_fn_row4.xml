@@ -15,8 +15,10 @@
             latin:keySpec="Fn|!code/key_fn"
             latin:keyStyle="fnKeyStyle" />
         <Key
-            latin:keyStyle="spaceKeyStyle"
-            latin:keyWidth="20%p" />
+            latin:keySpec="Tab|!code/key_tab"
+            latin:keyStyle="fnKeyStyle" />
+        <Key
+            latin:keyStyle="spaceKeyStyle" />
         <Key
         latin:keySpec="!icon/move_word_left_key|!code/key_move_word_left"
         latin:keyStyle="fnKeyStyle"

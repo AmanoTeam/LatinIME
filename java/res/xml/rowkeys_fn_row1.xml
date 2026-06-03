@@ -5,17 +5,17 @@
     <Key
         latin:keySpec="Esc|!code/key_escape"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="14%p" />
+        latin:keyWidth="10%p" />
     <Key
         latin:keySpec="!icon/undo_key|!code/key_undo"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="13%p"
+        latin:keyWidth="15%p"
         latin:keyHintLabel="^Z"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
         latin:keySpec="!icon/redo_key|!code/key_redo"
         latin:keyStyle="fnKeyStyle"
-        latin:keyWidth="13%p"
+        latin:keyWidth="15%p"
         latin:keyHintLabel="^Y"
         latin:keyActionFlags="isRepeatable|noKeyPreview" />
     <Key
