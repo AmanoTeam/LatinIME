@@ -37,7 +37,7 @@
     <Key
         latin:keyStyle="deleteKeyStyle" />
     <Key
-        latin:keySpec="Del|!code/key_delete_forward"
+        latin:keySpec="!icon/forward_delete_key|!code/key_delete_forward"
         latin:keyStyle="fnKeyStyle"
         latin:keyWidth="10%p"
         latin:keyActionFlags="isRepeatable|noKeyPreview"
