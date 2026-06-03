@@ -13,16 +13,20 @@
         latin:keyHintLabel="Select" />
     <Key
         latin:keySpec="F9|!code/key_f9"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="8%p" />
     <Key
         latin:keySpec="F10|!code/key_f10"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="8%p" />
     <Key
         latin:keySpec="F11|!code/key_f11"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="8%p" />
     <Key
         latin:keySpec="F12|!code/key_f12"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="8%p" />
     <Key
         latin:keySpec="Home|!code/key_home"
         latin:keyStyle="fnKeyStyle"
