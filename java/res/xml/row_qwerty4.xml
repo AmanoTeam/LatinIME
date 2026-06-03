@@ -39,6 +39,6 @@
             latin:keyboardLayout="@xml/key_period" />
         <Key
             latin:keyStyle="enterKeyStyle"
-            latin:keyWidth="fillRight" />
+            latin:keyWidth="15%p" />
     </Row>
 </merge>

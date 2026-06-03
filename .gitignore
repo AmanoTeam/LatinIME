@@ -6,3 +6,4 @@
 LatinIME.iml
 build/
 local.properties
+*.hprof
