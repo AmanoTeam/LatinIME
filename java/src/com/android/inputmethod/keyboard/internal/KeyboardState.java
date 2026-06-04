@@ -16,6 +16,7 @@
 
 package com.android.inputmethod.keyboard.internal;
 
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -85,6 +86,12 @@ public final class KeyboardState {
     private boolean mFnCtrlActive;
     private boolean mFnSelectActive;
 
+    // Inactivity timer for non-alphabet layers (symbols, emoji).
+    // When the keyboard is on a non-alphabet layer and the user focuses
+    // a new input field, the layer is preserved only if it was recently used.
+    private long mLastNonAlphabetActivityTime;
+    private static final long NON_ALPHABET_ACTIVITY_TIMEOUT = 2000; // ms
+
     // TODO: Merge {@link #mSwitchState}, {@link #mIsAlphabetMode}, {@link #mAlphabetShiftState},
     // {@link #mIsSymbolShifted}, {@link #mPrevMainKeyboardWasShiftLocked}, and
     // {@link #mPrevSymbolsKeyboardWasShifted} into single state variable.
@@ -98,7 +105,7 @@ public final class KeyboardState {
 
     // TODO: Consolidate these two mode booleans into one integer to distinguish between alphabet,
     // symbols, and emoji mode.
-    private boolean mIsAlphabetMode;
+    private boolean mIsAlphabetMode = true;
     private boolean mIsEmojiMode;
     private AlphabetShiftState mAlphabetShiftState = new AlphabetShiftState();
     private boolean mIsSymbolShifted;
@@ -147,10 +154,25 @@ public final class KeyboardState {
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
     }
 
+    public boolean isNonAlphabetActivityTimedOut() {
+        return SystemClock.uptimeMillis() - mLastNonAlphabetActivityTime
+                > NON_ALPHABET_ACTIVITY_TIMEOUT;
+    }
+
+    private void refreshNonAlphabetActivityTime() {
+        mLastNonAlphabetActivityTime = SystemClock.uptimeMillis();
+    }
+
     public void onLoadKeyboard(final int autoCapsFlags, final int recapitalizeMode) {
         if (DEBUG_EVENT) {
             Log.d(TAG, "onLoadKeyboard: " + stateToString(autoCapsFlags, recapitalizeMode));
         }
+        // Save current keyboard mode before resetting, so we can restore it
+        // when the Enter key action changes (e.g. switching text fields).
+        final boolean savedAlphabetShiftLocked = mAlphabetShiftState.isShiftLocked();
+        final int savedShiftMode = mAlphabetShiftState.isAutomaticShifted() ? AUTOMATIC_SHIFT
+                : (mAlphabetShiftState.isShiftedOrShiftLocked() ? MANUAL_SHIFT : UNSHIFT);
+        final int savedFnMode = mFnMode;
         // Reset alphabet shift state.
         mAlphabetShiftState.setShiftLocked(false);
         mPrevMainKeyboardWasShiftLocked = false;
@@ -158,11 +180,35 @@ public final class KeyboardState {
         mShiftKeyState.onRelease();
         mSymbolKeyState.onRelease();
         mFnKeyState.onRelease();
+        mFnCtrlActive = false;
+        mFnSelectActive = false;
         if (mSavedKeyboardState.mIsValid) {
             onRestoreKeyboardState(autoCapsFlags, recapitalizeMode);
             mSavedKeyboardState.mIsValid = false;
         } else {
-            // Reset keyboard to alphabet mode.
+            if (savedFnMode == FN_MODE_FN) {
+                mFnMode = FN_MODE_FN;
+                setAlphabetFnKeyboard();
+            } else if (savedFnMode == FN_MODE_FN_CTRL) {
+                mFnMode = FN_MODE_FN_CTRL;
+                setAlphabetFnCtrlKeyboard();
+            } else {
+                setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
+                setShiftLocked(savedAlphabetShiftLocked);
+                if (!savedAlphabetShiftLocked) {
+                    setShifted(savedShiftMode);
+                }
+            }
+        }
+    }
+
+    // Check the non-alphabet inactivity timer and reset to alphabet if expired.
+    // Called from LatinIME after loadKeyboard() to handle the case where
+    // the user switched away from the non-alphabet layer some time ago but
+    // the focus change happens to the same input type (so loadKeyboard
+    // preserved the layer).
+    public void maybeResetToAlphabet(final int autoCapsFlags, final int recapitalizeMode) {
+        if (mFnMode != FN_MODE_OFF && isNonAlphabetActivityTimedOut()) {
             setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
         }
     }
@@ -516,6 +562,11 @@ public final class KeyboardState {
                     mSwitchActions.setAlphabetKeyboard();
                 }
             }
+        }
+        // Pressing any key on Fn layer resets the inactivity timer,
+        // so the layer is preserved if focus changes to another input field soon after.
+        if (mFnMode != FN_MODE_OFF) {
+            refreshNonAlphabetActivityTime();
         }
     }
 

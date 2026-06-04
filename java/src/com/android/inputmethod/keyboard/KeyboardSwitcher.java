@@ -202,6 +202,11 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mState.onResetKeyboardStateToAlphabet(currentAutoCapsState, currentRecapitalizeState);
     }
 
+    public void maybeResetToAlphabet(final int currentAutoCapsState,
+            final int currentRecapitalizeState) {
+        mState.maybeResetToAlphabet(currentAutoCapsState, currentRecapitalizeState);
+    }
+
     public void onPressKey(final int code, final boolean isSinglePointer,
             final int currentAutoCapsState, final int currentRecapitalizeState) {
         mState.onPressKey(code, isSinglePointer, currentAutoCapsState, currentRecapitalizeState);

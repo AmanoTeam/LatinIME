@@ -1076,6 +1076,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
             switcher.loadKeyboard(editorInfo, currentSettingsValues, getCurrentAutoCapsState(),
                     getCurrentRecapitalizeState());
+            // Check inactivity timer: if user was on symbols/emoji layer but hasn't
+            // interacted with it for >2s, revert to alphabet. This must happen AFTER
+            // loadKeyboard so the new KeyboardLayoutSet (with updated enter key) is ready.
+            switcher.maybeResetToAlphabet(getCurrentAutoCapsState(),
+                    getCurrentRecapitalizeState());
             if (needToCallLoadKeyboardLater) {
                 // If we need to call loadKeyboard again later, we need to save its state now. The
                 // later call will be done in #retryResetCaches.
