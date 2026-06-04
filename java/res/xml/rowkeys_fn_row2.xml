@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <Key
+        latin:keySpec="Ctrl|!code/key_ctrl"
+        latin:keyStyle="fnModifierKeyStyle" />
+    <Key
+        latin:keySpec="!icon/cut_key|!code/key_cut"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^X"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="!icon/copy_key|!code/key_copy"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^C"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="!icon/paste_key|!code/key_paste"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyHintLabel="^V"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="F5|!code/key_f5"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F6|!code/key_f6"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F7|!code/key_f7"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F8|!code/key_f8"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keyStyle="enterKeyStyle" />
+    <Key
+        latin:keySpec="Ins|!code/key_insert"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="PgDn|!code/key_page_down"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+</merge>

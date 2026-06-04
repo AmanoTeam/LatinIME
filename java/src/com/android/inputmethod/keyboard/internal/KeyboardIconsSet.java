@@ -40,6 +40,7 @@ public final class KeyboardIconsSet {
     public static final String NAME_SHIFT_KEY = "shift_key";
     public static final String NAME_SHIFT_KEY_SHIFTED = "shift_key_shifted";
     public static final String NAME_DELETE_KEY = "delete_key";
+    public static final String NAME_FORWARD_DELETE_KEY = "forward_delete_key";
     public static final String NAME_SETTINGS_KEY = "settings_key";
     public static final String NAME_SPACE_KEY = "space_key";
     public static final String NAME_SPACE_KEY_FOR_NUMBER_LAYOUT = "space_key_for_number_layout";
@@ -58,7 +59,19 @@ public final class KeyboardIconsSet {
     public static final String NAME_ZWJ_KEY = "zwj_key";
     public static final String NAME_EMOJI_ACTION_KEY = "emoji_action_key";
     public static final String NAME_EMOJI_NORMAL_KEY = "emoji_normal_key";
-    public static final String NAME_CLIPBOARD_PASTE_KEY = "clipboard_paste_key";
+    public static final String NAME_MOVE_WORD_LEFT_KEY = "move_word_left_key";
+    public static final String NAME_MOVE_WORD_RIGHT_KEY = "move_word_right_key";
+    public static final String NAME_ARROW_LEFT_KEY = "arrow_left_key";
+    public static final String NAME_ARROW_DOWN_KEY = "arrow_down_key";
+    public static final String NAME_ARROW_UP_KEY = "arrow_up_key";
+    public static final String NAME_ARROW_RIGHT_KEY = "arrow_right_key";
+    public static final String NAME_SELECT_ALL_KEY = "select_all_key";
+    public static final String NAME_SELECT_KEY = "select_key";
+    public static final String NAME_UNDO_KEY = "undo_key";
+    public static final String NAME_REDO_KEY = "redo_key";
+    public static final String NAME_CUT_KEY = "cut_key";
+    public static final String NAME_COPY_KEY = "copy_key";
+    public static final String NAME_PASTE_KEY = "paste_key";
 
     private static final SparseIntArray ATTR_ID_TO_ICON_ID = new SparseIntArray();
 
@@ -69,6 +82,7 @@ public final class KeyboardIconsSet {
         NAME_UNDEFINED,                   ATTR_UNDEFINED,
         NAME_SHIFT_KEY,                   R.styleable.Keyboard_iconShiftKey,
         NAME_DELETE_KEY,                  R.styleable.Keyboard_iconDeleteKey,
+        NAME_FORWARD_DELETE_KEY,          R.styleable.Keyboard_iconForwardDeleteKey,
         NAME_SETTINGS_KEY,                R.styleable.Keyboard_iconSettingsKey,
         NAME_SPACE_KEY,                   R.styleable.Keyboard_iconSpaceKey,
         NAME_ENTER_KEY,                   R.styleable.Keyboard_iconEnterKey,
@@ -88,7 +102,19 @@ public final class KeyboardIconsSet {
         NAME_ZWJ_KEY,                     R.styleable.Keyboard_iconZwjKey,
         NAME_EMOJI_ACTION_KEY,            R.styleable.Keyboard_iconEmojiActionKey,
         NAME_EMOJI_NORMAL_KEY,            R.styleable.Keyboard_iconEmojiNormalKey,
-        NAME_CLIPBOARD_PASTE_KEY,         R.styleable.Keyboard_iconClipboardPasteKey,
+        NAME_MOVE_WORD_LEFT_KEY,          R.styleable.Keyboard_iconMoveWordLeftKey,
+        NAME_MOVE_WORD_RIGHT_KEY,         R.styleable.Keyboard_iconMoveWordRightKey,
+        NAME_ARROW_LEFT_KEY,              R.styleable.Keyboard_iconArrowLeftKey,
+        NAME_ARROW_DOWN_KEY,              R.styleable.Keyboard_iconArrowDownKey,
+        NAME_ARROW_UP_KEY,                R.styleable.Keyboard_iconArrowUpKey,
+        NAME_ARROW_RIGHT_KEY,             R.styleable.Keyboard_iconArrowRightKey,
+        NAME_SELECT_ALL_KEY,              R.styleable.Keyboard_iconSelectAllKey,
+        NAME_SELECT_KEY,                  R.styleable.Keyboard_iconSelectKey,
+        NAME_UNDO_KEY,                    R.styleable.Keyboard_iconUndoKey,
+        NAME_REDO_KEY,                    R.styleable.Keyboard_iconRedoKey,
+        NAME_CUT_KEY,                     R.styleable.Keyboard_iconCutKey,
+        NAME_COPY_KEY,                    R.styleable.Keyboard_iconCopyKey,
+        NAME_PASTE_KEY,                   R.styleable.Keyboard_iconPasteKey,
     };
 
     private static int NUM_ICONS = NAMES_AND_ATTR_IDS.length / 2;

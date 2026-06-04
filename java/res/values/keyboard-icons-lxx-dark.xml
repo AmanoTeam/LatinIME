@@ -20,6 +20,8 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <style name="KeyboardIcons.LXX_Dark">
+        <!-- Icon tint color applied to theme-neutral (white) key icons -->
+        <item name="keyIconTint">#CCFFFFFF</item>
         <!-- Keyboard icons -->
         <item name="iconShiftKey">@drawable/sym_keyboard_shift_lxx_dark</item>
         <item name="iconDeleteKey">@drawable/sym_keyboard_delete_lxx_dark</item>
@@ -43,5 +45,19 @@
         <item name="iconEmojiActionKey">@drawable/sym_keyboard_smiley_lxx_dark</item>
         <item name="iconEmojiNormalKey">@drawable/sym_keyboard_smiley_lxx_dark</item>
         <item name="iconClipboardPasteKey">@drawable/sym_keyboard_clipboard_paste_lxx_dark</item>
+        <item name="iconForwardDeleteKey">@drawable/sym_keyboard_forward_delete</item>
+        <item name="iconMoveWordLeftKey">@drawable/sym_keyboard_move_word_left</item>
+        <item name="iconMoveWordRightKey">@drawable/sym_keyboard_move_word_right</item>
+        <item name="iconArrowLeftKey">@drawable/sym_keyboard_arrow_left</item>
+        <item name="iconArrowDownKey">@drawable/sym_keyboard_arrow_down</item>
+        <item name="iconArrowUpKey">@drawable/sym_keyboard_arrow_up</item>
+        <item name="iconArrowRightKey">@drawable/sym_keyboard_arrow_right</item>
+        <item name="iconSelectAllKey">@drawable/sym_keyboard_select_all</item>
+        <item name="iconSelectKey">@drawable/sym_keyboard_select</item>
+        <item name="iconUndoKey">@drawable/sym_keyboard_undo</item>
+        <item name="iconRedoKey">@drawable/sym_keyboard_redo</item>
+        <item name="iconCutKey">@drawable/sym_keyboard_cut</item>
+        <item name="iconCopyKey">@drawable/sym_keyboard_copy</item>
+        <item name="iconPasteKey">@drawable/sym_keyboard_paste</item>
     </style>
 </resources>

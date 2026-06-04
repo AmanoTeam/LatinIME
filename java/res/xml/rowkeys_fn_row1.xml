@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <Key
+        latin:keySpec="Esc|!code/key_escape"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="10%p" />
+    <Key
+        latin:keySpec="!icon/undo_key|!code/key_undo"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="15%p"
+        latin:keyHintLabel="^Z"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="!icon/redo_key|!code/key_redo"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="15%p"
+        latin:keyHintLabel="^Y"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="F1|!code/key_f1"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F2|!code/key_f2"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F3|!code/key_f3"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F4|!code/key_f4"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keyStyle="deleteKeyStyle" />
+    <Key
+        latin:keySpec="!icon/forward_delete_key|!code/key_delete_forward"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="10%p"
+        latin:keyActionFlags="isRepeatable|noKeyPreview"
+        latin:keyHintLabel="Del" />
+    <Key
+        latin:keySpec="PgUp|!code/key_page_up"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="10%p"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+</merge>

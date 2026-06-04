@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <Row
+        latin:keyWidth="10%p"
+    >
+        <Key
+            latin:keySpec="Alt|!code/key_alt"
+            latin:keyStyle="fnAltKeyStyle" />
+        <Key
+            latin:keySpec="ABC|!code/key_switch_alpha_symbol"
+            latin:keyStyle="toSymbolKeyStyle" />
+        <Key
+            latin:keySpec="Fn|!code/key_fn"
+            latin:keyStyle="fnKeyStyle" />
+        <Key
+            latin:keySpec="!icon/tab_key|!code/key_tab"
+            latin:keyStyle="fnKeyStyle" />
+        <Key
+            latin:keyStyle="spaceKeyStyle" />
+        <Key
+        latin:keySpec="!icon/move_word_left_key|!code/key_move_word_left"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="!icon/move_word_right_key|!code/key_move_word_right"
+            latin:keyStyle="fnKeyStyle"
+            latin:keyActionFlags="isRepeatable|noKeyPreview" />
+        <Key
+            latin:keySpec="!icon/arrow_left_key|!code/key_move_left"
+            latin:keyStyle="fnKeyStyle"
+            latin:keyActionFlags="isRepeatable|noKeyPreview" />
+        <Key
+            latin:keySpec="!icon/arrow_down_key|!code/key_move_down"
+            latin:keyStyle="fnKeyStyle"
+            latin:keyActionFlags="isRepeatable|noKeyPreview" />
+        <Key
+            latin:keySpec="!icon/arrow_right_key|!code/key_move_right"
+            latin:keyStyle="fnKeyStyle"
+            latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    </Row>
+</merge>
