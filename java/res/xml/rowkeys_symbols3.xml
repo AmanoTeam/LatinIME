@@ -20,7 +20,9 @@
 
 <merge
     xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
->
+	>
+    <Key
+        latin:keySpec="\\" />
     <Key
         latin:keySpec="*"
         latin:moreKeys="!text/morekeys_star" />

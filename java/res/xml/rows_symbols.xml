@@ -53,23 +53,18 @@
         latin:keyWidth="10%p"
     >
         <Key
-            latin:keyStyle="toMoreSymbolKeyStyle"
-            latin:keyWidth="15%p"
-            latin:visualInsetsRight="1%p" />
+            latin:keyStyle="toMoreSymbolKeyStyle" />
         <include
             latin:keyboardLayout="@xml/rowkeys_symbols3" />
         <Key
-            latin:keyStyle="deleteKeyStyle"
-            latin:keyWidth="fillRight"
-            latin:visualInsetsLeft="1%p" />
+            latin:keyStyle="deleteKeyStyle" />
     </Row>
     <Row
         latin:keyWidth="10%p"
         latin:backgroundType="functional"
     >
         <Key
-            latin:keyStyle="toAlphaKeyStyle"
-            latin:keyWidth="15%p" />
+            latin:keyStyle="toAlphaKeyStyle" />
         <include
             latin:keyboardLayout="@xml/row_symbols4" />
         <Key

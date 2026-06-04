@@ -57,8 +57,7 @@
         latin:backgroundType="functional"
     >
         <Key
-            latin:keyStyle="toAlphaKeyStyle"
-            latin:keyWidth="15%p" />
+            latin:keyStyle="toAlphaKeyStyle" />
         <include
             latin:keyboardLayout="@xml/row_symbols_shift4" />
         <Key
