@@ -19,11 +19,5 @@
 -->
 <merge xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin" >
     <include
-        latin:keyboardLayout="@xml/key_styles_less_greater" />
-    <Key
-        latin:keyStyle="lessKeyStyle" />
-    <include
-        latin:keyboardLayout="@xml/key_space_symbols" />
-    <Key
-        latin:keyStyle="greaterKeyStyle" />
+        latin:keyboardLayout="@xml/row_symbols4" />
 </merge>

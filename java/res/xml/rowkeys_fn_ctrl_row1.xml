@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <Key
+        latin:keySpec="^Q|!code/key_ctrl_q"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^W|!code/key_ctrl_w"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^E|!code/key_ctrl_e"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^R|!code/key_ctrl_r"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^T|!code/key_ctrl_t"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^Y|!code/key_ctrl_y"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^U|!code/key_ctrl_u"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^I|!code/key_ctrl_i"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^O|!code/key_ctrl_o"
+        latin:keyStyle="fnKeyStyle" />
+    <Key
+        latin:keySpec="^P|!code/key_ctrl_p"
+        latin:keyStyle="fnKeyStyle" />
+</merge>

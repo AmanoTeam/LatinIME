@@ -16,6 +16,7 @@
 
 package com.android.inputmethod.keyboard.internal;
 
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -52,6 +53,11 @@ public final class KeyboardState {
         public void setEmojiKeyboard();
         public void setSymbolsKeyboard();
         public void setSymbolsShiftedKeyboard();
+        public void setAlphabetFnKeyboard();
+        public void setAlphabetFnCtrlKeyboard();
+        public void setAlphabetFnCtrlActiveKeyboard();
+        public void setAlphabetFnSelectActiveKeyboard();
+        public void setAlphabetFnBothActiveKeyboard();
 
         /**
          * Request to call back {@link KeyboardState#onUpdateShiftState(int, int)}.
@@ -69,6 +75,22 @@ public final class KeyboardState {
 
     private ShiftKeyState mShiftKeyState = new ShiftKeyState("Shift");
     private ModifierKeyState mSymbolKeyState = new ModifierKeyState("Symbol");
+    private ModifierKeyState mFnKeyState = new ModifierKeyState("Fn");
+
+    private static final int FN_MODE_OFF = 0;
+    private static final int FN_MODE_FN = 1;
+    private static final int FN_MODE_FN_CTRL = 2;
+    private int mFnMode = FN_MODE_OFF;
+
+    // Ctrl/Select active state for visual highlighting on the Fn layer
+    private boolean mFnCtrlActive;
+    private boolean mFnSelectActive;
+
+    // Inactivity timer for non-alphabet layers (symbols, emoji).
+    // When the keyboard is on a non-alphabet layer and the user focuses
+    // a new input field, the layer is preserved only if it was recently used.
+    private long mLastNonAlphabetActivityTime;
+    private static final long NON_ALPHABET_ACTIVITY_TIMEOUT = 2000; // ms
 
     // TODO: Merge {@link #mSwitchState}, {@link #mIsAlphabetMode}, {@link #mAlphabetShiftState},
     // {@link #mIsSymbolShifted}, {@link #mPrevMainKeyboardWasShiftLocked}, and
@@ -83,7 +105,7 @@ public final class KeyboardState {
 
     // TODO: Consolidate these two mode booleans into one integer to distinguish between alphabet,
     // symbols, and emoji mode.
-    private boolean mIsAlphabetMode;
+    private boolean mIsAlphabetMode = true;
     private boolean mIsEmojiMode;
     private AlphabetShiftState mAlphabetShiftState = new AlphabetShiftState();
     private boolean mIsSymbolShifted;
@@ -103,6 +125,7 @@ public final class KeyboardState {
         public boolean mIsAlphabetShiftLocked;
         public boolean mIsEmojiMode;
         public int mShiftMode;
+        public int mFnMode;
 
         @Override
         public String toString() {
@@ -110,8 +133,14 @@ public final class KeyboardState {
                 return "INVALID";
             }
             if (mIsAlphabetMode) {
-                return mIsAlphabetShiftLocked ? "ALPHABET_SHIFT_LOCKED"
-                        : "ALPHABET_" + shiftModeToString(mShiftMode);
+                final String fnTag;
+                switch (mFnMode) {
+                case FN_MODE_FN: fnTag = " FN"; break;
+                case FN_MODE_FN_CTRL: fnTag = " FN_CTRL"; break;
+                default: fnTag = ""; break;
+                }
+                return (mIsAlphabetShiftLocked ? "ALPHABET_SHIFT_LOCKED"
+                        : "ALPHABET_" + shiftModeToString(mShiftMode)) + fnTag;
             }
             if (mIsEmojiMode) {
                 return "EMOJI";
@@ -125,21 +154,54 @@ public final class KeyboardState {
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
     }
 
+    public boolean isNonAlphabetActivityTimedOut() {
+        return SystemClock.uptimeMillis() - mLastNonAlphabetActivityTime
+                > NON_ALPHABET_ACTIVITY_TIMEOUT;
+    }
+
+    private void refreshNonAlphabetActivityTime() {
+        mLastNonAlphabetActivityTime = SystemClock.uptimeMillis();
+    }
+
     public void onLoadKeyboard(final int autoCapsFlags, final int recapitalizeMode) {
         if (DEBUG_EVENT) {
             Log.d(TAG, "onLoadKeyboard: " + stateToString(autoCapsFlags, recapitalizeMode));
         }
+        // Save current Fn mode before resetting, so we can restore it
+        // when the Enter key action changes (e.g. switching text fields).
+        final int savedFnMode = mFnMode;
         // Reset alphabet shift state.
         mAlphabetShiftState.setShiftLocked(false);
         mPrevMainKeyboardWasShiftLocked = false;
         mPrevSymbolsKeyboardWasShifted = false;
         mShiftKeyState.onRelease();
         mSymbolKeyState.onRelease();
+        mFnKeyState.onRelease();
+        mFnCtrlActive = false;
+        mFnSelectActive = false;
         if (mSavedKeyboardState.mIsValid) {
             onRestoreKeyboardState(autoCapsFlags, recapitalizeMode);
             mSavedKeyboardState.mIsValid = false;
         } else {
-            // Reset keyboard to alphabet mode.
+            if (savedFnMode == FN_MODE_FN) {
+                mFnMode = FN_MODE_FN;
+                setAlphabetFnKeyboard();
+            } else if (savedFnMode == FN_MODE_FN_CTRL) {
+                mFnMode = FN_MODE_FN_CTRL;
+                setAlphabetFnCtrlKeyboard();
+            } else {
+                setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
+            }
+        }
+    }
+
+    // Check the non-alphabet inactivity timer and reset to alphabet if expired.
+    // Called from LatinIME after loadKeyboard() to handle the case where
+    // the user switched away from the non-alphabet layer some time ago but
+    // the focus change happens to the same input type (so loadKeyboard
+    // preserved the layer).
+    public void maybeResetToAlphabet(final int autoCapsFlags, final int recapitalizeMode) {
+        if (mFnMode != FN_MODE_OFF && isNonAlphabetActivityTimedOut()) {
             setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
         }
     }
@@ -154,6 +216,7 @@ public final class KeyboardState {
         final SavedKeyboardState state = mSavedKeyboardState;
         state.mIsAlphabetMode = mIsAlphabetMode;
         state.mIsEmojiMode = mIsEmojiMode;
+        state.mFnMode = mFnMode;
         if (mIsAlphabetMode) {
             state.mIsAlphabetShiftLocked = mAlphabetShiftState.isShiftLocked();
             state.mShiftMode = mAlphabetShiftState.isAutomaticShifted() ? AUTOMATIC_SHIFT
@@ -176,6 +239,14 @@ public final class KeyboardState {
         }
         mPrevMainKeyboardWasShiftLocked = state.mIsAlphabetShiftLocked;
         if (state.mIsAlphabetMode) {
+            mFnMode = state.mFnMode;
+            if (mFnMode == FN_MODE_FN) {
+                setAlphabetFnKeyboard();
+                return;
+            } else if (mFnMode == FN_MODE_FN_CTRL) {
+                setAlphabetFnCtrlKeyboard();
+                return;
+            }
             setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
             setShiftLocked(state.mIsAlphabetShiftLocked);
             if (!state.mIsAlphabetShiftLocked) {
@@ -306,6 +377,7 @@ public final class KeyboardState {
         mIsAlphabetMode = true;
         mIsEmojiMode = false;
         mIsSymbolShifted = false;
+        mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         mSwitchState = SWITCH_STATE_ALPHA;
         mSwitchActions.requestUpdatingShiftState(autoCapsFlags, recapitalizeMode);
@@ -318,6 +390,7 @@ public final class KeyboardState {
         mSwitchActions.setSymbolsKeyboard();
         mIsAlphabetMode = false;
         mIsSymbolShifted = false;
+        mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         // Reset alphabet shift state.
         mAlphabetShiftState.setShiftLocked(false);
@@ -331,6 +404,7 @@ public final class KeyboardState {
         mSwitchActions.setSymbolsShiftedKeyboard();
         mIsAlphabetMode = false;
         mIsSymbolShifted = true;
+        mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         // Reset alphabet shift state.
         mAlphabetShiftState.setShiftLocked(false);
@@ -343,11 +417,92 @@ public final class KeyboardState {
         }
         mIsAlphabetMode = false;
         mIsEmojiMode = true;
+        mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         // Remember caps lock mode and reset alphabet shift state.
         mPrevMainKeyboardWasShiftLocked = mAlphabetShiftState.isShiftLocked();
         mAlphabetShiftState.setShiftLocked(false);
         mSwitchActions.setEmojiKeyboard();
+    }
+
+    private void setAlphabetFnKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnKeyboard");
+        }
+        mSwitchActions.setAlphabetFnKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    private void setAlphabetFnCtrlKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnCtrlKeyboard");
+        }
+        mSwitchActions.setAlphabetFnCtrlKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    private void setAlphabetFnCtrlActiveKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnCtrlActiveKeyboard");
+        }
+        mSwitchActions.setAlphabetFnCtrlActiveKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    private void setAlphabetFnSelectActiveKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnSelectActiveKeyboard");
+        }
+        mSwitchActions.setAlphabetFnSelectActiveKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    private void setAlphabetFnBothActiveKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setAlphabetFnBothActiveKeyboard");
+        }
+        mSwitchActions.setAlphabetFnBothActiveKeyboard();
+        mIsAlphabetMode = true;
+        mIsEmojiMode = false;
+        mIsSymbolShifted = false;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        mSwitchState = SWITCH_STATE_ALPHA;
+    }
+
+    public void onUpdateFnElementState(final boolean ctrlActive, final boolean selectActive) {
+        if (mFnMode != FN_MODE_FN) {
+            mFnCtrlActive = false;
+            mFnSelectActive = false;
+            return;
+        }
+        if (mFnCtrlActive == ctrlActive && mFnSelectActive == selectActive) return;
+        mFnCtrlActive = ctrlActive;
+        mFnSelectActive = selectActive;
+        if (ctrlActive && selectActive) {
+            setAlphabetFnBothActiveKeyboard();
+        } else if (ctrlActive) {
+            setAlphabetFnCtrlActiveKeyboard();
+        } else if (selectActive) {
+            setAlphabetFnSelectActiveKeyboard();
+        } else {
+            setAlphabetFnKeyboard();
+        }
     }
 
     public void onPressKey(final int code, final boolean isSinglePointer, final int autoCapsFlags,
@@ -367,10 +522,23 @@ public final class KeyboardState {
         } else if (code == Constants.CODE_CAPSLOCK) {
             // Nothing to do here. See {@link #onReleaseKey(int,boolean)}.
         } else if (code == Constants.CODE_SWITCH_ALPHA_SYMBOL) {
-            onPressSymbol(autoCapsFlags, recapitalizeMode);
+            if (mFnMode != FN_MODE_OFF) {
+                // ABC key in Fn mode: reset Fn mode, switch to base alphabet
+                mFnMode = FN_MODE_OFF;
+                setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
+            } else {
+                onPressSymbol(autoCapsFlags, recapitalizeMode);
+            }
+        } else if (code == Constants.CODE_FN) {
+            onPressFn(autoCapsFlags, recapitalizeMode);
+        } else if (code == Constants.CODE_CTRL) {
+            mFnKeyState.onPress();
+        } else if (code == Constants.CODE_ALT) {
+            mFnKeyState.onPress();
         } else {
             mShiftKeyState.onOtherKeyPressed();
             mSymbolKeyState.onOtherKeyPressed();
+            mFnKeyState.onOtherKeyPressed();
             // It is required to reset the auto caps state when all of the following conditions
             // are met:
             // 1) two or more fingers are in action
@@ -388,6 +556,11 @@ public final class KeyboardState {
                 }
             }
         }
+        // Pressing any key on Fn layer resets the inactivity timer,
+        // so the layer is preserved if focus changes to another input field soon after.
+        if (mFnMode != FN_MODE_OFF) {
+            refreshNonAlphabetActivityTime();
+        }
     }
 
     public void onReleaseKey(final int code, final boolean withSliding, final int autoCapsFlags,
@@ -403,6 +576,12 @@ public final class KeyboardState {
             setShiftLocked(!mAlphabetShiftState.isShiftLocked());
         } else if (code == Constants.CODE_SWITCH_ALPHA_SYMBOL) {
             onReleaseSymbol(withSliding, autoCapsFlags, recapitalizeMode);
+        } else if (code == Constants.CODE_FN) {
+            onReleaseFn(withSliding);
+        } else if (code == Constants.CODE_CTRL) {
+            mFnKeyState.onRelease();
+        } else if (code == Constants.CODE_ALT) {
+            mFnKeyState.onRelease();
         }
     }
 
@@ -426,6 +605,26 @@ public final class KeyboardState {
             mPrevSymbolsKeyboardWasShifted = false;
         }
         mSymbolKeyState.onRelease();
+    }
+
+    private void onPressFn(final int autoCapsFlags,
+            final int recapitalizeMode) {
+        // Cycle Fn mode: OFF -> FN -> FN_CTRL -> FN <-> FN_CTRL
+        if (mFnMode == FN_MODE_OFF) {
+            mFnMode = FN_MODE_FN;
+            setAlphabetFnKeyboard();
+        } else if (mFnMode == FN_MODE_FN) {
+            mFnMode = FN_MODE_FN_CTRL;
+            setAlphabetFnCtrlKeyboard();
+        } else {
+            mFnMode = FN_MODE_FN;
+            setAlphabetFnKeyboard();
+        }
+        mFnKeyState.onPress();
+    }
+
+    private void onReleaseFn(final boolean withSliding) {
+        mFnKeyState.onRelease();
     }
 
     public void onUpdateShiftState(final int autoCapsFlags, final int recapitalizeMode) {
@@ -464,6 +663,7 @@ public final class KeyboardState {
 
     private void updateAlphabetShiftState(final int autoCapsFlags, final int recapitalizeMode) {
         if (!mIsAlphabetMode) return;
+        if (mFnMode != FN_MODE_OFF) return;
         if (RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE != recapitalizeMode) {
             // We are recapitalizing. Match the keyboard to the current recapitalize state.
             updateShiftStateForRecapitalize(recapitalizeMode);
@@ -485,6 +685,9 @@ public final class KeyboardState {
     }
 
     private void onPressShift() {
+        // If we are in Fn mode, ignore Shift presses to prevent switching to shifted
+        // alphabet keyboard.
+        if (mFnMode != FN_MODE_OFF) return;
         // If we are recapitalizing, we don't do any of the normal processing, including
         // importantly the double tap timer.
         if (RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE != mRecapitalizeMode) {
@@ -541,6 +744,8 @@ public final class KeyboardState {
             // We are recapitalizing. We should match the keyboard state to the recapitalize
             // state in priority.
             updateShiftStateForRecapitalize(mRecapitalizeMode);
+        } else if (mFnMode != FN_MODE_OFF) {
+            mShiftKeyState.onRelease();
         } else if (mIsAlphabetMode) {
             final boolean isShiftLocked = mAlphabetShiftState.isShiftLocked();
             mIsInAlphabetUnshiftedFromShifted = false;
@@ -697,10 +902,20 @@ public final class KeyboardState {
 
     @Override
     public String toString() {
-        return "[keyboard=" + (mIsAlphabetMode ? mAlphabetShiftState.toString()
-                : (mIsSymbolShifted ? "SYMBOLS_SHIFTED" : "SYMBOLS"))
+        final String keyboardMode;
+        if (mFnMode == FN_MODE_FN) {
+            keyboardMode = "FN";
+        } else if (mFnMode == FN_MODE_FN_CTRL) {
+            keyboardMode = "FN_CTRL";
+        } else if (mIsAlphabetMode) {
+            keyboardMode = mAlphabetShiftState.toString();
+        } else {
+            keyboardMode = mIsSymbolShifted ? "SYMBOLS_SHIFTED" : "SYMBOLS";
+        }
+        return "[keyboard=" + keyboardMode
                 + " shift=" + mShiftKeyState
                 + " symbol=" + mSymbolKeyState
+                + " fn=" + mFnKeyState
                 + " switch=" + switchStateToString(mSwitchState) + "]";
     }
 

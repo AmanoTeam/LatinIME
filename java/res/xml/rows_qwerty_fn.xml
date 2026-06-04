@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <include
+        latin:keyboardLayout="@xml/key_styles_common" />
+    <include
+        latin:keyboardLayout="@xml/key_styles_fn" />
+    <!-- Row 1: Esc  Undo  Redo  F1  F2  F3  F4  Del  DelForward  PgUp -->
+    <Row
+        latin:keyWidth="10%p"
+    >
+        <include
+            latin:keyboardLayout="@xml/rowkeys_fn_row1" />
+    </Row>
+    <!-- Row 2: Ctrl  Cut  Copy  Paste  F5  F6  F7  F8  Enter  Ins  PgDn -->
+    <Row
+        latin:keyWidth="10%p"
+    >
+        <include
+            latin:keyboardLayout="@xml/rowkeys_fn_row2" />
+    </Row>
+    <!-- Row 3: Shift  SelectAll  Select  F9  F10  F11  F12  Home  Up  End -->
+    <Row
+        latin:keyWidth="10%p"
+    >
+        <Key
+            latin:keySpec="!icon/shift_key|!code/key_shift"
+            latin:keyStyle="fnKeyStyle"
+            latin:keyWidth="10%p" />
+        <include
+            latin:keyboardLayout="@xml/rowkeys_fn_row3" />
+    </Row>
+    <!-- Row 4: Alt  ABC  Fn  Enter  ◀◀  ▶▶  Left  Down  Right -->
+    <include
+        latin:keyboardLayout="@xml/row_fn_row4" />
+</merge>

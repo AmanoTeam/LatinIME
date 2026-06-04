@@ -25,6 +25,21 @@
         latin:elementKeyboard="@xml/kbd_pcqwerty"
         latin:enableProximityCharsCorrection="true" />
     <Element
+        latin:elementName="alphabetFn"
+        latin:elementKeyboard="@xml/kbd_qwerty_fn" />
+    <Element
+        latin:elementName="alphabetFnCtrl"
+        latin:elementKeyboard="@xml/kbd_qwerty_fn_ctrl" />
+    <Element
+        latin:elementName="alphabetFnCtrlActive"
+        latin:elementKeyboard="@xml/kbd_qwerty_fn" />
+    <Element
+        latin:elementName="alphabetFnSelectActive"
+        latin:elementKeyboard="@xml/kbd_qwerty_fn" />
+    <Element
+        latin:elementName="alphabetFnBothActive"
+        latin:elementKeyboard="@xml/kbd_qwerty_fn" />
+    <Element
         latin:elementName="phone"
         latin:elementKeyboard="@xml/kbd_phone" />
     <Element

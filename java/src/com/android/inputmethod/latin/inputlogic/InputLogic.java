@@ -105,6 +105,12 @@ public final class InputLogic {
     private boolean mIsAutoCorrectionIndicatorOn;
     private long mDoubleSpacePeriodCountdownStart;
 
+    public boolean mSelectionMode;
+    public boolean mIsCtrlActive;
+
+    // Tracks that sendDownUpKeyEvent consumed Ctrl/Select, requiring element update.
+    public boolean mRequiresFnElementDeactivation;
+
     // The word being corrected while the cursor is in the middle of the word.
     // Note: This does not have a composing span, so it must be handled separately.
     private String mWordBeingCorrectedByCursor = null;
@@ -473,6 +479,38 @@ public final class InputLogic {
 
         Event currentEvent = processedEvent;
         while (null != currentEvent) {
+            if (mIsCtrlActive && currentEvent.mKeyCode != Constants.CODE_CTRL
+                    && currentEvent.mKeyCode != Constants.CODE_FN
+                    && currentEvent.mKeyCode != Constants.CODE_ALT) {
+                if (!currentEvent.isFunctionalKeyEvent()) {
+                    // Non-functional event while Ctrl active
+                    if (currentEvent.mCodePoint >= 'a'
+                            && currentEvent.mCodePoint <= 'z') {
+                        // Letter: send Ctrl+letter KeyEvent
+                        mIsCtrlActive = false;
+                        inputTransaction.requireFnElementUpdate();
+                        final int ctrlKeyCode = KeyEvent.KEYCODE_A
+                                + (currentEvent.mCodePoint - 'a');
+                        sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        currentEvent = currentEvent.mNextEvent;
+                        continue;
+                    }
+                    if (currentEvent.mCodePoint >= '0'
+                            && currentEvent.mCodePoint <= '9') {
+                        // Number: send Ctrl+number KeyEvent
+                        mIsCtrlActive = false;
+                        inputTransaction.requireFnElementUpdate();
+                        final int ctrlKeyCode = KeyEvent.KEYCODE_0
+                                + (currentEvent.mCodePoint - '0');
+                        sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        currentEvent = currentEvent.mNextEvent;
+                        continue;
+                    }
+                    // Non-letter/number character: consume Ctrl and proceed normally
+                    mIsCtrlActive = false;
+                    inputTransaction.requireFnElementUpdate();
+                }
+            }
             if (currentEvent.isConsumed()) {
                 handleConsumedEvent(currentEvent, inputTransaction);
             } else if (currentEvent.isFunctionalKeyEvent()) {
@@ -653,8 +691,32 @@ public final class InputLogic {
      * @param event The event to handle.
      * @param inputTransaction The transaction in progress.
      */
+    private static boolean isNavigationKey(final int keyCode) {
+        switch (keyCode) {
+            case Constants.CODE_MOVE_LEFT:
+            case Constants.CODE_MOVE_RIGHT:
+            case Constants.CODE_MOVE_UP:
+            case Constants.CODE_MOVE_DOWN:
+            case Constants.CODE_MOVE_WORD_LEFT:
+            case Constants.CODE_MOVE_WORD_RIGHT:
+            case Constants.CODE_HOME:
+            case Constants.CODE_END:
+            case Constants.CODE_PAGE_UP:
+            case Constants.CODE_PAGE_DOWN:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private void handleFunctionalEvent(final Event event, final InputTransaction inputTransaction,
             final int currentKeyboardScriptId, final LatinIME.UIHandler handler) {
+        if (mSelectionMode && !isNavigationKey(event.mKeyCode)
+                && event.mKeyCode != Constants.CODE_SELECT) {
+            mSelectionMode = false;
+            mIsCtrlActive = false;
+            inputTransaction.requireFnElementUpdate();
+        }
         switch (event.mKeyCode) {
             case Constants.CODE_DELETE:
                 handleBackspaceEvent(event, inputTransaction, currentKeyboardScriptId);
@@ -683,9 +745,6 @@ public final class InputLogic {
             case Constants.CODE_SETTINGS:
                 onSettingsKeyPressed();
                 break;
-            case Constants.CODE_CLIPBOARD_PASTE:
-                mConnection.performContextMenuAction(android.R.id.paste);
-                break;
             case Constants.CODE_SHORTCUT:
                 // We need to switch to the shortcut IME. This is handled by LatinIME since the
                 // input logic has no business with IME switching.
@@ -713,6 +772,272 @@ public final class InputLogic {
                 handleNonSpecialCharacterEvent(tmpEvent, inputTransaction, handler);
                 // Shift + Enter is treated as a functional key but it results in adding a new
                 // line, so that does affect the contents of the editor.
+                inputTransaction.setDidAffectContents();
+                break;
+            // Technical Keyboard Fn layer keys
+            case Constants.CODE_FN:
+                // Handled by KeyboardState state machine
+                break;
+            case Constants.CODE_CTRL:
+                mIsCtrlActive = !mIsCtrlActive;
+                if (!mIsCtrlActive) {
+                    // Deactivate selection mode when Ctrl turns off
+                    mSelectionMode = false;
+                }
+                inputTransaction.requireFnElementUpdate();
+                break;
+            case Constants.CODE_ALT:
+                // Handled by KeyboardState state machine
+                break;
+            case Constants.CODE_ESCAPE:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_ESCAPE);
+                break;
+            case Constants.CODE_UNDO:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_Z, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_REDO:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_Z, KeyEvent.META_CTRL_ON | KeyEvent.META_SHIFT_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CUT:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_X, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_COPY:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_C, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_PASTE:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_SELECT_ALL:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_SELECT:
+                mSelectionMode = !mSelectionMode;
+                inputTransaction.requireFnElementUpdate();
+                break;
+            case Constants.CODE_HOME:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME);
+                }
+                break;
+            case Constants.CODE_END:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END);
+                }
+                break;
+            case Constants.CODE_PAGE_UP:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP);
+                }
+                break;
+            case Constants.CODE_PAGE_DOWN:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN);
+                }
+                break;
+            case Constants.CODE_INSERT:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_INSERT);
+                break;
+            case Constants.CODE_DELETE_FORWARD:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_FORWARD_DEL);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_MOVE_LEFT:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT);
+                }
+                break;
+            case Constants.CODE_MOVE_RIGHT:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
+                }
+                break;
+            case Constants.CODE_MOVE_WORD_LEFT:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT,
+                            KeyEvent.META_CTRL_ON);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.META_CTRL_ON);
+                }
+                break;
+            case Constants.CODE_MOVE_WORD_RIGHT:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT,
+                            KeyEvent.META_CTRL_ON);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.META_CTRL_ON);
+                }
+                break;
+            case Constants.CODE_MOVE_UP:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
+                }
+                break;
+            case Constants.CODE_MOVE_DOWN:
+                if (mSelectionMode) {
+                    sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN);
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN);
+                }
+                break;
+            case Constants.CODE_F1:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F1);
+                break;
+            case Constants.CODE_F2:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F2);
+                break;
+            case Constants.CODE_F3:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F3);
+                break;
+            case Constants.CODE_F4:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F4);
+                break;
+            case Constants.CODE_F5:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F5);
+                break;
+            case Constants.CODE_F6:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F6);
+                break;
+            case Constants.CODE_F7:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F7);
+                break;
+            case Constants.CODE_F8:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F8);
+                break;
+            case Constants.CODE_F9:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F9);
+                break;
+            case Constants.CODE_F10:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F10);
+                break;
+            case Constants.CODE_F11:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F11);
+                break;
+            case Constants.CODE_F12:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F12);
+                break;
+            // Ctrl+Letter combos (Fn+Fn layer)
+            case Constants.CODE_CTRL_A:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_B:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_B, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_C:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_C, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_D:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_D, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_E:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_E, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_F:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_F, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_G:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_G, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_H:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_H, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_I:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_I, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_J:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_J, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_K:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_K, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_L:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_L, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_M:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_M, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_N:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_N, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_O:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_O, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_P:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_P, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_Q:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_Q, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_R:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_R, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_S:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_S, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_T:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_T, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_U:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_U, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_V:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_W:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_W, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_X:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_X, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_Y:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_Y, KeyEvent.META_CTRL_ON);
+                inputTransaction.setDidAffectContents();
+                break;
+            case Constants.CODE_CTRL_Z:
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_Z, KeyEvent.META_CTRL_ON);
                 inputTransaction.setDidAffectContents();
                 break;
             default:
@@ -1986,12 +2311,51 @@ public final class InputLogic {
      * @param keyCode the key code to send inside the key event.
      */
     private void sendDownUpKeyEvent(final int keyCode) {
+        final int metaState = mIsCtrlActive ? KeyEvent.META_CTRL_ON : 0;
+        if (mIsCtrlActive) {
+            mRequiresFnElementDeactivation = true;
+        }
+        mIsCtrlActive = false;
+        sendDownUpKeyEvent(keyCode, metaState);
+    }
+
+    private void sendDownUpKeyEvent(final int keyCode, final int metaState) {
+        if (mIsCtrlActive) {
+            mRequiresFnElementDeactivation = true;
+        }
+        mIsCtrlActive = false;
         final long eventTime = SystemClock.uptimeMillis();
         mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,
-                KeyEvent.ACTION_DOWN, keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.ACTION_DOWN, keyCode, 0, metaState, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
         mConnection.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
-                KeyEvent.ACTION_UP, keyCode, 0, 0, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.ACTION_UP, keyCode, 0, metaState, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+    }
+
+    private void sendShiftedDownUpKeyEvent(final int keyCode) {
+        sendShiftedDownUpKeyEvent(keyCode, 0);
+    }
+
+    private void sendShiftedDownUpKeyEvent(final int keyCode, final int extraMetaState) {
+        final long eventTime = SystemClock.uptimeMillis();
+        mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,
+                KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+        mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,
+                KeyEvent.ACTION_DOWN, keyCode, 0,
+                KeyEvent.META_SHIFT_ON | extraMetaState,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+        mConnection.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
+                KeyEvent.ACTION_UP, keyCode, 0,
+                KeyEvent.META_SHIFT_ON | extraMetaState,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
+                KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
+        mConnection.sendKeyEvent(new KeyEvent(SystemClock.uptimeMillis(), eventTime,
+                KeyEvent.ACTION_UP, KeyEvent.KEYCODE_SHIFT_LEFT, 0, 0,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0,
                 KeyEvent.FLAG_SOFT_KEYBOARD | KeyEvent.FLAG_KEEP_TOUCH_MODE));
     }
 

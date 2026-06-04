@@ -285,7 +285,22 @@
         <attr name="iconImeKey" format="reference" />
         <attr name="iconEmojiActionKey" format="reference" />
         <attr name="iconEmojiNormalKey" format="reference" />
+        <attr name="iconForwardDeleteKey" format="reference" />
         <attr name="iconClipboardPasteKey" format="reference" />
+        <attr name="iconMoveWordLeftKey" format="reference" />
+        <attr name="iconMoveWordRightKey" format="reference" />
+        <attr name="iconArrowLeftKey" format="reference" />
+        <attr name="iconArrowDownKey" format="reference" />
+        <attr name="iconArrowUpKey" format="reference" />
+        <attr name="iconArrowRightKey" format="reference" />
+        <attr name="iconSelectAllKey" format="reference" />
+        <attr name="iconSelectKey" format="reference" />
+        <attr name="iconUndoKey" format="reference" />
+        <attr name="iconRedoKey" format="reference" />
+        <attr name="iconCutKey" format="reference" />
+        <attr name="iconCopyKey" format="reference" />
+        <attr name="iconPasteKey" format="reference" />
+        <attr name="iconFnKey" format="reference" />
     </declare-styleable>
 
     <declare-styleable name="Keyboard_GridRows">
@@ -483,6 +498,11 @@
             <enum name="emojiCategory14" value="24" />
             <enum name="emojiCategory15" value="25" />
             <enum name="emojiCategory16" value="26" />
+            <enum name="alphabetFn" value="27" />
+            <enum name="alphabetFnCtrl" value="28" />
+            <enum name="alphabetFnCtrlActive" value="29" />
+            <enum name="alphabetFnSelectActive" value="30" />
+            <enum name="alphabetFnBothActive" value="31" />
         </attr>
         <!-- This should be aligned with Keyboard.themeId and
              {@link com.android.inputmethod.keyboard.KeyboardTheme#THEME_ID_ICS} etc. -->
@@ -571,6 +591,11 @@
             <enum name="emojiCategory14" value="24" />
             <enum name="emojiCategory15" value="25" />
             <enum name="emojiCategory16" value="26" />
+            <enum name="alphabetFn" value="27" />
+            <enum name="alphabetFnCtrl" value="28" />
+            <enum name="alphabetFnCtrlActive" value="29" />
+            <enum name="alphabetFnSelectActive" value="30" />
+            <enum name="alphabetFnBothActive" value="31" />
         </attr>
         <attr name="elementKeyboard" format="reference"/>
         <!-- Enable proximity characters correction. Disabled by default. -->

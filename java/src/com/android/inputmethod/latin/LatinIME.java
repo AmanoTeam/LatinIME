@@ -1078,6 +1078,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
             switcher.loadKeyboard(editorInfo, currentSettingsValues, getCurrentAutoCapsState(),
                     getCurrentRecapitalizeState());
+            // Check inactivity timer: if user was on symbols/emoji layer but hasn't
+            // interacted with it for >2s, revert to alphabet. This must happen AFTER
+            // loadKeyboard so the new KeyboardLayoutSet (with updated enter key) is ready.
+            switcher.maybeResetToAlphabet(getCurrentAutoCapsState(),
+                    getCurrentRecapitalizeState());
             if (needToCallLoadKeyboardLater) {
                 // If we need to call loadKeyboard again later, we need to save its state now. The
                 // later call will be done in #retryResetCaches.
@@ -1819,6 +1824,16 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
         if (inputTransaction.didAffectContents()) {
             mSubtypeState.setCurrentSubtypeHasBeenUsed();
+        }
+        if (inputTransaction.requiresFnElementUpdate() || mInputLogic.mRequiresFnElementDeactivation) {
+            mInputLogic.mRequiresFnElementDeactivation = false;
+            updateFnElementState(mInputLogic.mIsCtrlActive, mInputLogic.mSelectionMode);
+        }
+    }
+
+    public void updateFnElementState(final boolean isCtrlActive, final boolean isSelectActive) {
+        if (mKeyboardSwitcher != null) {
+            mKeyboardSwitcher.updateFnElementState(isCtrlActive, isSelectActive);
         }
     }
 

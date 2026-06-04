@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:latin="http://schemas.android.com/apk/res/com.android.inputmethod.latin"
+>
+    <Key
+        latin:keySpec="!icon/select_all_key|!code/key_select_all"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="10%p"
+        latin:keyHintLabel="^A" />
+    <Key
+        latin:keySpec="!icon/select_key|!code/key_select"
+        latin:keyStyle="fnSelectKeyStyle"
+        latin:keyWidth="20%p"
+        latin:keyHintLabel="Select" />
+    <Key
+        latin:keySpec="F9|!code/key_f9"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F10|!code/key_f10"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F11|!code/key_f11"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="F12|!code/key_f12"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyWidth="7.5%p" />
+    <Key
+        latin:keySpec="Home|!code/key_home"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="!icon/arrow_up_key|!code/key_move_up"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+    <Key
+        latin:keySpec="End|!code/key_end"
+        latin:keyStyle="fnKeyStyle"
+        latin:keyActionFlags="isRepeatable|noKeyPreview" />
+</merge>
