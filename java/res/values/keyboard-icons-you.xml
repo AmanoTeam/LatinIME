@@ -28,5 +28,19 @@
         <item name="iconEmojiActionKey">@drawable/sym_keyboard_smiley</item>
         <item name="iconEmojiNormalKey">@drawable/sym_keyboard_smiley</item>
         <item name="iconClipboardPasteKey">@drawable/sym_keyboard_clipboard_paste</item>
+        <item name="iconForwardDeleteKey">@drawable/sym_keyboard_forward_delete</item>
+        <item name="iconMoveWordLeftKey">@drawable/sym_keyboard_move_word_left</item>
+        <item name="iconMoveWordRightKey">@drawable/sym_keyboard_move_word_right</item>
+        <item name="iconArrowLeftKey">@drawable/sym_keyboard_arrow_left</item>
+        <item name="iconArrowDownKey">@drawable/sym_keyboard_arrow_down</item>
+        <item name="iconArrowUpKey">@drawable/sym_keyboard_arrow_up</item>
+        <item name="iconArrowRightKey">@drawable/sym_keyboard_arrow_right</item>
+        <item name="iconSelectAllKey">@drawable/sym_keyboard_select_all</item>
+        <item name="iconSelectKey">@drawable/sym_keyboard_select</item>
+        <item name="iconUndoKey">@drawable/sym_keyboard_undo</item>
+        <item name="iconRedoKey">@drawable/sym_keyboard_redo</item>
+        <item name="iconCutKey">@drawable/sym_keyboard_cut</item>
+        <item name="iconCopyKey">@drawable/sym_keyboard_copy</item>
+        <item name="iconPasteKey">@drawable/sym_keyboard_paste</item>
     </style>
 </resources>
