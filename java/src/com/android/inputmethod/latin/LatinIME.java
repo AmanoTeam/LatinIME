@@ -1524,13 +1524,8 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         mRichImm.setInputMethodAndSubtype(token, subtype);
     }
 
-    // TODO: Revise the language switch key behavior to make it much smarter and more reasonable.
     public void switchToNextSubtype() {
         final IBinder token = getWindow().getWindow().getAttributes().token;
-        if (shouldSwitchToOtherInputMethods()) {
-            mRichImm.switchToNextInputMethod(token, false /* onlyCurrentIme */);
-            return;
-        }
         mSubtypeState.switchSubtype(token, mRichImm);
     }
 
