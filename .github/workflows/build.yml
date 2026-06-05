@@ -1,14 +1,45 @@
-name: build
+name: Build
 
-on: [push, pull_request, workflow_dispatch]
+on:
+  workflow_dispatch:
+    branches:
+        - '**'
 
 jobs:
   build:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v6
-
-    - name: Build
-      uses: ./.github/workflows/build
+    - uses: actions/checkout@main
+    - name: Set up JDK
+      uses: actions/setup-java@main
+      with:
+        java-version: 25
+        distribution: temurin
+    - name: Set-up NDK
+      run: |
+        ./gradlew clean
+    - name: Install Pino
+      run: |
+        declare -r PINO_TAG='latest'
+        declare -r PINO_TARBALL='/tmp/toolchain.tar.xz'
+        declare -r PINO_URL="https://github.com/AmanoTeam/android-gcc-cross/releases/${PINO_TAG}/download/x86_64-unknown-linux-gnu.tar.xz"
+        
+        curl --connect-timeout '10' --retry '15' --retry-all-errors --fail --silent --location --url "${PINO_URL}" --output "${PINO_TARBALL}"
+        tar --directory="$(dirname "${PINO_TARBALL}")" --extract --file="${PINO_TARBALL}"
+        
+        echo 'PINO_STATIC=0' >> "${GITHUB_ENV}"
+        echo 'PINO_HOME=/tmp/android-gcc-cross' >> "${GITHUB_ENV}"
+        echo '/tmp/android-gcc-cross/bin' >> "${GITHUB_PATH}"
+    - name: Patch the NDK
+      run: |
+        ndk-patch
+    - name: Build Android project
+      run: |
+        ./gradlew --warning-mode 'all' --no-daemon 'assembleRelease'
+    - name: Upload artifact
+      uses: actions/upload-artifact@main
+      with:
+        path: ./build/outputs/apk/release/LatinIME-release-unsigned.apk
