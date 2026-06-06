@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"Фізічная клавіша Alt паказвае ўсе даступныя эмодзі"</string>
     <string name="button_default" msgid="4824983794085575316">"Па змаўчанні"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"Вітаем у прыкладанні <xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"з уводам жэстамі"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"Пачаць"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"Далей"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"Наладка прыкладання <xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>

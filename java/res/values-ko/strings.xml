@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"물리적 Alt 키로 그림 이모티콘 팔레트 표시"</string>
     <string name="button_default" msgid="4824983794085575316">"기본값"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"<xliff:g id="APPLICATION_NAME">%s</xliff:g>에 오신 것을 환영합니다."</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"제스처 타이핑 사용"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"시작하기"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"다음 단계"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> 설정"</string>

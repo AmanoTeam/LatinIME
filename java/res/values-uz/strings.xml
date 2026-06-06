@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"Jismoniy klaviaturadagi Alt tugmasi emojilarni ochadi"</string>
     <string name="button_default" msgid="4824983794085575316">"Standart"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> ilovasiga xush kelibsiz!"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"qo‘l uzmasdan yozish"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"Boshladik"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"Keyingi qadam"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> sozlanmoqda"</string>

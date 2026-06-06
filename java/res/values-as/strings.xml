@@ -144,7 +144,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"কায়িক Alt কীয়ে ইম\'জী পেলেট দেখুৱায়"</string>
     <string name="button_default" msgid="4824983794085575316">"ডিফ\'ল্ট"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"<xliff:g id="APPLICATION_NAME">%s</xliff:g>লৈ স্বাগতম জনাইছোঁ"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"আঙুলি পিছলাই দিয়া নিৰ্দেশেৰে টাইপ কৰাৰ সুবিধাৰ সৈতে"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"আৰম্ভ কৰক"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"পৰৱৰ্তী পদক্ষেপ"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> ছেট আপ কৰি থকা হৈছে"</string>

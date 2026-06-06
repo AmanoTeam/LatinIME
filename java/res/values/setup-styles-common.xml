@@ -21,9 +21,6 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    <style name="setupWelcomeDescritpionStyle" parent="setupTitleStyle">
-        <item name="android:textSize">@dimen/setup_welcome_description_text_size</item>
-    </style>
     <style name="setupStepIndicatorStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/setup_step_triangle_indicator_height</item>

@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"Phím Alt thực hiển thị bảng biểu tượng cảm xúc"</string>
     <string name="button_default" msgid="4824983794085575316">"Mặc định"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"Chào mừng bạn đến với <xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"với Nhập bằng cử chỉ"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"Bắt đầu"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"Bước tiếp theo"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"Thiết lập <xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>

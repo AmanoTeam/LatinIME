@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"Fiziki ALt düyməsi emoji palletini göstərir"</string>
     <string name="button_default" msgid="4824983794085575316">"Defolt"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> təbiqinə xoş gəlmisiniz"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"Jest Yazısı ilə"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"Başlayın"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"Növbəti addım"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> quraşdırılır"</string>

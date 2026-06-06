@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"भौतिक Alt कुञ्जीले इमोजी प्यालेट देखाउँछ"</string>
     <string name="button_default" msgid="4824983794085575316">"पूर्वनिर्धारित"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"तपाईँलाई स्वागत छ<xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"इशारा टाइप गर्नेसँग"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"सुरु गरौं"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"अर्को चरण"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"स्थापना गर्दै <xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>

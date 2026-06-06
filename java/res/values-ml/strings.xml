@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"പ്രത്യക്ഷ Alt കീ ഇമോജി പാലറ്റിനെ കാണിക്കുന്നു"</string>
     <string name="button_default" msgid="4824983794085575316">"സ്ഥിരമായത്"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> എന്നതിലേക്ക് സ്വാഗതം"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"വിരൽചലിത ടൈപ്പിംഗിനൊപ്പം"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"ആരംഭിക്കുക"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"അടുത്ത ചുവട്"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> സജ്ജമാക്കുന്നു"</string>

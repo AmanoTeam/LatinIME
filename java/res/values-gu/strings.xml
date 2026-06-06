@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"ભૌતિક Alt કી ઇમોજી પેલેટ દર્શાવે છે"</string>
     <string name="button_default" msgid="4824983794085575316">"ડિફોલ્ટ"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> પર સ્વાગત છે"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"સાંકેતિક ટાઇપિંગ દ્વારા"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"પ્રારંભ કરો"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"આગલું પગલું"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> સેટ કરી રહ્યું છે"</string>

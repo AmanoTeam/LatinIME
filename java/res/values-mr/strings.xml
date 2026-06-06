@@ -141,7 +141,6 @@
     <string name="prefs_enable_emoji_alt_physical_key_summary" msgid="1002326516601127090">"वास्तविक Alt की इमोजी पॅलेट दर्शविते"</string>
     <string name="button_default" msgid="4824983794085575316">"डीफॉल्ट"</string>
     <string name="setup_welcome_title" msgid="6678758294706106216">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> वर स्वागत आहे"</string>
-    <string name="setup_welcome_additional_description" msgid="5109278388931620095">"जेश्चर टायपिंग करून"</string>
     <string name="setup_start_action" msgid="4261815646635054773">"सुरू करा"</string>
     <string name="setup_next_action" msgid="7388109452671117767">"पुढील चरण"</string>
     <string name="setup_steps_title" msgid="750835620571733090">"<xliff:g id="APPLICATION_NAME">%s</xliff:g> सेट अप करत आहे"</string>
