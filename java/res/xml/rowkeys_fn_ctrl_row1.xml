@@ -4,32 +4,42 @@
 >
     <Key
         latin:keySpec="^Q|!code/key_ctrl_q"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^W|!code/key_ctrl_w"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^E|!code/key_ctrl_e"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^R|!code/key_ctrl_r"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^T|!code/key_ctrl_t"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^Y|!code/key_ctrl_y"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^U|!code/key_ctrl_u"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^I|!code/key_ctrl_i"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^O|!code/key_ctrl_o"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^P|!code/key_ctrl_p"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
 </merge>

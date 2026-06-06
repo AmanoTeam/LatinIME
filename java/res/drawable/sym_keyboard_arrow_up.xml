@@ -5,6 +5,7 @@
     android:viewportWidth="960"
     android:viewportHeight="960">
   <path
+      android:fillAlpha="0.9"
       android:fillColor="?attr/keyIconTint"
       android:pathData="M440,800L440,313L216,537L160,480L480,160L800,480L744,537L520,313L520,800L440,800Z"/>
 </vector>

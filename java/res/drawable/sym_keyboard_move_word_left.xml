@@ -6,6 +6,7 @@
     android:viewportHeight="960"
     android:autoMirrored="true">
   <path
+      android:fillAlpha="0.9"
       android:fillColor="?attr/keyIconTint"
       android:pathData="M440,720L200,480L440,240L496,296L313,480L496,664L440,720ZM704,720L464,480L704,240L760,296L577,480L760,664L704,720Z"/>
 </vector>

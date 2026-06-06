@@ -4,25 +4,32 @@
 >
     <Key
         latin:keySpec="^Z|!code/key_ctrl_z"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^X|!code/key_ctrl_x"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^C|!code/key_ctrl_c"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^V|!code/key_ctrl_v"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^B|!code/key_ctrl_b"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^N|!code/key_ctrl_n"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="^M|!code/key_ctrl_m"
-        latin:keyStyle="fnKeyStyle" />
+        latin:keyStyle="fnKeyStyle"
+        latin:backgroundType="normal" />
     <Key
         latin:keySpec="!icon/arrow_up_key|!code/key_move_up"
         latin:keyStyle="fnKeyStyle"
