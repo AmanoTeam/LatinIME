@@ -56,7 +56,8 @@
         </intent>
     </queries>
 
-    <application android:label="@string/english_ime_name"
+    <application android:name=".core.CoreApplication"
+         android:label="@string/english_ime_name"
          android:icon="@drawable/ic_launcher_foreground"
          android:supportsRtl="true"
          android:allowBackup="true"

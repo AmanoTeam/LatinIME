@@ -57,7 +57,7 @@ public final class KeyboardTheme implements Comparable<KeyboardTheme> {
         new KeyboardTheme(THEME_ID_AUTO_DARK, "AutoDark", 0,
                 Build.VERSION_CODES.Q),
         new KeyboardTheme(THEME_ID_YOU, "You", R.style.KeyboardTheme_You,
-                Build.VERSION_CODES.S_V2),
+                VERSION_CODES.LOLLIPOP),
         new KeyboardTheme(THEME_ID_OLED, "OLED", R.style.KeyboardTheme_OLED,
                 VERSION_CODES.BASE),
     };

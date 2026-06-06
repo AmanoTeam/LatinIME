@@ -19,7 +19,16 @@
 -->
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="platformActivityTheme" parent="@android:style/Theme.DeviceDefault" />
-    <style name="platformSettingsTheme" parent="@android:style/Theme.DeviceDefault.Settings" />
-    <style name="platformDialogTheme" parent="@android:style/Theme.DeviceDefault.Dialog" />
+    <style name="AppBaseTheme" parent="@style/Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:windowDisablePreview">true</item>
+
+        <item name="alertDialogTheme">@style/AppTheme.MaterialAlertDialog</item>
+    </style>
+
+    <style name="AppTheme.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog" />
+
+    <style name="platformActivityTheme" parent="AppBaseTheme" />
+    <style name="platformSettingsTheme" parent="AppBaseTheme" />
+    <style name="platformDialogTheme" parent="AppBaseTheme" />
 </resources>
