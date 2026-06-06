@@ -57,7 +57,7 @@
     </queries>
 
     <application android:label="@string/english_ime_name"
-         android:icon="@mipmap/ic_launcher"
+         android:icon="@drawable/ic_launcher_foreground"
          android:supportsRtl="true"
          android:allowBackup="true"
          android:defaultToDeviceProtectedStorage="true"
@@ -95,7 +95,7 @@
         <activity android:name=".setup.SetupActivity"
              android:theme="@style/platformActivityTheme"
              android:label="@string/english_ime_name"
-             android:icon="@mipmap/ic_launcher"
+             android:icon="@drawable/ic_launcher_foreground"
              android:launchMode="singleTask"
              android:noHistory="true"
              android:exported="true">

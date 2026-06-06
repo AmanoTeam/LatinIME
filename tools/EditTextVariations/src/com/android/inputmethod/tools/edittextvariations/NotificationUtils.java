@@ -59,7 +59,7 @@ final class NotificationUtils {
                 final NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
                         CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
                 channel.setDescription(CHANNEL_DESCRIPTION);
-                context.getSystemService(NotificationManager.class)
+                ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
                         .createNotificationChannel(channel);
                 sNotificationChannelInitialized = true;
             }
@@ -93,7 +93,7 @@ final class NotificationUtils {
                 .setShowWhen(true)
                 .addAction(action)
                 .build();
-        context.getSystemService(NotificationManager.class).notify(notificationId, notification);
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(notificationId, notification);
     }
 
     static void onReceiveDirectReply(Context context, Intent intent) {
@@ -109,7 +109,7 @@ final class NotificationUtils {
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentText(String.format("Sent \"%s\" to %s", reply,
                         UserHandle.getUserHandleForUid(Process.myUid())));
-        context.getSystemService(NotificationManager.class)
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
                 .notify(notificationId, notificationBuilder.build());
     }
 

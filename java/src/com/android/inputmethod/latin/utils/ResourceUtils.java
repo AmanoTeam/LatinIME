@@ -190,7 +190,7 @@ public final class ResourceUtils {
     public static int getDefaultKeyboardWidth(final Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             // Since Android 15’s edge-to-edge enforcement, window insets should be considered.
-            final WindowManager wm = context.getSystemService(WindowManager.class);
+            final WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             final WindowMetrics windowMetrics = wm.getCurrentWindowMetrics();
             final Insets insets =
                     windowMetrics

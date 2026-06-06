@@ -610,7 +610,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         AudioAndHapticFeedbackManager.init(this);
         AccessibilityUtils.init(this);
         mStatsUtilsManager.onCreate(this /* context */, mDictionaryFacilitator);
-        final WindowManager wm = getSystemService(WindowManager.class);
         mDisplayContext = getDisplayContext();
         KeyboardSwitcher.init(this);
         super.onCreate();
@@ -861,7 +860,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         // Context doesn't well updated when the IME window moving to external display.
         // Currently we do a workaround is to create new display context directly and re-init
         // keyboard layout with this context.
-        final WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        // Use getApplicationContext() to avoid D8 API model outlining which would generate
+        // a synthetic Service.getSystemService(Class) call not available on API < 23.
+        final WindowManager wm = (WindowManager) getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE);
         return createDisplayContext(wm.getDefaultDisplay());
     }
 
@@ -1941,11 +1943,18 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         // Note that WindowManager#getDefaultDisplay() returns the display ID associated with the
         // Context from which the WindowManager instance was obtained. Therefore the following code
         // returns the display ID for the window where the IME is shown.
-        final int currentDisplayId = ((WindowManager) getSystemService(Context.WINDOW_SERVICE))
+        // Use getApplicationContext() to avoid D8 API model outlining which would generate
+        // a synthetic Service.getSystemService(Class) call not available on API < 23.
+        final int currentDisplayId = ((WindowManager) getApplicationContext()
+                .getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay().getDisplayId();
 
-        startActivity(intent,
-                ActivityOptions.makeBasic().setLaunchDisplayId(currentDisplayId).toBundle());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startActivity(intent,
+                    ActivityOptions.makeBasic().setLaunchDisplayId(currentDisplayId).toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
     void launchSettings(final String extraEntryValue) {

@@ -66,7 +66,7 @@ public final class UserManagerCompatUtils {
         if (METHOD_isUserUnlocked == null) {
             return LOCK_STATE_UNKNOWN;
         }
-        final UserManager userManager = context.getSystemService(UserManager.class);
+        final UserManager userManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
         if (userManager == null) {
             return LOCK_STATE_UNKNOWN;
         }
