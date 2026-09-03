@@ -117,10 +117,11 @@
             latin:keyStyle="qsAutocorrectKeyStyle" />
     </Row>
     <Row
-        latin:keyWidth="25%p"
+        latin:keyWidth="33.333004%p"
     >
         <Key
-            latin:keyStyle="qsPCLayoutKeyStyle" />
+            latin:keyStyle="qsPCLayoutKeyStyle"
+            latin:keyXPos="33.333%p" />
     </Row>
     <!-- Spacer row to keep the keyboard height -->
     <Row
