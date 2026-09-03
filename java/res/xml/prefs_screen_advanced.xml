@@ -58,6 +58,26 @@
         android:title="@string/backspace_trackpad"
         android:summary="@string/backspace_trackpad_summary"
         android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_long_press_space_for_tab"
+        android:title="@string/long_press_space_for_tab"
+        android:summary="@string/long_press_space_for_tab_summary"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_special_behavior_connectbot"
+        android:title="@string/special_behavior_connectbot"
+        android:summary="@string/special_behavior_connectbot_summary"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_special_behavior_terminalide"
+        android:title="@string/special_behavior_terminalide"
+        android:summary="@string/special_behavior_terminalide_summary"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="pref_fullscreen_support"
+        android:title="@string/fullscreen_support"
+        android:summary="@string/fullscreen_support_summary"
+        android:defaultValue="false" />
     <com.android.inputmethod.latin.settings.SeekBarDialogPreference
         android:key="pref_keyboard_height_scale"
         android:title="@string/prefs_keyboard_height_scale"

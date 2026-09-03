@@ -491,7 +491,18 @@ public final class InputLogic {
                         inputTransaction.requireFnElementUpdate();
                         final int ctrlKeyCode = KeyEvent.KEYCODE_A
                                 + (currentEvent.mCodePoint - 'a');
-                        sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        if (isConnectbotTarget(settingsValues)) {
+                            // ConnectBot treats DPAD_CENTER as the control modifier
+                            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER);
+                            sendDownUpKeyEvent(ctrlKeyCode, 0);
+                        } else if (isTerminalIdeTarget(settingsValues)) {
+                            // TerminalIDE expects the raw control character
+                            mConnection.commitText(StringUtils.newSingleCodePointString(
+                                    currentEvent.mCodePoint - 'a' + 1), 1);
+                            inputTransaction.setDidAffectContents();
+                        } else {
+                            sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        }
                         currentEvent = currentEvent.mNextEvent;
                         continue;
                     }
@@ -502,7 +513,12 @@ public final class InputLogic {
                         inputTransaction.requireFnElementUpdate();
                         final int ctrlKeyCode = KeyEvent.KEYCODE_0
                                 + (currentEvent.mCodePoint - '0');
-                        sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        if (isConnectbotTarget(settingsValues)) {
+                            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER);
+                            sendDownUpKeyEvent(ctrlKeyCode, 0);
+                        } else {
+                            sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
+                        }
                         currentEvent = currentEvent.mNextEvent;
                         continue;
                     }
@@ -709,6 +725,20 @@ public final class InputLogic {
         }
     }
 
+    // Check whether the target application is a terminal emulator that expects
+    // terminal-specific key handling, such as raw control characters instead of
+    // meta-state-modified KeyEvents.
+    private boolean isConnectbotTarget(final SettingsValues settingsValues) {
+        return settingsValues.mSpecialBehaviorConnectbot && Constants.CONNECTBOT_PACKAGES.contains(
+                settingsValues.mInputAttributes.mTargetApplicationPackageName);
+    }
+
+    private boolean isTerminalIdeTarget(final SettingsValues settingsValues) {
+        return settingsValues.mSpecialBehaviorTerminalIDE
+                && Constants.TERMINALIDE_PACKAGES.contains(
+                        settingsValues.mInputAttributes.mTargetApplicationPackageName);
+    }
+
     private void handleFunctionalEvent(final Event event, final InputTransaction inputTransaction,
             final int currentKeyboardScriptId, final LatinIME.UIHandler handler) {
         if (mSelectionMode && !isNavigationKey(event.mKeyCode)
@@ -790,7 +820,13 @@ public final class InputLogic {
                 // Handled by KeyboardState state machine
                 break;
             case Constants.CODE_ESCAPE:
-                sendDownUpKeyEvent(KeyEvent.KEYCODE_ESCAPE);
+                if (isConnectbotTarget(inputTransaction.mSettingsValues)) {
+                    mConnection.commitText(
+                            StringUtils.newSingleCodePointString(0x1B), 1);
+                    inputTransaction.setDidAffectContents();
+                } else {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_ESCAPE);
+                }
                 break;
             case Constants.CODE_UNDO:
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_Z, KeyEvent.META_CTRL_ON);
@@ -1061,6 +1097,11 @@ public final class InputLogic {
         switch (event.mCodePoint) {
             case Constants.CODE_ENTER:
                 final EditorInfo editorInfo = getCurrentInputEditorInfo();
+                if (isTerminalIdeTarget(inputTransaction.mSettingsValues)) {
+                    // TerminalIDE expects a carriage return character.
+                    mConnection.commitText(StringUtils.newSingleCodePointString('\r'), 1);
+                    break;
+                }
                 final int imeOptionsActionId =
                         InputTypeUtils.getImeOptionsActionIdFromEditorInfo(editorInfo);
                 if (InputTypeUtils.IME_ACTION_CUSTOM_LABEL == imeOptionsActionId) {
@@ -2374,6 +2415,14 @@ public final class InputLogic {
         // For backward compatibility. See {@link InputMethodService#sendKeyChar(char)}.
         if (codePoint >= '0' && codePoint <= '9') {
             sendDownUpKeyEvent(codePoint - '0' + KeyEvent.KEYCODE_0);
+            return;
+        }
+
+        if (Constants.CODE_TAB == codePoint && isConnectbotTarget(settingsValues)) {
+            // ConnectBot needs DPAD_CENTER followed by the tab keycode to move
+            // the terminal focus to the next field.
+            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER);
+            sendDownUpKeyEvent(KeyEvent.KEYCODE_TAB);
             return;
         }
 

@@ -18,6 +18,10 @@ package com.android.inputmethod.latin.common;
 
 import com.android.inputmethod.annotations.UsedForTesting;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Nonnull;
 
 public final class Constants {
@@ -310,6 +314,29 @@ public final class Constants {
     public static final int CODE_CTRL_Z = -74;
     public static final int CODE_MOVE_WORD_LEFT = -75;
     public static final int CODE_MOVE_WORD_RIGHT = -76;
+    // QuickSettings layer codes
+    public static final int CODE_QS_PC_LAYOUT = -77;
+    public static final int CODE_QS_AUTOCORRECT = -78;
+    public static final int CODE_QS_SUGGESTIONS = -79;
+    public static final int CODE_QS_NUMBER_ROW = -80;
+    public static final int CODE_QS_OPEN_LANGUAGES = -81;
+    public static final int CODE_QS_OPEN_SETTINGS = -82;
+
+    // Terminal emulator packages that need special key handling.
+    public static final Set<String> CONNECTBOT_PACKAGES;
+    public static final Set<String> TERMINALIDE_PACKAGES;
+    static {
+        final Set<String> connectbot = new HashSet<>();
+        connectbot.add("org.connectbot");
+        connectbot.add("org.woltage.irssiconnectbot");
+        connectbot.add("sk.vx.connectbot");
+        connectbot.add("com.pslib.connectbot");
+        connectbot.add("com.madgag.ssh.agent");
+        CONNECTBOT_PACKAGES = Collections.unmodifiableSet(connectbot);
+        final Set<String> terminalIde = new HashSet<>();
+        terminalIde.add("com.spartacusrex.spartacuside");
+        TERMINALIDE_PACKAGES = Collections.unmodifiableSet(terminalIde);
+    }
 
     public static boolean isLetterCode(final int code) {
         return code >= CODE_SPACE;

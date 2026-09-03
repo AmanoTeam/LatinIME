@@ -44,9 +44,23 @@ disposition rather than other common dispositions for Latin languages. [CHAR LIM
     <string name="space_trackpad">Space bar trackpad</string>
     <string name="space_trackpad_summary">Swipe on the spacebar to move the cursor</string>
 
-    <!-- Preference item for the backspace key track pad -->
-    <string name="backspace_trackpad">Backspace key trackpad</string>
-    <string name="backspace_trackpad_summary">Swipe on the backspace key to delete words</string>
+<!-- Preference item for the backspace key track pad -->
+     <string name="backspace_trackpad">Backspace key trackpad</string>
+     <string name="backspace_trackpad_summary">Swipe on the backspace key to delete words</string>
+
+     <!-- Preference item for long-press space for tab -->
+     <string name="long_press_space_for_tab">Long-press space for tab</string>
+     <string name="long_press_space_for_tab_summary">Long-pressing the space key inputs a tab character</string>
+
+     <!-- Preference item for terminal emulator special behavior -->
+     <string name="special_behavior_connectbot">ConnectBot terminal handling</string>
+     <string name="special_behavior_connectbot_summary">Send control sequences compatible with ConnectBot and compatible terminals</string>
+     <string name="special_behavior_terminalide">TerminalIDE terminal handling</string>
+     <string name="special_behavior_terminalide_summary">Send raw control characters and carriage returns to TerminalIDE</string>
+
+     <!-- Preference item for fullscreen (extract) mode -->
+     <string name="fullscreen_support">Fullscreen mode</string>
+     <string name="fullscreen_support_summary">Use the fullscreen (extract) keyboard layout in landscape orientation</string>
 
     <!-- Preference item for enabling longpress key hints -->
     <string name="show_longpress_hints">Show long-press key hints</string>

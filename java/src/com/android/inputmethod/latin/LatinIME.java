@@ -1347,6 +1347,10 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
             // If there is a hardware keyboard, disable full screen mode.
             return false;
         }
+        if (!settingsValues.mFullscreenSupport) {
+            // Fullscreen (extract) mode is opt-in.
+            return false;
+        }
         // Reread resource value here, because this method is called by the framework as needed.
         final boolean isFullscreenModeAllowed = Settings.readUseFullscreenMode(getResources());
         if (super.onEvaluateFullscreenMode() && isFullscreenModeAllowed) {

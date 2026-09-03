@@ -107,6 +107,13 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     public static final String PREF_SHOW_NUMBER_ROW_PASSWORD = "pref_show_number_row_password";
 
     public static final String PREF_SHOW_LONGPRESS_HINTS = "pref_show_longpress_hints";
+    // Terminal emulator special behavior
+    public static final String PREF_SPECIAL_BEHAVIOR_CONNECTBOT = "pref_special_behavior_connectbot";
+    public static final String PREF_SPECIAL_BEHAVIOR_TERMINALIDE = "pref_special_behavior_terminalide";
+    // Long-press the space key to input a tab character
+    public static final String PREF_LONG_PRESS_SPACE_FOR_TAB = "pref_long_press_space_for_tab";
+    // Use the fullscreen (extract) mode in landscape
+    public static final String PREF_FULLSCREEN_SUPPORT = "pref_fullscreen_support";
     // This preference key is deprecated. Use {@link #PREF_SHOW_LANGUAGE_SWITCH_KEY} instead.
     // This is being used only for the backward compatibility.
     private static final String PREF_SUPPRESS_LANGUAGE_SWITCH_KEY =
@@ -363,6 +370,22 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
 
     public static boolean readShowNumberRow(final SharedPreferences prefs) {
         return prefs.getBoolean(PREF_SHOW_NUMBER_ROW, false);
+    }
+
+    public static boolean readSpecialBehaviorConnectbot(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_SPECIAL_BEHAVIOR_CONNECTBOT, true);
+    }
+
+    public static boolean readSpecialBehaviorTerminalIDE(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_SPECIAL_BEHAVIOR_TERMINALIDE, true);
+    }
+
+    public static boolean readLongPressSpaceForTab(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_LONG_PRESS_SPACE_FOR_TAB, true);
+    }
+
+    public static boolean readFullscreenSupport(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_FULLSCREEN_SUPPORT, false);
     }
 
     public static float readKeyboardHeight(final SharedPreferences prefs,

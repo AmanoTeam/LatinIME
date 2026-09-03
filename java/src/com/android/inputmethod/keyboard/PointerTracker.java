@@ -1090,6 +1090,18 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
         if (key == null) {
             return;
         }
+        final int code = key.getCode();
+        if (Settings.getInstance().getCurrent().mLongPressSpaceForTab
+                && code == Constants.CODE_SPACE) {
+            // Long pressing the space key inputs a tab character.
+            cancelKeyTracking();
+            sListener.onPressKey(Constants.CODE_TAB, 0 /* repeatCont */,
+                    true /* isSinglePointer */);
+            sListener.onCodeInput(Constants.CODE_TAB, Constants.NOT_A_COORDINATE,
+                    Constants.NOT_A_COORDINATE, false /* isKeyRepeat */);
+            sListener.onReleaseKey(Constants.CODE_TAB, false /* withSliding */);
+            return;
+        }
         if (key.hasNoPanelAutoMoreKey()) {
             cancelKeyTracking();
             final int moreKeyCode = key.getMoreKeys()[0].mCode;
@@ -1099,7 +1111,6 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             sListener.onReleaseKey(moreKeyCode, false /* withSliding */);
             return;
         }
-        final int code = key.getCode();
         if (code == Constants.CODE_SPACE || code == Constants.CODE_LANGUAGE_SWITCH) {
             // Long pressing the space key invokes IME switcher dialog.
             if (sListener.onCustomRequest(Constants.CUSTOM_CODE_SHOW_INPUT_METHOD_PICKER)) {

@@ -79,6 +79,10 @@ public class SettingsValues {
     public final boolean mBlockPotentiallyOffensive;
     public final boolean mSpaceTrackpadEnabled;
     public final boolean mBackspaceTrackpadEnabled;
+    public final boolean mSpecialBehaviorConnectbot;
+    public final boolean mSpecialBehaviorTerminalIDE;
+    public final boolean mLongPressSpaceForTab;
+    public final boolean mFullscreenSupport;
     // Use bigrams to predict the next word when there is no input for it yet
     public final boolean mBigramPredictionEnabled;
     public final boolean mGestureInputEnabled;
@@ -232,6 +236,10 @@ public class SettingsValues {
         }
         mSpaceTrackpadEnabled = Settings.readSpaceTrackpadEnabled(prefs);
         mBackspaceTrackpadEnabled = Settings.readBackspaceTrackpadEnabled(prefs);
+        mSpecialBehaviorConnectbot = Settings.readSpecialBehaviorConnectbot(prefs);
+        mSpecialBehaviorTerminalIDE = Settings.readSpecialBehaviorTerminalIDE(prefs);
+        mLongPressSpaceForTab = Settings.readLongPressSpaceForTab(prefs);
+        mFullscreenSupport = Settings.readFullscreenSupport(prefs);
     }
 
     public boolean isMetricsLoggingEnabled() {
