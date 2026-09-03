@@ -9,40 +9,81 @@
         latin:keyLabelFlags="preserveCase|autoXScale"
         latin:keyActionFlags="noKeyPreview"
         latin:backgroundType="functional" />
-    <!-- Base style for Fn modifier keys (Ctrl, Alt) and Select -->
+    <!-- Base style for Fn modifier keys (Ctrl, Alt) and Select. The keySpec is set here
+         rather than on the individual Key elements so that the active (lock) state can
+         relabel the key. -->
     <key-style
         latin:styleName="baseForFnModifierKeyStyle"
         latin:keyLabelFlags="preserveCase|autoXScale"
         latin:keyActionFlags="noKeyPreview"
         android:shadowRadius="0.0"
         latin:backgroundType="functional" />
-    <!-- Ctrl key: toggles to stickyOn on Ctrl active -->
+    <!-- Ctrl key. Default and single (chord) use "Ctrl"; lock uses "CTRL". -->
     <key-style
         latin:styleName="fnModifierKeyStyle"
+        latin:keySpec="Ctrl|!code/key_ctrl"
         latin:parentStyle="baseForFnModifierKeyStyle" />
-    <!-- Select key: toggles to stickyOn on Select active -->
+    <!-- Select key. Sticky-on is shown when Select is locked. -->
     <key-style
         latin:styleName="fnSelectKeyStyle"
+        latin:keySpec="!icon/select_key|!code/key_select"
         latin:parentStyle="baseForFnModifierKeyStyle" />
-    <!-- Alt key: always functional, no active state -->
+    <!-- Alt key. Default and single use "Alt"; lock uses "ALT". -->
     <key-style
         latin:styleName="fnAltKeyStyle"
+        latin:keySpec="Alt|!code/key_alt"
         latin:parentStyle="baseForFnModifierKeyStyle" />
+    <!-- Ctrl active (single or lock): sticky on; lock relabels to "CTRL". -->
     <switch>
         <case
-            latin:keyboardLayoutSetElement="alphabetFnCtrlActive|alphabetFnBothActive"
+            latin:ctrlState="single"
         >
             <key-style
                 latin:styleName="fnModifierKeyStyle"
                 latin:backgroundType="stickyOn"
+                latin:keySpec="Ctrl|!code/key_ctrl"
                 latin:parentStyle="baseForFnModifierKeyStyle" />
         </case>
         <case
-            latin:keyboardLayoutSetElement="alphabetFnSelectActive|alphabetFnBothActive"
+            latin:ctrlState="lock"
+        >
+            <key-style
+                latin:styleName="fnModifierKeyStyle"
+                latin:backgroundType="stickyOn"
+                latin:keySpec="CTRL|!code/key_ctrl"
+                latin:parentStyle="baseForFnModifierKeyStyle" />
+        </case>
+    </switch>
+    <!-- Alt active (single or lock): sticky on; lock relabels to "ALT". -->
+    <switch>
+        <case
+            latin:altState="single"
+        >
+            <key-style
+                latin:styleName="fnAltKeyStyle"
+                latin:backgroundType="stickyOn"
+                latin:keySpec="Alt|!code/key_alt"
+                latin:parentStyle="baseForFnModifierKeyStyle" />
+        </case>
+        <case
+            latin:altState="lock"
+        >
+            <key-style
+                latin:styleName="fnAltKeyStyle"
+                latin:backgroundType="stickyOn"
+                latin:keySpec="ALT|!code/key_alt"
+                latin:parentStyle="baseForFnModifierKeyStyle" />
+        </case>
+    </switch>
+    <!-- Select active (lock only): sticky on. -->
+    <switch>
+        <case
+            latin:selectState="lock"
         >
             <key-style
                 latin:styleName="fnSelectKeyStyle"
                 latin:backgroundType="stickyOn"
+                latin:keySpec="!icon/select_key|!code/key_select"
                 latin:parentStyle="baseForFnModifierKeyStyle" />
         </case>
     </switch>

@@ -28,6 +28,7 @@ import android.view.textservice.SuggestionsInfo;
 import com.android.inputmethod.keyboard.Keyboard;
 import com.android.inputmethod.keyboard.KeyboardId;
 import com.android.inputmethod.keyboard.KeyboardLayoutSet;
+import com.android.inputmethod.keyboard.ModifierParams;
 import com.android.inputmethod.latin.DictionaryFacilitator;
 import com.android.inputmethod.latin.DictionaryFacilitatorLruCache;
 import com.android.inputmethod.latin.NgramContext;
@@ -231,7 +232,7 @@ public final class AndroidSpellCheckerService extends SpellCheckerService
         final InputMethodSubtype subtype = AdditionalSubtypeUtils.createDummyAdditionalSubtype(
                 locale.toString(), keyboardLayoutName);
         final KeyboardLayoutSet keyboardLayoutSet = createKeyboardSetForSpellChecker(subtype);
-        return keyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET);
+        return keyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET, ModifierParams.DEFAULT);
     }
 
     private KeyboardLayoutSet createKeyboardSetForSpellChecker(final InputMethodSubtype subtype) {

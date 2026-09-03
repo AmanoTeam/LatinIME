@@ -126,6 +126,8 @@ public final class KeyboardLayoutSet {
         boolean mSuggestionsEnabled;
         boolean mAutocorrect;
         boolean mPCLayout;
+        // Technical Keyboard function keyboard modifier parameters.
+        ModifierParams mModifierParams = ModifierParams.DEFAULT;
         RichInputMethodSubtype mSubtype;
         boolean mIsSpellChecker;
         int mKeyboardWidth;
@@ -172,7 +174,10 @@ public final class KeyboardLayoutSet {
     }
 
     @Nonnull
-    public Keyboard getKeyboard(final int baseKeyboardLayoutSetElementId) {
+    public Keyboard getKeyboard(final int baseKeyboardLayoutSetElementId,
+            final ModifierParams modifierParams) {
+        mParams.mModifierParams = (modifierParams == null) ? ModifierParams.DEFAULT
+                : modifierParams;
         final int keyboardLayoutSetElementId;
         switch (mParams.mMode) {
         case KeyboardId.MODE_PHONE:

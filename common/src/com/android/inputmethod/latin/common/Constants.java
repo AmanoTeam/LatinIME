@@ -342,6 +342,45 @@ public final class Constants {
         return code >= CODE_SPACE;
     }
 
+    // Whether the code affects the meta modifier state machine in
+    // {@link com.android.inputmethod.keyboard.internal.KeyboardState} and should not
+    // trigger a single-shot modifier reset.
+    public static boolean isMetaCode(final int code) {
+        switch (code) {
+            case CODE_SHIFT:
+            case CODE_CAPSLOCK:
+            case CODE_SWITCH_ALPHA_SYMBOL:
+            case CODE_SETTINGS:
+            case CODE_FN:
+            case CODE_CTRL:
+            case CODE_ALT:
+            case CODE_SELECT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    // Whether the code moves the cursor, so that the Select modifier stays active
+    // while these keys are pressed.
+    public static boolean isCursorCode(final int code) {
+        switch (code) {
+            case CODE_MOVE_LEFT:
+            case CODE_MOVE_RIGHT:
+            case CODE_MOVE_UP:
+            case CODE_MOVE_DOWN:
+            case CODE_MOVE_WORD_LEFT:
+            case CODE_MOVE_WORD_RIGHT:
+            case CODE_HOME:
+            case CODE_END:
+            case CODE_PAGE_UP:
+            case CODE_PAGE_DOWN:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     @Nonnull
     public static String printableCode(final int code) {
         switch (code) {

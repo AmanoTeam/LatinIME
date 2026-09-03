@@ -74,9 +74,6 @@ public final class KeyboardId {
     // Fn layer element IDs for Technical Keyboard
     public static final int ELEMENT_ALPHABET_FN = 27;
     public static final int ELEMENT_ALPHABET_FN_CTRL = 28;
-    public static final int ELEMENT_ALPHABET_FN_CTRL_ACTIVE = 29;
-    public static final int ELEMENT_ALPHABET_FN_SELECT_ACTIVE = 30;
-    public static final int ELEMENT_ALPHABET_FN_BOTH_ACTIVE = 31;
     // Quick Settings layer element ID for Technical Keyboard
     public static final int ELEMENT_QUICK_SETTINGS = 32;
 
@@ -94,6 +91,10 @@ public final class KeyboardId {
     public final boolean mSuggestionsEnabled;
     public final boolean mAutocorrect;
     public final boolean mPCLayout;
+    // Technical Keyboard function keyboard modifier states.
+    public final int mCtrlState;
+    public final int mAltState;
+    public final int mSelectState;
     public final String mCustomActionLabel;
     public final boolean mHasShortcutKey;
     public final boolean mIsSplitLayout;
@@ -115,6 +116,9 @@ public final class KeyboardId {
         mSuggestionsEnabled = params.mSuggestionsEnabled;
         mAutocorrect = params.mAutocorrect;
         mPCLayout = params.mPCLayout;
+        mCtrlState = params.mModifierParams.mCtrlState;
+        mAltState = params.mModifierParams.mAltState;
+        mSelectState = params.mModifierParams.mSelectState;
         mCustomActionLabel = (mEditorInfo.actionLabel != null)
                 ? mEditorInfo.actionLabel.toString() : null;
         mHasShortcutKey = params.mVoiceInputKeyEnabled;
@@ -138,6 +142,9 @@ public final class KeyboardId {
                 id.mSuggestionsEnabled,
                 id.mAutocorrect,
                 id.mPCLayout,
+                id.mCtrlState,
+                id.mAltState,
+                id.mSelectState,
                 id.isMultiLine(),
                 id.imeAction(),
                 id.mCustomActionLabel,
@@ -164,6 +171,9 @@ public final class KeyboardId {
                 && other.mSuggestionsEnabled == mSuggestionsEnabled
                 && other.mAutocorrect == mAutocorrect
                 && other.mPCLayout == mPCLayout
+                && other.mCtrlState == mCtrlState
+                && other.mAltState == mAltState
+                && other.mSelectState == mSelectState
                 && other.isMultiLine() == isMultiLine()
                 && other.imeAction() == imeAction()
                 && TextUtils.equals(other.mCustomActionLabel, mCustomActionLabel)
@@ -176,10 +186,7 @@ public final class KeyboardId {
     private static boolean isAlphabetKeyboard(final int elementId) {
         return elementId < ELEMENT_SYMBOLS
                 || elementId == ELEMENT_ALPHABET_FN
-                || elementId == ELEMENT_ALPHABET_FN_CTRL
-                || elementId == ELEMENT_ALPHABET_FN_CTRL_ACTIVE
-                || elementId == ELEMENT_ALPHABET_FN_SELECT_ACTIVE
-                || elementId == ELEMENT_ALPHABET_FN_BOTH_ACTIVE;
+                || elementId == ELEMENT_ALPHABET_FN_CTRL;
     }
 
     public boolean isAlphabetKeyboard() {
@@ -284,9 +291,6 @@ public final class KeyboardId {
         case ELEMENT_EMOJI_CATEGORY15: return "emojiCategory15";
         case ELEMENT_ALPHABET_FN: return "alphabetFn";
         case ELEMENT_ALPHABET_FN_CTRL: return "alphabetFnCtrl";
-        case ELEMENT_ALPHABET_FN_CTRL_ACTIVE: return "alphabetFnCtrlActive";
-        case ELEMENT_ALPHABET_FN_SELECT_ACTIVE: return "alphabetFnSelectActive";
-        case ELEMENT_ALPHABET_FN_BOTH_ACTIVE: return "alphabetFnBothActive";
         case ELEMENT_QUICK_SETTINGS: return "quickSettings";
         case ELEMENT_EMOJI_CATEGORY16: return "emojiCategory16";
         default: return null;

@@ -19,8 +19,10 @@ package com.android.inputmethod.keyboard.internal;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.android.inputmethod.event.Event;
+import com.android.inputmethod.keyboard.ModifierParams;
 import com.android.inputmethod.latin.common.Constants;
 import com.android.inputmethod.latin.utils.CapsModeUtils;
 import com.android.inputmethod.latin.utils.RecapitalizeStatus;
@@ -55,9 +57,6 @@ public final class KeyboardState {
         public void setSymbolsShiftedKeyboard();
         public void setAlphabetFnKeyboard();
         public void setAlphabetFnCtrlKeyboard();
-        public void setAlphabetFnCtrlActiveKeyboard();
-        public void setAlphabetFnSelectActiveKeyboard();
-        public void setAlphabetFnBothActiveKeyboard();
         public void setQuickSettingsKeyboard();
 
         /**
@@ -77,15 +76,23 @@ public final class KeyboardState {
     private ShiftKeyState mShiftKeyState = new ShiftKeyState("Shift");
     private ModifierKeyState mSymbolKeyState = new ModifierKeyState("Symbol");
     private ModifierKeyState mFnKeyState = new ModifierKeyState("Fn");
+    private final ModifierKeyState mCtrlKeyState = new ModifierKeyState("Ctrl");
+    private final ModifierKeyState mAltKeyState = new ModifierKeyState("Alt");
+    private final ModifierKeyState mFnSelectKeyState = new ModifierKeyState("FnSelect");
 
     private static final int FN_MODE_OFF = 0;
     private static final int FN_MODE_FN = 1;
     private static final int FN_MODE_FN_CTRL = 2;
     private int mFnMode = FN_MODE_OFF;
 
-    // Ctrl/Select active state for visual highlighting on the Fn layer
-    private boolean mFnCtrlActive;
-    private boolean mFnSelectActive;
+    // Function keyboard modifier parameters (Ctrl/Alt/Select states). These flow into
+    // the keyboard builder so that Fn layer key styles can reflect the modifier state.
+    private ModifierParams mFunctionModifierParams = ModifierParams.DEFAULT;
+
+    // Timeouts to detect double taps of the Ctrl and Alt keys for locking.
+    private static final long META_LOCK_INTERVAL = 500;
+    private long mLastCtrlTime = 0;
+    private long mLastAltTime = 0;
 
     // Inactivity timer for non-alphabet layers (symbols, emoji).
     // When the keyboard is on a non-alphabet layer and the user focuses
@@ -156,6 +163,55 @@ public final class KeyboardState {
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
     }
 
+    // Returns the new modifier state from double tap aware input logic: off becomes
+    // single, single becomes lock if tapped again quickly, and lock becomes off.
+    private static int getNewMetaState(final int oldState, final long lastInputTime) {
+        switch (oldState) {
+        case ModifierParams.SINGLE:
+            final long time = System.currentTimeMillis();
+            if (time - lastInputTime < META_LOCK_INTERVAL) {
+                return ModifierParams.LOCK;
+            }
+            return ModifierParams.OFF;
+        case ModifierParams.LOCK:
+            return ModifierParams.OFF;
+        default:
+            return ModifierParams.SINGLE;
+        }
+    }
+
+    public boolean isMetaControlAlt() {
+        return mFunctionModifierParams.mCtrlState != ModifierParams.OFF
+                || mFunctionModifierParams.mAltState != ModifierParams.OFF;
+    }
+
+    public boolean isMetaSelect() {
+        return mFunctionModifierParams.mSelectState != ModifierParams.OFF;
+    }
+
+    public ModifierParams getFunctionModifierParams() {
+        return mFunctionModifierParams;
+    }
+
+    public int getCtrlState() {
+        return mFunctionModifierParams.mCtrlState;
+    }
+
+    public int getAltState() {
+        return mFunctionModifierParams.mAltState;
+    }
+
+    public int getMetaState() {
+        int state = 0;
+        if (mFunctionModifierParams.mCtrlState != ModifierParams.OFF) {
+            state |= KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON;
+        }
+        if (mFunctionModifierParams.mAltState != ModifierParams.OFF) {
+            state |= KeyEvent.META_ALT_ON | KeyEvent.META_ALT_LEFT_ON;
+        }
+        return state;
+    }
+
     public boolean isNonAlphabetActivityTimedOut() {
         return SystemClock.uptimeMillis() - mLastNonAlphabetActivityTime
                 > NON_ALPHABET_ACTIVITY_TIMEOUT;
@@ -179,8 +235,9 @@ public final class KeyboardState {
         mShiftKeyState.onRelease();
         mSymbolKeyState.onRelease();
         mFnKeyState.onRelease();
-        mFnCtrlActive = false;
-        mFnSelectActive = false;
+        mCtrlKeyState.onRelease();
+        mAltKeyState.onRelease();
+        mFnSelectKeyState.onRelease();
         if (mSavedKeyboardState.mIsValid) {
             onRestoreKeyboardState(autoCapsFlags, recapitalizeMode);
             mSavedKeyboardState.mIsValid = false;
@@ -480,62 +537,95 @@ public final class KeyboardState {
         mSwitchState = SWITCH_STATE_ALPHA;
     }
 
-    private void setAlphabetFnCtrlActiveKeyboard() {
-        if (DEBUG_INTERNAL_ACTION) {
-            Log.d(TAG, "setAlphabetFnCtrlActiveKeyboard");
-        }
-        mSwitchActions.setAlphabetFnCtrlActiveKeyboard();
-        mIsAlphabetMode = true;
-        mIsEmojiMode = false;
-        mIsQuickSettingsMode = false;
-        mIsSymbolShifted = false;
-        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
-        mSwitchState = SWITCH_STATE_ALPHA;
-    }
-
-    private void setAlphabetFnSelectActiveKeyboard() {
-        if (DEBUG_INTERNAL_ACTION) {
-            Log.d(TAG, "setAlphabetFnSelectActiveKeyboard");
-        }
-        mSwitchActions.setAlphabetFnSelectActiveKeyboard();
-        mIsAlphabetMode = true;
-        mIsEmojiMode = false;
-        mIsQuickSettingsMode = false;
-        mIsSymbolShifted = false;
-        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
-        mSwitchState = SWITCH_STATE_ALPHA;
-    }
-
-    private void setAlphabetFnBothActiveKeyboard() {
-        if (DEBUG_INTERNAL_ACTION) {
-            Log.d(TAG, "setAlphabetFnBothActiveKeyboard");
-        }
-        mSwitchActions.setAlphabetFnBothActiveKeyboard();
-        mIsAlphabetMode = true;
-        mIsEmojiMode = false;
-        mIsQuickSettingsMode = false;
-        mIsSymbolShifted = false;
-        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
-        mSwitchState = SWITCH_STATE_ALPHA;
-    }
-
-    public void onUpdateFnElementState(final boolean ctrlActive, final boolean selectActive) {
-        if (mFnMode != FN_MODE_FN) {
-            mFnCtrlActive = false;
-            mFnSelectActive = false;
-            return;
-        }
-        if (mFnCtrlActive == ctrlActive && mFnSelectActive == selectActive) return;
-        mFnCtrlActive = ctrlActive;
-        mFnSelectActive = selectActive;
-        if (ctrlActive && selectActive) {
-            setAlphabetFnBothActiveKeyboard();
-        } else if (ctrlActive) {
-            setAlphabetFnCtrlActiveKeyboard();
-        } else if (selectActive) {
-            setAlphabetFnSelectActiveKeyboard();
-        } else {
+    // Reload the current Fn layer element so that modifier key styles pick up the new
+    // modifier state. Modifier keys are only present on the Fn layers.
+    private void reloadKeyboardForModifierState() {
+        if (mFnMode == FN_MODE_FN) {
             setAlphabetFnKeyboard();
+        } else if (mFnMode == FN_MODE_FN_CTRL) {
+            setAlphabetFnCtrlKeyboard();
+        }
+    }
+
+    private void toggleCtrl() {
+        final int newCtrlState = getNewMetaState(mFunctionModifierParams.mCtrlState, mLastCtrlTime);
+        mLastCtrlTime = newCtrlState == ModifierParams.SINGLE ? System.currentTimeMillis() : 0L;
+        mFunctionModifierParams = mFunctionModifierParams.newControlState(newCtrlState);
+        reloadKeyboardForModifierState();
+    }
+
+    private void toggleAlt() {
+        final int newAltState = getNewMetaState(mFunctionModifierParams.mAltState, mLastAltTime);
+        mLastAltTime = newAltState == ModifierParams.SINGLE ? System.currentTimeMillis() : 0L;
+        mFunctionModifierParams = mFunctionModifierParams.newAltState(newAltState);
+        reloadKeyboardForModifierState();
+    }
+
+    private void toggleFnSelect() {
+        final int newFnSelectState = mFunctionModifierParams.mSelectState == ModifierParams.LOCK
+                ? ModifierParams.OFF : ModifierParams.LOCK;
+        mFunctionModifierParams = mFunctionModifierParams.newSelectState(newFnSelectState);
+        reloadKeyboardForModifierState();
+    }
+
+    private void onPressControl() {
+        toggleCtrl();
+        mCtrlKeyState.onPress();
+    }
+
+    private void onPressAlt() {
+        toggleAlt();
+        mAltKeyState.onPress();
+    }
+
+    private void onPressFnSelect() {
+        toggleFnSelect();
+        mFnSelectKeyState.onPress();
+    }
+
+    private void onReleaseControl() {
+        if (mCtrlKeyState.isChording()) {
+            // Switch back to the previous modifier state if the user chords the modifier
+            // key and another key, then releases the modifier key.
+            toggleCtrl();
+        }
+        mCtrlKeyState.onRelease();
+    }
+
+    private void onReleaseAlt() {
+        if (mAltKeyState.isChording()) {
+            toggleAlt();
+        }
+        mAltKeyState.onRelease();
+    }
+
+    private void onReleaseFnSelect() {
+        if (mFnSelectKeyState.isChording()) {
+            toggleFnSelect();
+        }
+        mFnSelectKeyState.onRelease();
+    }
+
+    // Reset single-shot modifiers that have already been released after a non-meta key
+    // event, and reload the keyboard so that modifier key styles reflect the state.
+    private void updateMetaState() {
+        boolean modifierStateChanged = false;
+        if (mAltKeyState.isReleasing() && mFunctionModifierParams.mAltState == ModifierParams.SINGLE) {
+            mFunctionModifierParams = mFunctionModifierParams.newAltState(ModifierParams.OFF);
+            modifierStateChanged = true;
+        }
+        if (mCtrlKeyState.isReleasing()
+                && mFunctionModifierParams.mCtrlState == ModifierParams.SINGLE) {
+            mFunctionModifierParams = mFunctionModifierParams.newControlState(ModifierParams.OFF);
+            modifierStateChanged = true;
+        }
+        if (mFnSelectKeyState.isReleasing()
+                && mFunctionModifierParams.mSelectState == ModifierParams.SINGLE) {
+            mFunctionModifierParams = mFunctionModifierParams.newSelectState(ModifierParams.OFF);
+            modifierStateChanged = true;
+        }
+        if (modifierStateChanged) {
+            reloadKeyboardForModifierState();
         }
     }
 
@@ -566,13 +656,18 @@ public final class KeyboardState {
         } else if (code == Constants.CODE_FN) {
             onPressFn(autoCapsFlags, recapitalizeMode);
         } else if (code == Constants.CODE_CTRL) {
-            mFnKeyState.onPress();
+            onPressControl();
         } else if (code == Constants.CODE_ALT) {
-            mFnKeyState.onPress();
+            onPressAlt();
+        } else if (code == Constants.CODE_SELECT) {
+            onPressFnSelect();
         } else {
             mShiftKeyState.onOtherKeyPressed();
             mSymbolKeyState.onOtherKeyPressed();
             mFnKeyState.onOtherKeyPressed();
+            mCtrlKeyState.onOtherKeyPressed();
+            mAltKeyState.onOtherKeyPressed();
+            mFnSelectKeyState.onOtherKeyPressed();
             // It is required to reset the auto caps state when all of the following conditions
             // are met:
             // 1) two or more fingers are in action
@@ -595,6 +690,15 @@ public final class KeyboardState {
         if (mFnMode != FN_MODE_OFF) {
             refreshNonAlphabetActivityTime();
         }
+        // Select mode: pressing a non-cursor key exits select mode.
+        if (code != Constants.CODE_SELECT
+                && mFunctionModifierParams.mSelectState != ModifierParams.OFF
+                && !Constants.isCursorCode(code)) {
+            final int newFnSelectState = mFunctionModifierParams.mSelectState != ModifierParams.LOCK
+                    ? ModifierParams.LOCK : ModifierParams.OFF;
+            mFunctionModifierParams = mFunctionModifierParams.newSelectState(newFnSelectState);
+            reloadKeyboardForModifierState();
+        }
     }
 
     public void onReleaseKey(final int code, final boolean withSliding, final int autoCapsFlags,
@@ -613,9 +717,11 @@ public final class KeyboardState {
         } else if (code == Constants.CODE_FN) {
             onReleaseFn(withSliding);
         } else if (code == Constants.CODE_CTRL) {
-            mFnKeyState.onRelease();
+            onReleaseControl();
         } else if (code == Constants.CODE_ALT) {
-            mFnKeyState.onRelease();
+            onReleaseAlt();
+        } else if (code == Constants.CODE_SELECT) {
+            onReleaseFnSelect();
         }
     }
 
@@ -911,6 +1017,10 @@ public final class KeyboardState {
         } else if (code == Constants.CODE_ALPHA_FROM_EMOJI) {
             setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
         }
+        // Reset single-shot modifiers after a non-meta key event.
+        if (!Constants.isMetaCode(code)) {
+            updateMetaState();
+        }
     }
 
     static String shiftModeToString(final int shiftMode) {
@@ -952,6 +1062,7 @@ public final class KeyboardState {
                 + " shift=" + mShiftKeyState
                 + " symbol=" + mSymbolKeyState
                 + " fn=" + mFnKeyState
+                + " fnMod=" + mFunctionModifierParams
                 + " switch=" + switchStateToString(mSwitchState) + "]";
     }
 

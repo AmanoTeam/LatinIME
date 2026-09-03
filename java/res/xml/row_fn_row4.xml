@@ -6,7 +6,6 @@
         latin:keyWidth="10%p"
     >
         <Key
-            latin:keySpec="Alt|!code/key_alt"
             latin:keyStyle="fnAltKeyStyle" />
         <Key
             latin:keySpec="ABC|!code/key_switch_alpha_symbol"

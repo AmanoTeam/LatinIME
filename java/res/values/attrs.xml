@@ -500,9 +500,6 @@
             <enum name="emojiCategory16" value="26" />
             <enum name="alphabetFn" value="27" />
             <enum name="alphabetFnCtrl" value="28" />
-            <enum name="alphabetFnCtrlActive" value="29" />
-            <enum name="alphabetFnSelectActive" value="30" />
-            <enum name="alphabetFnBothActive" value="31" />
             <enum name="quickSettings" value="32" />
         </attr>
         <!-- This should be aligned with Keyboard.themeId and
@@ -535,6 +532,23 @@
         <attr name="suggestions" format="boolean" />
         <attr name="autocorrect" format="boolean" />
         <attr name="pcLayout" format="boolean" />
+        <!-- Technical Keyboard function modifier states. The integer values must
+             match {@link ModifierParams#OFF}, {@link ModifierParams#SINGLE} and
+             {@link ModifierParams#LOCK}. -->
+        <attr name="ctrlState" format="enum">
+            <enum name="off" value="0" />
+            <enum name="single" value="1" />
+            <enum name="lock" value="2" />
+        </attr>
+        <attr name="altState" format="enum">
+            <enum name="off" value="0" />
+            <enum name="single" value="1" />
+            <enum name="lock" value="2" />
+        </attr>
+        <attr name="selectState" format="enum">
+            <enum name="off" value="0" />
+            <enum name="lock" value="2" />
+        </attr>
         <attr name="isMultiLine" format="boolean" />
         <attr name="imeAction" format="enum">
             <!-- This should be aligned with
@@ -597,9 +611,6 @@
             <enum name="emojiCategory16" value="26" />
             <enum name="alphabetFn" value="27" />
             <enum name="alphabetFnCtrl" value="28" />
-            <enum name="alphabetFnCtrlActive" value="29" />
-            <enum name="alphabetFnSelectActive" value="30" />
-            <enum name="alphabetFnBothActive" value="31" />
             <enum name="quickSettings" value="32" />
         </attr>
         <attr name="elementKeyboard" format="reference"/>

@@ -166,7 +166,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         // TODO: pass this object to setKeyboard instead of getting the current values.
         final MainKeyboardView keyboardView = mKeyboardView;
         final Keyboard oldKeyboard = keyboardView.getKeyboard();
-        final Keyboard newKeyboard = mKeyboardLayoutSet.getKeyboard(keyboardId);
+        final Keyboard newKeyboard = mKeyboardLayoutSet.getKeyboard(keyboardId,
+                mState.getFunctionModifierParams());
         keyboardView.setKeyboard(newKeyboard);
         mCurrentInputView.setKeyboardTopPadding(newKeyboard.mTopPadding);
         keyboardView.setKeyPreviewPopupEnabled(
@@ -308,33 +309,6 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
 
     // Implements {@link KeyboardState.SwitchActions}.
     @Override
-    public void setAlphabetFnCtrlActiveKeyboard() {
-        if (DEBUG_ACTION) {
-            Log.d(TAG, "setAlphabetFnCtrlActiveKeyboard");
-        }
-        setKeyboard(KeyboardId.ELEMENT_ALPHABET_FN_CTRL_ACTIVE, KeyboardSwitchState.OTHER);
-    }
-
-    // Implements {@link KeyboardState.SwitchActions}.
-    @Override
-    public void setAlphabetFnSelectActiveKeyboard() {
-        if (DEBUG_ACTION) {
-            Log.d(TAG, "setAlphabetFnSelectActiveKeyboard");
-        }
-        setKeyboard(KeyboardId.ELEMENT_ALPHABET_FN_SELECT_ACTIVE, KeyboardSwitchState.OTHER);
-    }
-
-    // Implements {@link KeyboardState.SwitchActions}.
-    @Override
-    public void setAlphabetFnBothActiveKeyboard() {
-        if (DEBUG_ACTION) {
-            Log.d(TAG, "setAlphabetFnBothActiveKeyboard");
-        }
-        setKeyboard(KeyboardId.ELEMENT_ALPHABET_FN_BOTH_ACTIVE, KeyboardSwitchState.OTHER);
-    }
-
-    // Implements {@link KeyboardState.SwitchActions}.
-    @Override
     public void setQuickSettingsKeyboard() {
         if (DEBUG_ACTION) {
             Log.d(TAG, "setQuickSettingsKeyboard");
@@ -346,8 +320,24 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mState.toggleQuickSettings(autoCapsFlags, recapitalizeMode);
     }
 
-    public void updateFnElementState(final boolean ctrlActive, final boolean selectActive) {
-        mState.onUpdateFnElementState(ctrlActive, selectActive);
+    public boolean isMetaControlAlt() {
+        return mState.isMetaControlAlt();
+    }
+
+    public boolean isMetaSelect() {
+        return mState.isMetaSelect();
+    }
+
+    public int getMetaState() {
+        return mState.getMetaState();
+    }
+
+    public int getCtrlState() {
+        return mState.getCtrlState();
+    }
+
+    public int getAltState() {
+        return mState.getAltState();
     }
 
     public boolean isImeSuppressedByHardwareKeyboard(
@@ -376,7 +366,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         if (DEBUG_ACTION) {
             Log.d(TAG, "setEmojiKeyboard");
         }
-        final Keyboard keyboard = mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET);
+        final Keyboard keyboard = mKeyboardLayoutSet.getKeyboard(KeyboardId.ELEMENT_ALPHABET,
+                ModifierParams.DEFAULT);
         mMainKeyboardFrame.setVisibility(View.GONE);
         // The visibility of {@link #mKeyboardView} must be aligned with {@link #MainKeyboardFrame}.
         // @see #getVisibleKeyboardView() and

@@ -3,7 +3,6 @@
     xmlns:latin="http://schemas.android.com/apk/res-auto"
 >
     <Key
-        latin:keySpec="Ctrl|!code/key_ctrl"
         latin:keyStyle="fnModifierKeyStyle" />
     <Key
         latin:keySpec="!icon/cut_key|!code/key_cut"

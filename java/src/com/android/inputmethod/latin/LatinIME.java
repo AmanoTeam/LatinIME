@@ -1838,16 +1838,6 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (inputTransaction.didAffectContents()) {
             mSubtypeState.setCurrentSubtypeHasBeenUsed();
         }
-        if (inputTransaction.requiresFnElementUpdate() || mInputLogic.mRequiresFnElementDeactivation) {
-            mInputLogic.mRequiresFnElementDeactivation = false;
-            updateFnElementState(mInputLogic.mIsCtrlActive, mInputLogic.mSelectionMode);
-        }
-    }
-
-    public void updateFnElementState(final boolean isCtrlActive, final boolean isSelectActive) {
-        if (mKeyboardSwitcher != null) {
-            mKeyboardSwitcher.updateFnElementState(isCtrlActive, isSelectActive);
-        }
     }
 
     private void hapticAndAudioFeedback(final int code, final int repeatCount) {

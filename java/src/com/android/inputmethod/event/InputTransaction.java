@@ -43,7 +43,6 @@ public class InputTransaction {
     private boolean mRequiresUpdateSuggestions = false;
     private boolean mDidAffectContents = false;
     private boolean mDidAutoCorrect = false;
-    private boolean mRequiresFnElementUpdate = false;
 
     public InputTransaction(final SettingsValues settingsValues, final Event event,
             final long timestamp, final int spaceState, final int shiftState) {
@@ -113,13 +112,5 @@ public class InputTransaction {
      */
     public boolean didAutoCorrect() {
         return mDidAutoCorrect;
-    }
-
-    public void requireFnElementUpdate() {
-        mRequiresFnElementUpdate = true;
-    }
-
-    public boolean requiresFnElementUpdate() {
-        return mRequiresFnElementUpdate;
     }
 }

@@ -35,6 +35,7 @@ import com.android.inputmethod.event.Event;
 import com.android.inputmethod.event.InputTransaction;
 import com.android.inputmethod.keyboard.Keyboard;
 import com.android.inputmethod.keyboard.KeyboardSwitcher;
+import com.android.inputmethod.keyboard.ModifierParams;
 import com.android.inputmethod.latin.Dictionary;
 import com.android.inputmethod.latin.DictionaryFacilitator;
 import com.android.inputmethod.latin.LastComposedWord;
@@ -106,12 +107,6 @@ public final class InputLogic {
     // Find a way to remove it for readability.
     private boolean mIsAutoCorrectionIndicatorOn;
     private long mDoubleSpacePeriodCountdownStart;
-
-    public boolean mSelectionMode;
-    public boolean mIsCtrlActive;
-
-    // Tracks that sendDownUpKeyEvent consumed Ctrl/Select, requiring element update.
-    public boolean mRequiresFnElementDeactivation;
 
     // The word being corrected while the cursor is in the middle of the word.
     // Note: This does not have a composing span, so it must be handled separately.
@@ -481,60 +476,11 @@ public final class InputLogic {
 
         Event currentEvent = processedEvent;
         while (null != currentEvent) {
-            if (mIsCtrlActive && currentEvent.mKeyCode != Constants.CODE_CTRL
-                    && currentEvent.mKeyCode != Constants.CODE_FN
-                    && currentEvent.mKeyCode != Constants.CODE_ALT) {
-                if (!currentEvent.isFunctionalKeyEvent()) {
-                    // Non-functional event while Ctrl active
-                    if (currentEvent.mCodePoint >= 'a'
-                            && currentEvent.mCodePoint <= 'z') {
-                        // Letter: send Ctrl+letter KeyEvent
-                        mIsCtrlActive = false;
-                        inputTransaction.requireFnElementUpdate();
-                        final int ctrlKeyCode = KeyEvent.KEYCODE_A
-                                + (currentEvent.mCodePoint - 'a');
-                        if (isConnectbotTarget(settingsValues)) {
-                            // ConnectBot treats DPAD_CENTER as the control modifier
-                            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER);
-                            sendDownUpKeyEvent(ctrlKeyCode, 0);
-                        } else if (isTerminalIdeTarget(settingsValues)) {
-                            // TerminalIDE expects the raw control character
-                            mConnection.commitText(StringUtils.newSingleCodePointString(
-                                    currentEvent.mCodePoint - 'a' + 1), 1);
-                            inputTransaction.setDidAffectContents();
-                        } else {
-                            if (!mLatinIME.isPCMode()) {
-                                // Visual feedback for the control character that was sent,
-                                // as the regular layout has no control modifier state.
-                                Toast.makeText(mLatinIME,
-                                        "Ctrl+" + (char) currentEvent.mCodePoint,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                            sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
-                        }
-                        currentEvent = currentEvent.mNextEvent;
-                        continue;
-                    }
-                    if (currentEvent.mCodePoint >= '0'
-                            && currentEvent.mCodePoint <= '9') {
-                        // Number: send Ctrl+number KeyEvent
-                        mIsCtrlActive = false;
-                        inputTransaction.requireFnElementUpdate();
-                        final int ctrlKeyCode = KeyEvent.KEYCODE_0
-                                + (currentEvent.mCodePoint - '0');
-                        if (isConnectbotTarget(settingsValues)) {
-                            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER);
-                            sendDownUpKeyEvent(ctrlKeyCode, 0);
-                        } else {
-                            sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
-                        }
-                        currentEvent = currentEvent.mNextEvent;
-                        continue;
-                    }
-                    // Non-letter/number character: consume Ctrl and proceed normally
-                    mIsCtrlActive = false;
-                    inputTransaction.requireFnElementUpdate();
-                }
+            if (!currentEvent.isFunctionalKeyEvent()
+                    && KeyboardSwitcher.getInstance().isMetaControlAlt()
+                    && handleMetaKeyEvent(currentEvent, inputTransaction)) {
+                currentEvent = currentEvent.mNextEvent;
+                continue;
             }
             if (currentEvent.isConsumed()) {
                 handleConsumedEvent(currentEvent, inputTransaction);
@@ -750,12 +696,6 @@ public final class InputLogic {
 
     private void handleFunctionalEvent(final Event event, final InputTransaction inputTransaction,
             final int currentKeyboardScriptId, final LatinIME.UIHandler handler) {
-        if (mSelectionMode && !isNavigationKey(event.mKeyCode)
-                && event.mKeyCode != Constants.CODE_SELECT) {
-            mSelectionMode = false;
-            mIsCtrlActive = false;
-            inputTransaction.requireFnElementUpdate();
-        }
         switch (event.mKeyCode) {
             case Constants.CODE_DELETE:
                 handleBackspaceEvent(event, inputTransaction, currentKeyboardScriptId);
@@ -837,15 +777,10 @@ public final class InputLogic {
                 // Handled by KeyboardState state machine
                 break;
             case Constants.CODE_CTRL:
-                mIsCtrlActive = !mIsCtrlActive;
-                if (!mIsCtrlActive) {
-                    // Deactivate selection mode when Ctrl turns off
-                    mSelectionMode = false;
-                }
-                inputTransaction.requireFnElementUpdate();
-                break;
             case Constants.CODE_ALT:
-                // Handled by KeyboardState state machine
+            case Constants.CODE_SELECT:
+                // Toggled by the KeyboardState state machine, which reloads the Fn layer
+                // with the new modifier state.
                 break;
             case Constants.CODE_ESCAPE:
                 if (isConnectbotTarget(inputTransaction.mSettingsValues)) {
@@ -880,33 +815,29 @@ public final class InputLogic {
                 sendDownUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
                 inputTransaction.setDidAffectContents();
                 break;
-            case Constants.CODE_SELECT:
-                mSelectionMode = !mSelectionMode;
-                inputTransaction.requireFnElementUpdate();
-                break;
             case Constants.CODE_HOME:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_HOME);
                 }
                 break;
             case Constants.CODE_END:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_MOVE_END);
                 }
                 break;
             case Constants.CODE_PAGE_UP:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_UP);
                 }
                 break;
             case Constants.CODE_PAGE_DOWN:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_PAGE_DOWN);
@@ -920,21 +851,21 @@ public final class InputLogic {
                 inputTransaction.setDidAffectContents();
                 break;
             case Constants.CODE_MOVE_LEFT:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT);
                 }
                 break;
             case Constants.CODE_MOVE_RIGHT:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT);
                 }
                 break;
             case Constants.CODE_MOVE_WORD_LEFT:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT,
                             KeyEvent.META_CTRL_ON);
                 } else {
@@ -942,7 +873,7 @@ public final class InputLogic {
                 }
                 break;
             case Constants.CODE_MOVE_WORD_RIGHT:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT,
                             KeyEvent.META_CTRL_ON);
                 } else {
@@ -950,14 +881,14 @@ public final class InputLogic {
                 }
                 break;
             case Constants.CODE_MOVE_UP:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP);
                 }
                 break;
             case Constants.CODE_MOVE_DOWN:
-                if (mSelectionMode) {
+                if (isSelectMode()) {
                     sendShiftedDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN);
                 } else {
                     sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN);
@@ -2384,20 +2315,85 @@ public final class InputLogic {
      *
      * @param keyCode the key code to send inside the key event.
      */
-    private void sendDownUpKeyEvent(final int keyCode) {
-        final int metaState = mIsCtrlActive ? KeyEvent.META_CTRL_ON : 0;
-        if (mIsCtrlActive) {
-            mRequiresFnElementDeactivation = true;
+    /**
+     * Sends a Ctrl or Alt modified key event to the editor, mimicking a hardware keyboard
+     * with the modifier held down (Technical Keyboard).
+     *
+     * @param event the event to handle.
+     * @param inputTransaction the transaction in progress.
+     * @return true if the event was handled and should not be processed further.
+     */
+    private boolean handleMetaKeyEvent(final Event event,
+            final InputTransaction inputTransaction) {
+        final KeyboardSwitcher switcher = KeyboardSwitcher.getInstance();
+        final SettingsValues settingsValues = inputTransaction.mSettingsValues;
+        final int code = event.mCodePoint;
+        if (code >= '0' && code <= '9') {
+            final int sendKeyCode = code - '0' + KeyEvent.KEYCODE_0;
+            sendDownUpKeyEvent(sendKeyCode, switcher.getMetaState());
+            return true;
         }
-        mIsCtrlActive = false;
-        sendDownUpKeyEvent(keyCode, metaState);
+        if (code >= 'a' && code <= 'z') {
+            final int sendKeyCode = code - 'a' + KeyEvent.KEYCODE_A;
+            if (isConnectbotTarget(settingsValues)) {
+                // ConnectBot treats DPAD_CENTER as the control modifier.
+                if (switcher.getCtrlState() != ModifierParams.OFF) {
+                    sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER);
+                    sendDownUpKeyEvent(sendKeyCode, 0);
+                } else {
+                    sendDownUpKeyEvent(sendKeyCode, switcher.getMetaState());
+                }
+            } else if (isTerminalIdeTarget(settingsValues)) {
+                // TerminalIDE expects the raw control character.
+                mConnection.commitText(StringUtils.newSingleCodePointString(code - 'a' + 1), 1);
+                inputTransaction.setDidAffectContents();
+            } else {
+                if (!mLatinIME.isPCMode()) {
+                    // Visual feedback for the modified character that was sent.
+                    Toast.makeText(mLatinIME, getMetaStateLabel() + (char) code,
+                            Toast.LENGTH_SHORT).show();
+                }
+                sendDownUpKeyEvent(sendKeyCode, switcher.getMetaState());
+            }
+            return true;
+        }
+        if (code >= 'A' && code <= 'Z') {
+            final int sendKeyCode = code - 'A' + KeyEvent.KEYCODE_A;
+            if (isTerminalIdeTarget(settingsValues)) {
+                mConnection.commitText(StringUtils.newSingleCodePointString(code - 'A' + 1), 1);
+                inputTransaction.setDidAffectContents();
+            } else {
+                sendShiftedDownUpKeyEvent(sendKeyCode, switcher.getMetaState());
+            }
+            return true;
+        }
+        // Any other character is committed normally; single-shot modifiers are reset by
+        // {@link KeyboardState#updateMetaState} after the event.
+        return false;
+    }
+
+    private boolean isSelectMode() {
+        return KeyboardSwitcher.getInstance().isMetaSelect();
+    }
+
+    private String getMetaStateLabel() {
+        final KeyboardSwitcher switcher = KeyboardSwitcher.getInstance();
+        final boolean ctrl = switcher.getCtrlState() != ModifierParams.OFF;
+        final boolean alt = switcher.getAltState() != ModifierParams.OFF;
+        if (ctrl && alt) {
+            return "Ctrl+Alt+";
+        }
+        if (ctrl) {
+            return "Ctrl+";
+        }
+        return "Alt+";
+    }
+
+    private void sendDownUpKeyEvent(final int keyCode) {
+        sendDownUpKeyEvent(keyCode, 0);
     }
 
     private void sendDownUpKeyEvent(final int keyCode, final int metaState) {
-        if (mIsCtrlActive) {
-            mRequiresFnElementDeactivation = true;
-        }
-        mIsCtrlActive = false;
         final long eventTime = SystemClock.uptimeMillis();
         mConnection.sendKeyEvent(new KeyEvent(eventTime, eventTime,
                 KeyEvent.ACTION_DOWN, keyCode, 0, metaState, KeyCharacterMap.VIRTUAL_KEYBOARD, 0,

@@ -30,6 +30,7 @@ import com.android.inputmethod.keyboard.Key;
 import com.android.inputmethod.keyboard.Keyboard;
 import com.android.inputmethod.keyboard.KeyboardId;
 import com.android.inputmethod.keyboard.KeyboardLayoutSet;
+import com.android.inputmethod.keyboard.ModifierParams;
 import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.settings.Settings;
 
@@ -328,7 +329,7 @@ final class EmojiCategory {
     }
 
     private int getCategoryPageCount(final int categoryId) {
-        final Keyboard keyboard = mLayoutSet.getKeyboard(sCategoryElementId[categoryId]);
+        final Keyboard keyboard = mLayoutSet.getKeyboard(sCategoryElementId[categoryId], ModifierParams.DEFAULT);
         return (keyboard.getSortedKeys().size() - 1) / mMaxPageKeyCount + 1;
     }
 
@@ -371,18 +372,18 @@ final class EmojiCategory {
 
             if (categoryId == EmojiCategory.ID_RECENTS) {
                 final DynamicGridKeyboard kbd = new DynamicGridKeyboard(mPrefs,
-                        mLayoutSet.getKeyboard(KeyboardId.ELEMENT_EMOJI_RECENTS),
+                        mLayoutSet.getKeyboard(KeyboardId.ELEMENT_EMOJI_RECENTS, ModifierParams.DEFAULT),
                         mMaxPageKeyCount, categoryId);
                 mCategoryKeyboardMap.put(categoryKeyboardMapKey, kbd);
                 return kbd;
             }
 
-            final Keyboard keyboard = mLayoutSet.getKeyboard(sCategoryElementId[categoryId]);
+            final Keyboard keyboard = mLayoutSet.getKeyboard(sCategoryElementId[categoryId], ModifierParams.DEFAULT);
             final Key[][] sortedKeys = sortKeysIntoPages(
                     keyboard.getSortedKeys(), mMaxPageKeyCount);
             for (int pageId = 0; pageId < sortedKeys.length; ++pageId) {
                 final DynamicGridKeyboard tempKeyboard = new DynamicGridKeyboard(mPrefs,
-                        mLayoutSet.getKeyboard(KeyboardId.ELEMENT_EMOJI_RECENTS),
+                        mLayoutSet.getKeyboard(KeyboardId.ELEMENT_EMOJI_RECENTS, ModifierParams.DEFAULT),
                         mMaxPageKeyCount, categoryId);
                 for (final Key emojiKey : sortedKeys[pageId]) {
                     if (emojiKey == null) {
