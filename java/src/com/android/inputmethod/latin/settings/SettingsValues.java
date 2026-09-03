@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
@@ -83,6 +84,8 @@ public class SettingsValues {
     public final boolean mSpecialBehaviorTerminalIDE;
     public final boolean mLongPressSpaceForTab;
     public final boolean mFullscreenSupport;
+    public final Typeface mKeyTypeface;
+    public final int mKeyTextSizeAdjust;
     // Use bigrams to predict the next word when there is no input for it yet
     public final boolean mBigramPredictionEnabled;
     public final boolean mGestureInputEnabled;
@@ -240,6 +243,8 @@ public class SettingsValues {
         mSpecialBehaviorTerminalIDE = Settings.readSpecialBehaviorTerminalIDE(prefs);
         mLongPressSpaceForTab = Settings.readLongPressSpaceForTab(prefs);
         mFullscreenSupport = Settings.readFullscreenSupport(prefs);
+        mKeyTypeface = Settings.readKeyTextTypeface(prefs);
+        mKeyTextSizeAdjust = Settings.readKeyTextSizeAdjust(prefs);
     }
 
     public boolean isMetricsLoggingEnabled() {

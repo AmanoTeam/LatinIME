@@ -16,6 +16,7 @@
 
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:latin="http://schemas.android.com/apk/res-auto"
     android:key="screen_appearance"
     android:title="@string/settings_screen_appearance">
     <PreferenceScreen
@@ -31,4 +32,17 @@
         android:title="@string/enable_split_keyboard"
         android:persistent="true"
         android:defaultValue="false" />
+    <ListPreference
+        android:key="pref_key_typeface"
+        android:title="@string/key_typeface"
+        android:summary="@string/key_typeface_summary"
+        android:entries="@array/key_typeface"
+        android:entryValues="@array/key_typeface_values"
+        android:defaultValue="default"
+        android:persistent="true" />
+    <com.android.inputmethod.latin.settings.SeekBarDialogPreference
+        android:key="pref_key_text_size_adjust"
+        android:title="@string/key_text_size_adjust_title"
+        latin:minValue="50"
+        latin:maxValue="150" /> <!-- percentage -->
 </PreferenceScreen>

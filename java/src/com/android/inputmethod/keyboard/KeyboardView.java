@@ -37,6 +37,7 @@ import com.android.inputmethod.keyboard.internal.KeyVisualAttributes;
 import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.common.Constants;
 import com.android.inputmethod.latin.settings.Settings;
+import com.android.inputmethod.latin.settings.SettingsValues;
 import com.android.inputmethod.latin.utils.TypefaceUtils;
 
 import java.util.HashSet;
@@ -393,8 +394,14 @@ public class KeyboardView extends View {
         float labelBaseline = centerY;
         final String label = key.getLabel();
         if (label != null) {
-            paint.setTypeface(key.selectTypeface(params));
-            paint.setTextSize(key.selectTextSize(params));
+            final SettingsValues settingsValues = Settings.getInstance().getCurrent();
+            final Typeface typefaceOverride =
+                    (settingsValues != null) ? settingsValues.mKeyTypeface : null;
+            final int textSizeAdjust =
+                    (settingsValues != null) ? settingsValues.mKeyTextSizeAdjust : 100;
+            paint.setTypeface(typefaceOverride == null
+                    ? key.selectTypeface(params) : typefaceOverride);
+            paint.setTextSize(key.selectTextSize(params) * textSizeAdjust / 100.0f);
             final float labelCharHeight = TypefaceUtils.getReferenceCharHeight(paint);
             final float labelCharWidth = TypefaceUtils.getReferenceCharWidth(paint);
 

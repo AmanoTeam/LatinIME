@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.android.inputmethod.latin.utils.JniUtils;
 import com.android.inputmethod.latin.utils.ResourceUtils;
 import com.android.inputmethod.latin.utils.RunInLocale;
 import com.android.inputmethod.latin.utils.StatsUtils;
+import com.android.inputmethod.latin.utils.Typefaces;
 
 import java.util.Collections;
 import java.util.Locale;
@@ -114,6 +116,10 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     public static final String PREF_LONG_PRESS_SPACE_FOR_TAB = "pref_long_press_space_for_tab";
     // Use the fullscreen (extract) mode in landscape
     public static final String PREF_FULLSCREEN_SUPPORT = "pref_fullscreen_support";
+    // Key typeface override
+    public static final String PREF_KEY_TYPEFACE = "pref_key_typeface";
+    // Key text size adjustment (percentage)
+    public static final String PREF_KEY_TEXT_SIZE_ADJUST = "pref_key_text_size_adjust";
     // This preference key is deprecated. Use {@link #PREF_SHOW_LANGUAGE_SWITCH_KEY} instead.
     // This is being used only for the backward compatibility.
     private static final String PREF_SUPPRESS_LANGUAGE_SWITCH_KEY =
@@ -386,6 +392,24 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
 
     public static boolean readFullscreenSupport(final SharedPreferences prefs) {
         return prefs.getBoolean(PREF_FULLSCREEN_SUPPORT, false);
+    }
+
+    public static Typeface readKeyTextTypeface(final SharedPreferences prefs) {
+        final String value = prefs.getString(PREF_KEY_TYPEFACE, null);
+        if (value == null) {
+            return null;
+        }
+        switch (value) {
+        case "light": return Typefaces.LIGHT;
+        case "thin": return Typefaces.THIN;
+        case "normal": return Typeface.DEFAULT;
+        case "bold": return Typeface.DEFAULT_BOLD;
+        default: return null;
+        }
+    }
+
+    public static int readKeyTextSizeAdjust(final SharedPreferences prefs) {
+        return prefs.getInt(PREF_KEY_TEXT_SIZE_ADJUST, 100);
     }
 
     public static float readKeyboardHeight(final SharedPreferences prefs,

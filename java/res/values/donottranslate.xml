@@ -130,4 +130,19 @@
         <item>sv:AsciiCapable,SupportTouchPositionCorrection,EmojiCapable</item>
         <item>nordic</item>
     </string-array>
+
+    <string-array name="key_typeface">
+        <item>@string/typeface_default</item>
+        <item>@string/typeface_normal</item>
+        <item>@string/typeface_bold</item>
+        <item>@string/typeface_light</item>
+        <item>@string/typeface_thin</item>
+    </string-array>
+    <string-array name="key_typeface_values">
+        <item>default</item>
+        <item>normal</item>
+        <item>bold</item>
+        <item>light</item>
+        <item>thin</item>
+    </string-array>
 </resources>

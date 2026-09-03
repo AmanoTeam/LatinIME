@@ -16,16 +16,22 @@
 
 package com.android.inputmethod.latin.settings;
 
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.android.inputmethod.latin.R;
 import com.android.inputmethod.latin.common.Constants;
 import com.android.inputmethod.latin.define.ProductionFlags;
 
+import java.util.Locale;
+
 /**
  * "Appearance" settings sub screen.
  */
 public final class AppearanceSettingsFragment extends SubScreenFragment {
+    private static final int PREF_KEY_TEXT_SIZE_ADJUST_DEFAULT = 100;
+
     @Override
     public void onCreate(final Bundle icicle) {
         super.onCreate(icicle);
@@ -34,6 +40,7 @@ public final class AppearanceSettingsFragment extends SubScreenFragment {
                 Constants.isPhone(Settings.readScreenMetrics(getResources()))) {
             removePreference(Settings.PREF_ENABLE_SPLIT_KEYBOARD);
         }
+        setupKeyTextSizeAdjustmentSettings();
     }
 
     @Override
@@ -42,5 +49,50 @@ public final class AppearanceSettingsFragment extends SubScreenFragment {
         CustomInputStyleSettingsFragment.updateCustomInputStylesSummary(
                 findPreference(Settings.PREF_CUSTOM_INPUT_STYLES));
         ThemeSettingsFragment.updateKeyboardThemeSummary(findPreference(Settings.SCREEN_THEME));
+        updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_TYPEFACE);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+        updateListPreferenceSummaryToCurrentValue(Settings.PREF_KEY_TYPEFACE);
+    }
+
+    private void setupKeyTextSizeAdjustmentSettings() {
+        final SeekBarDialogPreference pref =
+                (SeekBarDialogPreference) findPreference(Settings.PREF_KEY_TEXT_SIZE_ADJUST);
+        if (pref == null) {
+            return;
+        }
+        final SharedPreferences prefs = getSharedPreferences();
+        final Resources res = getResources();
+        pref.setInterface(new SeekBarDialogPreference.ValueProxy() {
+            @Override
+            public void writeValue(final int value, final String key) {
+                prefs.edit().putInt(key, value).apply();
+            }
+
+            @Override
+            public void writeDefaultValue(final String key) {
+                prefs.edit().remove(key).apply();
+            }
+
+            @Override
+            public int readValue(final String key) {
+                return Settings.readKeyTextSizeAdjust(prefs);
+            }
+
+            @Override
+            public int readDefaultValue(final String key) {
+                return PREF_KEY_TEXT_SIZE_ADJUST_DEFAULT;
+            }
+
+            @Override
+            public void feedbackValue(final int value) {}
+
+            @Override
+            public String getValueText(final int value) {
+                return String.format(Locale.ROOT, "%d%%", value);
+            }
+        });
     }
 }
