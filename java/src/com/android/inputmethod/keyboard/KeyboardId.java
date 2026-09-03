@@ -92,6 +92,7 @@ public final class KeyboardId {
     public final boolean mAutocorrect;
     public final boolean mPCLayout;
     // Technical Keyboard function keyboard modifier states.
+    public final int mShiftState;
     public final int mCtrlState;
     public final int mAltState;
     public final int mSelectState;
@@ -116,6 +117,7 @@ public final class KeyboardId {
         mSuggestionsEnabled = params.mSuggestionsEnabled;
         mAutocorrect = params.mAutocorrect;
         mPCLayout = params.mPCLayout;
+        mShiftState = params.mModifierParams.mShiftState;
         mCtrlState = params.mModifierParams.mCtrlState;
         mAltState = params.mModifierParams.mAltState;
         mSelectState = params.mModifierParams.mSelectState;
@@ -142,6 +144,7 @@ public final class KeyboardId {
                 id.mSuggestionsEnabled,
                 id.mAutocorrect,
                 id.mPCLayout,
+                id.mShiftState,
                 id.mCtrlState,
                 id.mAltState,
                 id.mSelectState,
@@ -171,6 +174,7 @@ public final class KeyboardId {
                 && other.mSuggestionsEnabled == mSuggestionsEnabled
                 && other.mAutocorrect == mAutocorrect
                 && other.mPCLayout == mPCLayout
+                && other.mShiftState == mShiftState
                 && other.mCtrlState == mCtrlState
                 && other.mAltState == mAltState
                 && other.mSelectState == mSelectState

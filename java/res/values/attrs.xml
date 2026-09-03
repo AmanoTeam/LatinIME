@@ -535,6 +535,11 @@
         <!-- Technical Keyboard function modifier states. The integer values must
              match {@link ModifierParams#OFF}, {@link ModifierParams#SINGLE} and
              {@link ModifierParams#LOCK}. -->
+        <attr name="shiftState" format="enum">
+            <enum name="off" value="0" />
+            <enum name="single" value="1" />
+            <enum name="lock" value="2" />
+        </attr>
         <attr name="ctrlState" format="enum">
             <enum name="off" value="0" />
             <enum name="single" value="1" />

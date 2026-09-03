@@ -79,6 +79,7 @@ public final class KeyboardState {
     private final ModifierKeyState mCtrlKeyState = new ModifierKeyState("Ctrl");
     private final ModifierKeyState mAltKeyState = new ModifierKeyState("Alt");
     private final ModifierKeyState mFnSelectKeyState = new ModifierKeyState("FnSelect");
+    private final ModifierKeyState mFnShiftKeyState = new ModifierKeyState("FnShift");
 
     private static final int FN_MODE_OFF = 0;
     private static final int FN_MODE_FN = 1;
@@ -89,10 +90,11 @@ public final class KeyboardState {
     // the keyboard builder so that Fn layer key styles can reflect the modifier state.
     private ModifierParams mFunctionModifierParams = ModifierParams.DEFAULT;
 
-    // Timeouts to detect double taps of the Ctrl and Alt keys for locking.
+    // Timeouts to detect double taps of the Ctrl, Alt and Shift keys for locking.
     private static final long META_LOCK_INTERVAL = 500;
     private long mLastCtrlTime = 0;
     private long mLastAltTime = 0;
+    private long mLastShiftTime = 0;
 
     // Inactivity timer for non-alphabet layers (symbols, emoji).
     // When the keyboard is on a non-alphabet layer and the user focuses
@@ -180,9 +182,10 @@ public final class KeyboardState {
         }
     }
 
-    public boolean isMetaControlAlt() {
+    public boolean isMetaActive() {
         return mFunctionModifierParams.mCtrlState != ModifierParams.OFF
-                || mFunctionModifierParams.mAltState != ModifierParams.OFF;
+                || mFunctionModifierParams.mAltState != ModifierParams.OFF
+                || mFunctionModifierParams.mShiftState != ModifierParams.OFF;
     }
 
     public boolean isMetaSelect() {
@@ -201,8 +204,15 @@ public final class KeyboardState {
         return mFunctionModifierParams.mAltState;
     }
 
+    public int getShiftState() {
+        return mFunctionModifierParams.mShiftState;
+    }
+
     public int getMetaState() {
         int state = 0;
+        if (mFunctionModifierParams.mShiftState != ModifierParams.OFF) {
+            state |= KeyEvent.META_SHIFT_ON | KeyEvent.META_SHIFT_LEFT_ON;
+        }
         if (mFunctionModifierParams.mCtrlState != ModifierParams.OFF) {
             state |= KeyEvent.META_CTRL_ON | KeyEvent.META_CTRL_LEFT_ON;
         }
@@ -238,6 +248,7 @@ public final class KeyboardState {
         mCtrlKeyState.onRelease();
         mAltKeyState.onRelease();
         mFnSelectKeyState.onRelease();
+        mFnShiftKeyState.onRelease();
         if (mSavedKeyboardState.mIsValid) {
             onRestoreKeyboardState(autoCapsFlags, recapitalizeMode);
             mSavedKeyboardState.mIsValid = false;
@@ -606,6 +617,27 @@ public final class KeyboardState {
         mFnSelectKeyState.onRelease();
     }
 
+    private void toggleFnShift() {
+        final int newShiftState = getNewMetaState(
+                mFunctionModifierParams.mShiftState, mLastShiftTime);
+        mLastShiftTime = newShiftState == ModifierParams.SINGLE
+                ? System.currentTimeMillis() : 0L;
+        mFunctionModifierParams = mFunctionModifierParams.newShiftState(newShiftState);
+        reloadKeyboardForModifierState();
+    }
+
+    private void onPressFnShift() {
+        toggleFnShift();
+        mFnShiftKeyState.onPress();
+    }
+
+    private void onReleaseFnShift() {
+        if (mFnShiftKeyState.isChording()) {
+            toggleFnShift();
+        }
+        mFnShiftKeyState.onRelease();
+    }
+
     // Reset single-shot modifiers that have already been released after a non-meta key
     // event, and reload the keyboard so that modifier key styles reflect the state.
     private void updateMetaState() {
@@ -617,6 +649,11 @@ public final class KeyboardState {
         if (mCtrlKeyState.isReleasing()
                 && mFunctionModifierParams.mCtrlState == ModifierParams.SINGLE) {
             mFunctionModifierParams = mFunctionModifierParams.newControlState(ModifierParams.OFF);
+            modifierStateChanged = true;
+        }
+        if (mFnShiftKeyState.isReleasing()
+                && mFunctionModifierParams.mShiftState == ModifierParams.SINGLE) {
+            mFunctionModifierParams = mFunctionModifierParams.newShiftState(ModifierParams.OFF);
             modifierStateChanged = true;
         }
         if (mFnSelectKeyState.isReleasing()
@@ -642,7 +679,12 @@ public final class KeyboardState {
             mSwitchActions.cancelDoubleTapShiftKeyTimer();
         }
         if (code == Constants.CODE_SHIFT) {
-            onPressShift();
+            if (mFnMode != FN_MODE_OFF) {
+                // Shift key on the Fn layers acts as a lockable modifier, like Ctrl and Alt.
+                onPressFnShift();
+            } else {
+                onPressShift();
+            }
         } else if (code == Constants.CODE_CAPSLOCK) {
             // Nothing to do here. See {@link #onReleaseKey(int,boolean)}.
         } else if (code == Constants.CODE_SWITCH_ALPHA_SYMBOL) {
@@ -668,6 +710,7 @@ public final class KeyboardState {
             mCtrlKeyState.onOtherKeyPressed();
             mAltKeyState.onOtherKeyPressed();
             mFnSelectKeyState.onOtherKeyPressed();
+            mFnShiftKeyState.onOtherKeyPressed();
             // It is required to reset the auto caps state when all of the following conditions
             // are met:
             // 1) two or more fingers are in action
@@ -709,7 +752,11 @@ public final class KeyboardState {
                     + " " + stateToString(autoCapsFlags, recapitalizeMode));
         }
         if (code == Constants.CODE_SHIFT) {
-            onReleaseShift(withSliding, autoCapsFlags, recapitalizeMode);
+            if (mFnMode != FN_MODE_OFF) {
+                onReleaseFnShift();
+            } else {
+                onReleaseShift(withSliding, autoCapsFlags, recapitalizeMode);
+            }
         } else if (code == Constants.CODE_CAPSLOCK) {
             setShiftLocked(!mAlphabetShiftState.isShiftLocked());
         } else if (code == Constants.CODE_SWITCH_ALPHA_SYMBOL) {
@@ -825,9 +872,6 @@ public final class KeyboardState {
     }
 
     private void onPressShift() {
-        // If we are in Fn mode, ignore Shift presses to prevent switching to shifted
-        // alphabet keyboard.
-        if (mFnMode != FN_MODE_OFF) return;
         // If we are recapitalizing, we don't do any of the normal processing, including
         // importantly the double tap timer.
         if (RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE != mRecapitalizeMode) {
@@ -884,8 +928,6 @@ public final class KeyboardState {
             // We are recapitalizing. We should match the keyboard state to the recapitalize
             // state in priority.
             updateShiftStateForRecapitalize(mRecapitalizeMode);
-        } else if (mFnMode != FN_MODE_OFF) {
-            mShiftKeyState.onRelease();
         } else if (mIsAlphabetMode) {
             final boolean isShiftLocked = mAlphabetShiftState.isShiftLocked();
             mIsInAlphabetUnshiftedFromShifted = false;

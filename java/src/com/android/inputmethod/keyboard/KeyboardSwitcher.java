@@ -320,8 +320,8 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         mState.toggleQuickSettings(autoCapsFlags, recapitalizeMode);
     }
 
-    public boolean isMetaControlAlt() {
-        return mState.isMetaControlAlt();
+    public boolean isMetaActive() {
+        return mState.isMetaActive();
     }
 
     public boolean isMetaSelect() {
@@ -338,6 +338,10 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
 
     public int getAltState() {
         return mState.getAltState();
+    }
+
+    public int getShiftState() {
+        return mState.getShiftState();
     }
 
     public boolean isImeSuppressedByHardwareKeyboard(

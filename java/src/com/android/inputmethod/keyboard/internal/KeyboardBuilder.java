@@ -672,6 +672,9 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
                     R.styleable.Keyboard_Case_autocorrect, id.mAutocorrect);
             final boolean pcLayoutMatched = matchBoolean(caseAttr,
                     R.styleable.Keyboard_Case_pcLayout, id.mPCLayout);
+            final boolean shiftStateMatched = matchTypedValue(caseAttr,
+                    R.styleable.Keyboard_Case_shiftState, id.mShiftState,
+                    ModifierParams.stateToName("shift", id.mShiftState));
             final boolean ctrlStateMatched = matchTypedValue(caseAttr,
                     R.styleable.Keyboard_Case_ctrlState, id.mCtrlState,
                     ModifierParams.stateToName("ctrl", id.mCtrlState));
@@ -706,6 +709,7 @@ public class KeyboardBuilder<KP extends KeyboardParams> {
                     && languageSwitchKeyEnabledMatched && emojiKeyEnabledMatched
                     && suggestionsMatched && autocorrectMatched && pcLayoutMatched
                     && ctrlStateMatched && altStateMatched && selectStateMatched
+                    && shiftStateMatched
                     && isMultiLineMatched && imeActionMatched && isIconDefinedMatched
                     && localeCodeMatched && languageCodeMatched && countryCodeMatched
                     && splitLayoutMatched;

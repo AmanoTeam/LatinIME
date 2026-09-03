@@ -33,6 +33,11 @@
         latin:styleName="fnAltKeyStyle"
         latin:keySpec="Alt|!code/key_alt"
         latin:parentStyle="baseForFnModifierKeyStyle" />
+    <!-- Shift key. Default and single use the shift icon; lock relabels to "SHIFT". -->
+    <key-style
+        latin:styleName="fnShiftKeyStyle"
+        latin:keySpec="!icon/shift_key|!code/key_shift"
+        latin:parentStyle="baseForFnModifierKeyStyle" />
     <!-- Ctrl active (single or lock): sticky on; lock relabels to "CTRL". -->
     <switch>
         <case
@@ -84,6 +89,27 @@
                 latin:styleName="fnSelectKeyStyle"
                 latin:backgroundType="stickyOn"
                 latin:keySpec="!icon/select_key|!code/key_select"
+                latin:parentStyle="baseForFnModifierKeyStyle" />
+        </case>
+    </switch>
+    <!-- Shift active (single or lock): sticky on; lock relabels to "SHIFT". -->
+    <switch>
+        <case
+            latin:shiftState="single"
+        >
+            <key-style
+                latin:styleName="fnShiftKeyStyle"
+                latin:backgroundType="stickyOn"
+                latin:keySpec="!icon/shift_key|!code/key_shift"
+                latin:parentStyle="baseForFnModifierKeyStyle" />
+        </case>
+        <case
+            latin:shiftState="lock"
+        >
+            <key-style
+                latin:styleName="fnShiftKeyStyle"
+                latin:backgroundType="stickyOn"
+                latin:keySpec="SHIFT|!code/key_shift"
                 latin:parentStyle="baseForFnModifierKeyStyle" />
         </case>
     </switch>

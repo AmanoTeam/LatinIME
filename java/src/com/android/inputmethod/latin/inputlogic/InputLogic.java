@@ -477,7 +477,7 @@ public final class InputLogic {
         Event currentEvent = processedEvent;
         while (null != currentEvent) {
             if (!currentEvent.isFunctionalKeyEvent()
-                    && KeyboardSwitcher.getInstance().isMetaControlAlt()
+                    && KeyboardSwitcher.getInstance().isMetaActive()
                     && handleMetaKeyEvent(currentEvent, inputTransaction)) {
                 currentEvent = currentEvent.mNextEvent;
                 continue;
@@ -2378,15 +2378,17 @@ public final class InputLogic {
 
     private String getMetaStateLabel() {
         final KeyboardSwitcher switcher = KeyboardSwitcher.getInstance();
-        final boolean ctrl = switcher.getCtrlState() != ModifierParams.OFF;
-        final boolean alt = switcher.getAltState() != ModifierParams.OFF;
-        if (ctrl && alt) {
-            return "Ctrl+Alt+";
+        final StringBuilder sb = new StringBuilder();
+        if (switcher.getCtrlState() != ModifierParams.OFF) {
+            sb.append("Ctrl+");
         }
-        if (ctrl) {
-            return "Ctrl+";
+        if (switcher.getAltState() != ModifierParams.OFF) {
+            sb.append("Alt+");
         }
-        return "Alt+";
+        if (switcher.getShiftState() != ModifierParams.OFF) {
+            sb.append("Shift+");
+        }
+        return sb.length() > 0 ? sb.toString() : "Meta+";
     }
 
     private void sendDownUpKeyEvent(final int keyCode) {
