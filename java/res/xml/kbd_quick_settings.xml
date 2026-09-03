@@ -119,9 +119,12 @@
     <Row
         latin:keyWidth="33.333004%p"
     >
+        <!-- Spacers keep the centered PC layout key from being marked as a row edge
+             key, which would expand its hit box across the whole row. -->
+        <Spacer />
         <Key
-            latin:keyStyle="qsPCLayoutKeyStyle"
-            latin:keyXPos="33.333%p" />
+            latin:keyStyle="qsPCLayoutKeyStyle" />
+        <Spacer />
     </Row>
     <!-- Spacer row to keep the keyboard height -->
     <Row
