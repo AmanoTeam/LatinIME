@@ -31,6 +31,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
@@ -2056,6 +2057,41 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     public void handlePCLayoutFromKey() {
         handlePCLayout();
+    }
+
+    public void toggleQuickSettings() {
+        mKeyboardSwitcher.toggleQuickSettings(getCurrentAutoCapsState(),
+                getCurrentRecapitalizeState());
+    }
+
+    public void toggleQuickSetting(final int code) {
+        if (!QuickSettingsUtil.allowQuickSettingsOptionPress()) {
+            return;
+        }
+        QuickSettingsUtil.updateLastQuickSettingsOptionPress();
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        switch (code) {
+        case Constants.CODE_QS_NUMBER_ROW: {
+            final boolean enabled = prefs.getBoolean(Settings.PREF_SHOW_NUMBER_ROW, false);
+            prefs.edit().putBoolean(Settings.PREF_SHOW_NUMBER_ROW, !enabled).apply();
+            break;
+        }
+        case Constants.CODE_QS_SUGGESTIONS: {
+            final boolean enabled = prefs.getBoolean(Settings.PREF_SHOW_SUGGESTIONS, true);
+            prefs.edit().putBoolean(Settings.PREF_SHOW_SUGGESTIONS, !enabled).apply();
+            break;
+        }
+        case Constants.CODE_QS_AUTOCORRECT: {
+            final boolean enabled = prefs.getBoolean(Settings.PREF_AUTO_CORRECTION, true);
+            prefs.edit().putBoolean(Settings.PREF_AUTO_CORRECTION, !enabled).apply();
+            break;
+        }
+        default:
+            return;
+        }
+        // Reload the keyboard so the sticky key visuals reflect the new preference state.
+        mKeyboardSwitcher.loadKeyboard(getCurrentInputEditorInfo(), mSettings.getCurrent(),
+                getCurrentAutoCapsState(), getCurrentRecapitalizeState());
     }
 
     private void launchInputLanguages() {

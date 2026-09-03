@@ -87,6 +87,7 @@ public class SettingsValues {
     public final Typeface mKeyTypeface;
     public final int mKeyTextSizeAdjust;
     public final boolean mPCLayoutLandscape;
+    public final boolean mQuickSettings;
     // Use bigrams to predict the next word when there is no input for it yet
     public final boolean mBigramPredictionEnabled;
     public final boolean mGestureInputEnabled;
@@ -247,6 +248,7 @@ public class SettingsValues {
         mKeyTypeface = Settings.readKeyTextTypeface(prefs);
         mKeyTextSizeAdjust = Settings.readKeyTextSizeAdjust(prefs);
         mPCLayoutLandscape = Settings.readPCLayoutLandscape(prefs);
+        mQuickSettings = Settings.readQuickSettings(prefs);
     }
 
     public boolean isMetricsLoggingEnabled() {
@@ -264,6 +266,10 @@ public class SettingsValues {
 
     public boolean isSuggestionsEnabledPerUserSettings() {
         return mSuggestionsEnabledPerUserSettings;
+    }
+
+    public boolean isAutoCorrectEnabled() {
+        return mAutoCorrectEnabled;
     }
 
     public boolean isPersonalizationEnabled() {

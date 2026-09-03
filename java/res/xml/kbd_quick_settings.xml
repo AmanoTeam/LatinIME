@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2013 Kenny Yu
+     Copyright (C) 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<Keyboard
+    xmlns:latin="http://schemas.android.com/apk/res-auto"
+>
+    <include
+        latin:keyboardLayout="@xml/key_styles_common" />
+    <key-style
+        latin:styleName="baseModifierKeyStyle"
+        latin:keyActionFlags="noKeyPreview"
+        latin:keyLabelFlags="preserveCase" />
+    <!-- Sticky number row key -->
+    <switch>
+        <case
+            latin:numberRowEnabled="true"
+        >
+            <key-style
+                latin:styleName="qsNumberRowKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_number_row|!code/key_qs_number_row"
+                latin:backgroundType="stickyOn" />
+        </case>
+        <!-- numberRowEnabled="false" -->
+        <default>
+            <key-style
+                latin:styleName="qsNumberRowKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_number_row|!code/key_qs_number_row"
+                latin:backgroundType="stickyOff" />
+        </default>
+    </switch>
+    <!-- Sticky suggestions key -->
+    <switch>
+        <case
+            latin:suggestions="true"
+        >
+            <key-style
+                latin:styleName="qsSuggestionsKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_suggestions|!code/key_qs_suggestions"
+                latin:backgroundType="stickyOn" />
+        </case>
+        <!-- suggestions="false" -->
+        <default>
+            <key-style
+                latin:styleName="qsSuggestionsKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_suggestions|!code/key_qs_suggestions"
+                latin:backgroundType="stickyOff" />
+        </default>
+    </switch>
+    <!-- Sticky autocorrect key -->
+    <switch>
+        <case
+            latin:autocorrect="true"
+        >
+            <key-style
+                latin:styleName="qsAutocorrectKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_autocorrect|!code/key_qs_autocorrect"
+                latin:backgroundType="stickyOn" />
+        </case>
+        <!-- autocorrect="false" -->
+        <default>
+            <key-style
+                latin:styleName="qsAutocorrectKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_autocorrect|!code/key_qs_autocorrect"
+                latin:backgroundType="stickyOff" />
+        </default>
+    </switch>
+    <!-- Sticky PC layout key -->
+    <switch>
+        <case
+            latin:pcLayout="true"
+        >
+            <key-style
+                latin:styleName="qsPCLayoutKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_pclayout|!code/key_qs_pc_layout"
+                latin:backgroundType="stickyOn" />
+        </case>
+        <!-- pcLayout="false" -->
+        <default>
+            <key-style
+                latin:styleName="qsPCLayoutKeyStyle"
+                latin:parentStyle="baseModifierKeyStyle"
+                latin:keySpec="!string/qs_pclayout|!code/key_qs_pc_layout"
+                latin:backgroundType="stickyOff" />
+        </default>
+    </switch>
+    <!-- Number row, mirroring the main layout -->
+    <switch>
+        <case
+            latin:numberRowEnabled="true"
+        >
+            <Row
+                latin:keyWidth="10%p"
+            >
+                <include
+                    latin:keyboardLayout="@xml/rowkeys_symbols1" />
+            </Row>
+        </case>
+    </switch>
+    <Row
+        latin:keyWidth="33.333004%p"
+    >
+        <Key
+            latin:keyStyle="qsNumberRowKeyStyle" />
+        <Key
+            latin:keyStyle="qsSuggestionsKeyStyle" />
+        <Key
+            latin:keyStyle="qsAutocorrectKeyStyle" />
+    </Row>
+    <Row
+        latin:keyWidth="25%p"
+    >
+        <Key
+            latin:keyStyle="qsPCLayoutKeyStyle" />
+    </Row>
+    <!-- Spacer row to keep the keyboard height -->
+    <Row
+        latin:keyWidth="25%p"
+    />
+    <Row
+        latin:keyWidth="33.333004%p"
+    >
+        <Key
+            latin:keySpec="!string/qs_done|!code/key_settings"
+            latin:keyStyle="settingsKeyStyle" />
+        <Key
+            latin:keySpec="!string/qs_open_settings|!code/key_qs_open_settings"
+            latin:keyStyle="baseModifierKeyStyle" />
+        <Key
+            latin:keySpec="!string/qs_open_languages|!code/key_qs_open_languages"
+            latin:keyStyle="baseModifierKeyStyle" />
+    </Row>
+</Keyboard>

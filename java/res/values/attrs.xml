@@ -503,6 +503,7 @@
             <enum name="alphabetFnCtrlActive" value="29" />
             <enum name="alphabetFnSelectActive" value="30" />
             <enum name="alphabetFnBothActive" value="31" />
+            <enum name="quickSettings" value="32" />
         </attr>
         <!-- This should be aligned with Keyboard.themeId and
              {@link com.android.inputmethod.keyboard.KeyboardTheme#THEME_ID_ICS} etc. -->
@@ -531,6 +532,9 @@
         <attr name="numberRowEnabled" format="boolean" />
         <attr name="emojiKeyEnabled" format="boolean" />
         <attr name="languageSwitchKeyEnabled" format="boolean" />
+        <attr name="suggestions" format="boolean" />
+        <attr name="autocorrect" format="boolean" />
+        <attr name="pcLayout" format="boolean" />
         <attr name="isMultiLine" format="boolean" />
         <attr name="imeAction" format="enum">
             <!-- This should be aligned with
@@ -596,6 +600,7 @@
             <enum name="alphabetFnCtrlActive" value="29" />
             <enum name="alphabetFnSelectActive" value="30" />
             <enum name="alphabetFnBothActive" value="31" />
+            <enum name="quickSettings" value="32" />
         </attr>
         <attr name="elementKeyboard" format="reference"/>
         <!-- Enable proximity characters correction. Disabled by default. -->

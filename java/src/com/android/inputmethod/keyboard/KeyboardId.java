@@ -77,6 +77,8 @@ public final class KeyboardId {
     public static final int ELEMENT_ALPHABET_FN_CTRL_ACTIVE = 29;
     public static final int ELEMENT_ALPHABET_FN_SELECT_ACTIVE = 30;
     public static final int ELEMENT_ALPHABET_FN_BOTH_ACTIVE = 31;
+    // Quick Settings layer element ID for Technical Keyboard
+    public static final int ELEMENT_QUICK_SETTINGS = 32;
 
     public final RichInputMethodSubtype mSubtype;
     public final int mWidth;
@@ -88,6 +90,10 @@ public final class KeyboardId {
     public final boolean mNumberRowEnabled;
     public final boolean mLanguageSwitchKeyEnabled;
     public final boolean mEmojiKeyEnabled;
+    // Technical Keyboard Quick Settings case variables.
+    public final boolean mSuggestionsEnabled;
+    public final boolean mAutocorrect;
+    public final boolean mPCLayout;
     public final String mCustomActionLabel;
     public final boolean mHasShortcutKey;
     public final boolean mIsSplitLayout;
@@ -106,6 +112,9 @@ public final class KeyboardId {
                 (params.mNumberRowPasswordEnabled && params.mIsPasswordField);
         mLanguageSwitchKeyEnabled = params.mLanguageSwitchKeyEnabled;
         mEmojiKeyEnabled = params.mEmojiKeyEnabled;
+        mSuggestionsEnabled = params.mSuggestionsEnabled;
+        mAutocorrect = params.mAutocorrect;
+        mPCLayout = params.mPCLayout;
         mCustomActionLabel = (mEditorInfo.actionLabel != null)
                 ? mEditorInfo.actionLabel.toString() : null;
         mHasShortcutKey = params.mVoiceInputKeyEnabled;
@@ -126,6 +135,9 @@ public final class KeyboardId {
                 id.mHasShortcutKey,
                 id.mLanguageSwitchKeyEnabled,
                 id.mEmojiKeyEnabled,
+                id.mSuggestionsEnabled,
+                id.mAutocorrect,
+                id.mPCLayout,
                 id.isMultiLine(),
                 id.imeAction(),
                 id.mCustomActionLabel,
@@ -149,6 +161,9 @@ public final class KeyboardId {
                 && other.mHasShortcutKey == mHasShortcutKey
                 && other.mLanguageSwitchKeyEnabled == mLanguageSwitchKeyEnabled
                 && other.mEmojiKeyEnabled == mEmojiKeyEnabled
+                && other.mSuggestionsEnabled == mSuggestionsEnabled
+                && other.mAutocorrect == mAutocorrect
+                && other.mPCLayout == mPCLayout
                 && other.isMultiLine() == isMultiLine()
                 && other.imeAction() == imeAction()
                 && TextUtils.equals(other.mCustomActionLabel, mCustomActionLabel)
@@ -272,6 +287,7 @@ public final class KeyboardId {
         case ELEMENT_ALPHABET_FN_CTRL_ACTIVE: return "alphabetFnCtrlActive";
         case ELEMENT_ALPHABET_FN_SELECT_ACTIVE: return "alphabetFnSelectActive";
         case ELEMENT_ALPHABET_FN_BOTH_ACTIVE: return "alphabetFnBothActive";
+        case ELEMENT_QUICK_SETTINGS: return "quickSettings";
         case ELEMENT_EMOJI_CATEGORY16: return "emojiCategory16";
         default: return null;
         }

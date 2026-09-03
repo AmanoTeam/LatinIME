@@ -40,6 +40,9 @@
         latin:elementName="alphabetFnBothActive"
         latin:elementKeyboard="@xml/kbd_qwerty_fn" />
     <Element
+        latin:elementName="quickSettings"
+        latin:elementKeyboard="@xml/kbd_quick_settings" />
+    <Element
         latin:elementName="phone"
         latin:elementKeyboard="@xml/kbd_phone" />
     <Element

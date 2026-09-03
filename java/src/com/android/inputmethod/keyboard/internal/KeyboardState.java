@@ -58,6 +58,7 @@ public final class KeyboardState {
         public void setAlphabetFnCtrlActiveKeyboard();
         public void setAlphabetFnSelectActiveKeyboard();
         public void setAlphabetFnBothActiveKeyboard();
+        public void setQuickSettingsKeyboard();
 
         /**
          * Request to call back {@link KeyboardState#onUpdateShiftState(int, int)}.
@@ -107,6 +108,7 @@ public final class KeyboardState {
     // symbols, and emoji mode.
     private boolean mIsAlphabetMode = true;
     private boolean mIsEmojiMode;
+    private boolean mIsQuickSettingsMode;
     private AlphabetShiftState mAlphabetShiftState = new AlphabetShiftState();
     private boolean mIsSymbolShifted;
     private boolean mPrevMainKeyboardWasShiftLocked;
@@ -376,6 +378,7 @@ public final class KeyboardState {
         mSwitchActions.setAlphabetKeyboard();
         mIsAlphabetMode = true;
         mIsEmojiMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = false;
         mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
@@ -389,6 +392,7 @@ public final class KeyboardState {
         }
         mSwitchActions.setSymbolsKeyboard();
         mIsAlphabetMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = false;
         mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
@@ -403,6 +407,7 @@ public final class KeyboardState {
         }
         mSwitchActions.setSymbolsShiftedKeyboard();
         mIsAlphabetMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = true;
         mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
@@ -417,12 +422,36 @@ public final class KeyboardState {
         }
         mIsAlphabetMode = false;
         mIsEmojiMode = true;
+        mIsQuickSettingsMode = false;
         mFnMode = FN_MODE_OFF;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         // Remember caps lock mode and reset alphabet shift state.
         mPrevMainKeyboardWasShiftLocked = mAlphabetShiftState.isShiftLocked();
         mAlphabetShiftState.setShiftLocked(false);
         mSwitchActions.setEmojiKeyboard();
+    }
+
+    private void setQuickSettingsKeyboard() {
+        if (DEBUG_INTERNAL_ACTION) {
+            Log.d(TAG, "setQuickSettingsKeyboard");
+        }
+        mIsAlphabetMode = false;
+        mIsEmojiMode = false;
+        mIsQuickSettingsMode = true;
+        mFnMode = FN_MODE_OFF;
+        mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
+        // Remember caps lock mode and reset alphabet shift state.
+        mPrevMainKeyboardWasShiftLocked = mAlphabetShiftState.isShiftLocked();
+        mAlphabetShiftState.setShiftLocked(false);
+        mSwitchActions.setQuickSettingsKeyboard();
+    }
+
+    public void toggleQuickSettings(final int autoCapsFlags, final int recapitalizeMode) {
+        if (mIsQuickSettingsMode) {
+            setAlphabetKeyboard(autoCapsFlags, recapitalizeMode);
+        } else {
+            setQuickSettingsKeyboard();
+        }
     }
 
     private void setAlphabetFnKeyboard() {
@@ -432,6 +461,7 @@ public final class KeyboardState {
         mSwitchActions.setAlphabetFnKeyboard();
         mIsAlphabetMode = true;
         mIsEmojiMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = false;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         mSwitchState = SWITCH_STATE_ALPHA;
@@ -444,6 +474,7 @@ public final class KeyboardState {
         mSwitchActions.setAlphabetFnCtrlKeyboard();
         mIsAlphabetMode = true;
         mIsEmojiMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = false;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         mSwitchState = SWITCH_STATE_ALPHA;
@@ -456,6 +487,7 @@ public final class KeyboardState {
         mSwitchActions.setAlphabetFnCtrlActiveKeyboard();
         mIsAlphabetMode = true;
         mIsEmojiMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = false;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         mSwitchState = SWITCH_STATE_ALPHA;
@@ -468,6 +500,7 @@ public final class KeyboardState {
         mSwitchActions.setAlphabetFnSelectActiveKeyboard();
         mIsAlphabetMode = true;
         mIsEmojiMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = false;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         mSwitchState = SWITCH_STATE_ALPHA;
@@ -480,6 +513,7 @@ public final class KeyboardState {
         mSwitchActions.setAlphabetFnBothActiveKeyboard();
         mIsAlphabetMode = true;
         mIsEmojiMode = false;
+        mIsQuickSettingsMode = false;
         mIsSymbolShifted = false;
         mRecapitalizeMode = RecapitalizeStatus.NOT_A_RECAPITALIZE_MODE;
         mSwitchState = SWITCH_STATE_ALPHA;
@@ -907,6 +941,8 @@ public final class KeyboardState {
             keyboardMode = "FN";
         } else if (mFnMode == FN_MODE_FN_CTRL) {
             keyboardMode = "FN_CTRL";
+        } else if (mIsQuickSettingsMode) {
+            keyboardMode = "QUICK_SETTINGS";
         } else if (mIsAlphabetMode) {
             keyboardMode = mAlphabetShiftState.toString();
         } else {

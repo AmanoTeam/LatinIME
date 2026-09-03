@@ -122,6 +122,10 @@ public final class KeyboardLayoutSet {
         boolean mNumberRowPasswordEnabled; // implied if mNumberRowEnabled
         boolean mLanguageSwitchKeyEnabled;
         boolean mEmojiKeyEnabled;
+        // Technical Keyboard Quick Settings case variables.
+        boolean mSuggestionsEnabled;
+        boolean mAutocorrect;
+        boolean mPCLayout;
         RichInputMethodSubtype mSubtype;
         boolean mIsSpellChecker;
         int mKeyboardWidth;
@@ -342,6 +346,21 @@ public final class KeyboardLayoutSet {
 
         public Builder setEmojiKeyEnabled(final boolean enabled) {
             mParams.mEmojiKeyEnabled = enabled;
+            return this;
+        }
+
+        public Builder setSuggestionsEnabled(final boolean enabled) {
+            mParams.mSuggestionsEnabled = enabled;
+            return this;
+        }
+
+        public Builder setAutoCorrectEnabled(final boolean enabled) {
+            mParams.mAutocorrect = enabled;
+            return this;
+        }
+
+        public Builder setPCLayoutEnabled(final boolean enabled) {
+            mParams.mPCLayout = enabled;
             return this;
         }
 

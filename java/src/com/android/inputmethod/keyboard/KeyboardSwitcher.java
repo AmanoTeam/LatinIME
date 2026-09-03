@@ -131,6 +131,9 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
         builder.setNumberRowPasswordEnabled(settingsValues.mShowNumberRowPassword);
         builder.setLanguageSwitchKeyEnabled(mLatinIME.shouldShowLanguageSwitchKey());
         builder.setEmojiKeyEnabled(settingsValues.mShowsEmojiKey);
+        builder.setSuggestionsEnabled(settingsValues.isSuggestionsEnabledPerUserSettings());
+        builder.setAutoCorrectEnabled(settingsValues.isAutoCorrectEnabled());
+        builder.setPCLayoutEnabled(mLatinIME.isPCMode());
         builder.setSplitLayoutEnabledByUser(ProductionFlags.IS_SPLIT_KEYBOARD_SUPPORTED
                 && settingsValues.mIsSplitKeyboardEnabled);
         mKeyboardLayoutSet = builder.build();
@@ -328,6 +331,19 @@ public final class KeyboardSwitcher implements KeyboardState.SwitchActions {
             Log.d(TAG, "setAlphabetFnBothActiveKeyboard");
         }
         setKeyboard(KeyboardId.ELEMENT_ALPHABET_FN_BOTH_ACTIVE, KeyboardSwitchState.OTHER);
+    }
+
+    // Implements {@link KeyboardState.SwitchActions}.
+    @Override
+    public void setQuickSettingsKeyboard() {
+        if (DEBUG_ACTION) {
+            Log.d(TAG, "setQuickSettingsKeyboard");
+        }
+        setKeyboard(KeyboardId.ELEMENT_QUICK_SETTINGS, KeyboardSwitchState.OTHER);
+    }
+
+    public void toggleQuickSettings(final int autoCapsFlags, final int recapitalizeMode) {
+        mState.toggleQuickSettings(autoCapsFlags, recapitalizeMode);
     }
 
     public void updateFnElementState(final boolean ctrlActive, final boolean selectActive) {

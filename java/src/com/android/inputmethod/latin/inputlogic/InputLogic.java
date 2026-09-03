@@ -50,6 +50,7 @@ import com.android.inputmethod.latin.common.Constants;
 import com.android.inputmethod.latin.common.InputPointers;
 import com.android.inputmethod.latin.common.StringUtils;
 import com.android.inputmethod.latin.define.DebugFlags;
+import com.android.inputmethod.latin.settings.Settings;
 import com.android.inputmethod.latin.settings.SettingsValues;
 import com.android.inputmethod.latin.settings.SettingsValuesForSuggestion;
 import com.android.inputmethod.latin.settings.SpacingAndPunctuations;
@@ -799,6 +800,15 @@ public final class InputLogic {
             case Constants.CODE_QS_PC_LAYOUT:
                 // Toggle the PC keyboard layout (Technical Keyboard).
                 mLatinIME.handlePCLayoutFromKey();
+                break;
+            case Constants.CODE_QS_NUMBER_ROW:
+                mLatinIME.toggleQuickSetting(Constants.CODE_QS_NUMBER_ROW);
+                break;
+            case Constants.CODE_QS_SUGGESTIONS:
+                mLatinIME.toggleQuickSetting(Constants.CODE_QS_SUGGESTIONS);
+                break;
+            case Constants.CODE_QS_AUTOCORRECT:
+                mLatinIME.toggleQuickSetting(Constants.CODE_QS_AUTOCORRECT);
                 break;
             case Constants.CODE_QS_OPEN_LANGUAGES:
                 mLatinIME.launchInputLanguagesFromKey();
@@ -2264,7 +2274,12 @@ public final class InputLogic {
      * Handle a press on the settings key.
      */
     private void onSettingsKeyPressed() {
-        mLatinIME.displaySettingsDialog();
+        if (Settings.getInstance().getCurrent().mQuickSettings) {
+            // Show the Technical Keyboard quick settings layer instead of the settings dialog.
+            mLatinIME.toggleQuickSettings();
+        } else {
+            mLatinIME.displaySettingsDialog();
+        }
     }
 
     /**

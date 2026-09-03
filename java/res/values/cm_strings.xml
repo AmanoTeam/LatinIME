@@ -76,6 +76,19 @@ disposition rather than other common dispositions for Latin languages. [CHAR LIM
      <string name="pc_layout_landscape">PC layout in landscape</string>
      <string name="pc_layout_landscape_summary">Switch to the PC keyboard layout automatically when the device is rotated to landscape orientation</string>
 
+     <!-- Preference item for the quick settings layer -->
+     <string name="quick_settings">Quick settings layer</string>
+     <string name="quick_settings_summary">Pressing the settings key shows a layer of toggle keys instead of the settings dialog</string>
+
+     <!-- Quick settings layer key labels -->
+     <string name="qs_number_row">Number row</string>
+     <string name="qs_suggestions">Suggestions</string>
+     <string name="qs_autocorrect">Autocorrect</string>
+     <string name="qs_pclayout">PC layout</string>
+     <string name="qs_done">Done</string>
+     <string name="qs_open_settings">Settings</string>
+     <string name="qs_open_languages">Languages</string>
+
     <!-- Preference item for enabling longpress key hints -->
     <string name="show_longpress_hints">Show long-press key hints</string>
     <string name="show_longpress_hints_summary">Shows long-press hints for supported keys</string>

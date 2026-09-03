@@ -114,6 +114,12 @@ public final class KeyboardCodesSet {
         "key_ctrl_z",
         "key_move_word_left",
         "key_move_word_right",
+        "key_qs_pc_layout",
+        "key_qs_autocorrect",
+        "key_qs_suggestions",
+        "key_qs_number_row",
+        "key_qs_open_languages",
+        "key_qs_open_settings",
     };
 
     private static final int[] DEFAULT = {
@@ -195,6 +201,12 @@ public final class KeyboardCodesSet {
         Constants.CODE_CTRL_Z,
         Constants.CODE_MOVE_WORD_LEFT,
         Constants.CODE_MOVE_WORD_RIGHT,
+        Constants.CODE_QS_PC_LAYOUT,
+        Constants.CODE_QS_AUTOCORRECT,
+        Constants.CODE_QS_SUGGESTIONS,
+        Constants.CODE_QS_NUMBER_ROW,
+        Constants.CODE_QS_OPEN_LANGUAGES,
+        Constants.CODE_QS_OPEN_SETTINGS,
     };
 
     static {
