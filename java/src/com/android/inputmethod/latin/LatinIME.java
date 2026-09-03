@@ -2098,7 +2098,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
 
     private void launchInputLanguages() {
         final Intent intent = IntentUtils.getInputLanguageSelectionIntent(
-                mRichImm.getInputMethodIdOfThisIme(), 0);
+                mRichImm.getInputMethodIdOfThisIme(),
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                        | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(Intent.EXTRA_TITLE, getString(R.string.language_selection_title));
         startActivity(intent);
     }
 
