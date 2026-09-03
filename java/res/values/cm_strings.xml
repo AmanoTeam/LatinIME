@@ -72,6 +72,10 @@ disposition rather than other common dispositions for Latin languages. [CHAR LIM
      <string name="typeface_thin">Thin</string>
      <string name="key_text_size_adjust_title">Key text size</string>
 
+     <!-- Preference item for automatic PC layout in landscape -->
+     <string name="pc_layout_landscape">PC layout in landscape</string>
+     <string name="pc_layout_landscape_summary">Switch to the PC keyboard layout automatically when the device is rotated to landscape orientation</string>
+
     <!-- Preference item for enabling longpress key hints -->
     <string name="show_longpress_hints">Show long-press key hints</string>
     <string name="show_longpress_hints_summary">Shows long-press hints for supported keys</string>

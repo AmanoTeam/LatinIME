@@ -806,6 +806,14 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         if (settingsValues.mDisplayOrientation != conf.orientation) {
             mHandler.startOrientationChanging();
             mInputLogic.onOrientationChange(mSettings.getCurrent());
+            if (settingsValues.mPCLayoutLandscape) {
+                final boolean pcMode = isPCMode();
+                if (!pcMode && conf.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    setPCMode(true);
+                } else if (pcMode && conf.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    setPCMode(false);
+                }
+            }
         }
         if (settingsValues.mHasHardwareKeyboard != Settings.readHasHardwareKeyboard(conf)) {
             // If the state of having a hardware keyboard changed, then we want to reload the
@@ -1976,7 +1984,7 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         }
     }
 
-    void launchSettings(final String extraEntryValue) {
+    public void launchSettings(final String extraEntryValue) {
         mInputLogic.commitTyped(mSettings.getCurrent(), LastComposedWord.NOT_A_SEPARATOR);
         requestHideSelf(0);
         final MainKeyboardView mainKeyboardView = mKeyboardSwitcher.getMainKeyboardView();
@@ -1991,6 +1999,73 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         intent.putExtra(SettingsActivity.EXTRA_SHOW_HOME_AS_UP, true);
         intent.putExtra(SettingsActivity.EXTRA_ENTRY_KEY, extraEntryValue);
         startActivityOnTheSameDisplay(intent);
+    }
+
+    // The subtype that was active before switching to the PC layout, restored
+    // when PC mode is turned back off.
+    private InputMethodSubtype mLastNonPCSubtype;
+
+    public boolean isPCMode() {
+        return "pcqwerty".equals(mRichImm.getCurrentSubtype().getKeyboardLayoutSetName());
+    }
+
+    private void setPCMode(final boolean enabled) {
+        final IBinder token = getWindow().getWindow().getAttributes().token;
+        if (enabled) {
+            final RichInputMethodSubtype currentSubtype = mRichImm.getCurrentSubtype();
+            mLastNonPCSubtype = currentSubtype.getRawSubtype();
+            InputMethodSubtype subtype = mRichImm.findSubtypeByLocaleAndKeyboardLayoutSet(
+                    currentSubtype.isNoLanguage() ? SubtypeLocaleUtils.NO_LANGUAGE
+                            : currentSubtype.getLocale().toString(),
+                    "pcqwerty");
+            if (subtype == null) {
+                subtype = mRichImm.findSubtypeByLocaleAndKeyboardLayoutSet(
+                        SubtypeLocaleUtils.NO_LANGUAGE, "pcqwerty");
+            }
+            if (subtype != null) {
+                mRichImm.setInputMethodAndSubtype(token, subtype);
+            }
+            return;
+        }
+        if (mLastNonPCSubtype != null) {
+            mRichImm.setInputMethodAndSubtype(token, mLastNonPCSubtype);
+            return;
+        }
+        final List<InputMethodSubtype> enabledSubtypes =
+                mRichImm.getMyEnabledInputMethodSubtypeList(true);
+        if (enabledSubtypes != null) {
+            for (final InputMethodSubtype subtype : enabledSubtypes) {
+                if (!isPCLayoutSubtype(subtype)) {
+                    mRichImm.setInputMethodAndSubtype(token, subtype);
+                    return;
+                }
+            }
+        }
+    }
+
+    private static boolean isPCLayoutSubtype(final InputMethodSubtype subtype) {
+        return "pcqwerty".equals(SubtypeLocaleUtils.getKeyboardLayoutSetName(subtype));
+    }
+
+    private void handlePCLayout() {
+        if (QuickSettingsUtil.allowQuickSettingsOptionPress()) {
+            QuickSettingsUtil.updateLastQuickSettingsOptionPress();
+            setPCMode(!isPCMode());
+        }
+    }
+
+    public void handlePCLayoutFromKey() {
+        handlePCLayout();
+    }
+
+    private void launchInputLanguages() {
+        final Intent intent = IntentUtils.getInputLanguageSelectionIntent(
+                mRichImm.getInputMethodIdOfThisIme(), 0);
+        startActivity(intent);
+    }
+
+    public void launchInputLanguagesFromKey() {
+        launchInputLanguages();
     }
 
     private void showSubtypeSelectorAndSettings() {

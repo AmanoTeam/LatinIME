@@ -25,6 +25,7 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.SuggestionSpan;
 import android.util.Log;
 import android.view.KeyCharacterMap;
+import android.widget.Toast;
 import android.view.KeyEvent;
 import android.view.inputmethod.CorrectionInfo;
 import android.view.inputmethod.EditorInfo;
@@ -501,6 +502,13 @@ public final class InputLogic {
                                     currentEvent.mCodePoint - 'a' + 1), 1);
                             inputTransaction.setDidAffectContents();
                         } else {
+                            if (!mLatinIME.isPCMode()) {
+                                // Visual feedback for the control character that was sent,
+                                // as the regular layout has no control modifier state.
+                                Toast.makeText(mLatinIME,
+                                        "Ctrl+" + (char) currentEvent.mCodePoint,
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             sendDownUpKeyEvent(ctrlKeyCode, KeyEvent.META_CTRL_ON);
                         }
                         currentEvent = currentEvent.mNextEvent;
@@ -787,6 +795,16 @@ public final class InputLogic {
                 break;
             case Constants.CODE_LANGUAGE_SWITCH:
                 handleLanguageSwitchKey();
+                break;
+            case Constants.CODE_QS_PC_LAYOUT:
+                // Toggle the PC keyboard layout (Technical Keyboard).
+                mLatinIME.handlePCLayoutFromKey();
+                break;
+            case Constants.CODE_QS_OPEN_LANGUAGES:
+                mLatinIME.launchInputLanguagesFromKey();
+                break;
+            case Constants.CODE_QS_OPEN_SETTINGS:
+                mLatinIME.launchSettings(null /* extraEntryValue */);
                 break;
             case Constants.CODE_EMOJI:
                 // Note: Switching emoji keyboard is being handled in

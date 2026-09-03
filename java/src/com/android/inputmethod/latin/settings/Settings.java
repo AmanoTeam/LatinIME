@@ -120,6 +120,8 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     public static final String PREF_KEY_TYPEFACE = "pref_key_typeface";
     // Key text size adjustment (percentage)
     public static final String PREF_KEY_TEXT_SIZE_ADJUST = "pref_key_text_size_adjust";
+    // Switch to the PC layout automatically in landscape orientation
+    public static final String PREF_PC_LAYOUT_LANDSCAPE = "pc_layout_landscape";
     // This preference key is deprecated. Use {@link #PREF_SHOW_LANGUAGE_SWITCH_KEY} instead.
     // This is being used only for the backward compatibility.
     private static final String PREF_SUPPRESS_LANGUAGE_SWITCH_KEY =
@@ -410,6 +412,10 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
 
     public static int readKeyTextSizeAdjust(final SharedPreferences prefs) {
         return prefs.getInt(PREF_KEY_TEXT_SIZE_ADJUST, 100);
+    }
+
+    public static boolean readPCLayoutLandscape(final SharedPreferences prefs) {
+        return prefs.getBoolean(PREF_PC_LAYOUT_LANDSCAPE, false);
     }
 
     public static float readKeyboardHeight(final SharedPreferences prefs,

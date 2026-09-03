@@ -78,6 +78,11 @@
         android:title="@string/fullscreen_support"
         android:summary="@string/fullscreen_support_summary"
         android:defaultValue="false" />
+    <CheckBoxPreference
+        android:key="pc_layout_landscape"
+        android:title="@string/pc_layout_landscape"
+        android:summary="@string/pc_layout_landscape_summary"
+        android:defaultValue="false" />
     <com.android.inputmethod.latin.settings.SeekBarDialogPreference
         android:key="pref_keyboard_height_scale"
         android:title="@string/prefs_keyboard_height_scale"

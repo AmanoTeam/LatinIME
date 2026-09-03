@@ -342,6 +342,10 @@ language among those that use the Latin alphabet. This keyboard is laid out in t
 disposition that offers additional keys, but smaller keys compared to other common dispositions for
 mobile devices. [CHAR LIMIT=25] -->
     <string name="subtype_no_language_pcqwerty">Alphabet (PC)</string>
+    <!-- Description for English (US) PC keyboard subtype [CHAR LIMIT=25] -->
+    <string name="subtype_en_US_pcqwerty">PC</string>
+    <!-- Description for English (UK) PC keyboard subtype [CHAR LIMIT=25] -->
+    <string name="subtype_en_GB_pcqwerty">PC</string>
     <!-- Description for Emoji keyboard subtype [CHAR LIMIT=25] -->
     <string name="subtype_emoji">Emoji</string>
 

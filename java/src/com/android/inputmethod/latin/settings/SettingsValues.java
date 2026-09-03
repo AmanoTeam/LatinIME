@@ -86,6 +86,7 @@ public class SettingsValues {
     public final boolean mFullscreenSupport;
     public final Typeface mKeyTypeface;
     public final int mKeyTextSizeAdjust;
+    public final boolean mPCLayoutLandscape;
     // Use bigrams to predict the next word when there is no input for it yet
     public final boolean mBigramPredictionEnabled;
     public final boolean mGestureInputEnabled;
@@ -245,6 +246,7 @@ public class SettingsValues {
         mFullscreenSupport = Settings.readFullscreenSupport(prefs);
         mKeyTypeface = Settings.readKeyTextTypeface(prefs);
         mKeyTextSizeAdjust = Settings.readKeyTextSizeAdjust(prefs);
+        mPCLayoutLandscape = Settings.readPCLayoutLandscape(prefs);
     }
 
     public boolean isMetricsLoggingEnabled() {
