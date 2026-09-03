@@ -2089,9 +2089,11 @@ public class LatinIME extends InputMethodService implements KeyboardActionListen
         default:
             return;
         }
-        // Reload the keyboard so the sticky key visuals reflect the new preference state.
+        // Reload the keyboard so the sticky key visuals reflect the new preference state,
+        // then re-enter the Quick Settings layer since loading resets the keyboard state.
         mKeyboardSwitcher.loadKeyboard(getCurrentInputEditorInfo(), mSettings.getCurrent(),
                 getCurrentAutoCapsState(), getCurrentRecapitalizeState());
+        toggleQuickSettings();
     }
 
     private void launchInputLanguages() {
